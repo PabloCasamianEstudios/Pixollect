@@ -26,13 +26,14 @@
                 </ul>
 
                 <div
+                    v-if="currentUser"
                     class="navBar__user"
                     ref="userMenuRef"
                     @click="toggleUserMenu"
                 >
                     <button class="logoutBtn" @click.stop="logout">⛔</button>
                     <span class="userName">
-                        USERNAME
+                        {{ currentUser.name }}
                         <span
                             class="dropdownIcon"
                             :class="{ open: userMenuOpen }"
@@ -54,14 +55,21 @@
                         </li>
                     </ul>
                 </div>
+                <div v-else class="authButtons">
+                    <LinkTo href="/login">
+                        <button class="authBtn">Login</button>
+                    </LinkTo>
+                    <LinkTo href="/register">
+                        <button class="authBtn">Register</button>
+                    </LinkTo>
+                </div>
             </nav>
         </header>
     </div>
 </template>
 
 <script>
-import { Link as LinkTo } from '@inertiajs/vue3';
-
+import { Link as LinkTo, usePage, router } from '@inertiajs/vue3';
 export default {
     components: {
         LinkTo,
@@ -71,6 +79,11 @@ export default {
             menuOpen: false,
             userMenuOpen: false,
         };
+    },
+    computed: {
+        currentUser() {
+            return usePage().props.auth.user;
+        },
     },
     methods: {
         toggleMenu() {
@@ -87,15 +100,35 @@ export default {
                 this.userMenuOpen = false;
             }
         },
-        logout() {
-            console.log('Logout');
+        async logout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                await router.post(
+                    'logout',
+                    {},
+                    {
+                        onSuccess: () => {
+                            router.reload({ only: ['auth'] });
+                        },
+                        onError: () => {
+                            console.error('Error al cerrar sesión');
+                        },
+                    },
+                );
+            }
         },
     },
     mounted() {
         document.addEventListener('click', this.handleClickOutside);
+        this.user = usePage().props.auth.user;
+        router.on('success', (event) => {
+            if (event.detail.page.props.auth) {
+                this.$forceUpdate();
+            }
+        });
     },
     beforeUnmount() {
         document.removeEventListener('click', this.handleClickOutside);
+        router.off('success');
     },
 };
 </script>
@@ -107,6 +140,7 @@ export default {
     background-color: #121212;
     color: white;
     width: 100%;
+    height: 67px;
     border-bottom: 1px solid #2e2e2e;
     font-family: 'Orbitron', sans-serif;
 
@@ -150,7 +184,7 @@ export default {
             border: none;
             cursor: pointer;
 
-            @media (max-width: 768px) {
+            @media (max-width: 865px) {
                 display: block;
             }
         }
@@ -171,7 +205,7 @@ export default {
                 }
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: 865px) {
                 flex-direction: column;
                 width: 100%;
                 margin-top: 1rem;
@@ -179,6 +213,7 @@ export default {
 
                 &--open {
                     display: flex;
+                    margin-bottom: 30px;
                 }
             }
         }
@@ -205,6 +240,7 @@ export default {
 
                 li {
                     padding: 0.5rem 1rem;
+                    list-style: none;
 
                     a {
                         color: white;
@@ -260,6 +296,25 @@ export default {
                         transform: rotate(180deg); // o usa ▲ si prefieres
                     }
                 }
+            }
+        }
+        .authButtons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .authBtn {
+            background-color: #1c1c1c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+
+            &:hover {
+                background-color: $main-color;
             }
         }
     }

@@ -1,3 +1,73 @@
+<template>
+    <Head title="Log in" />
+
+    <GuestLayout>
+        <div class="loginContainer">
+            <div class="loginBox">
+                <h2 class="loginTitle">Log in</h2>
+
+                <form @submit.prevent="submit">
+                    <div class="inputGroup">
+                        <InputLabel for="email" value="Email" />
+                        <TextInput
+                            id="email"
+                            type="email"
+                            v-model="form.email"
+                            required
+                            autofocus
+                            autocomplete="username"
+                            class="inputField"
+                        />
+                        <InputError class="mt-2" :message="form.errors.email" />
+                    </div>
+
+                    <div class="inputGroup">
+                        <InputLabel for="password" value="Password" />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            v-model="form.password"
+                            required
+                            autocomplete="current-password"
+                            class="inputField"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.password"
+                        />
+                    </div>
+
+                    <div class="rememberMe">
+                        <Checkbox
+                            name="remember"
+                            v-model:checked="form.remember"
+                        />
+                        <span class="rememberText">Remember me</span>
+                    </div>
+
+                    <div class="actions">
+                        <Link
+                            v-if="canResetPassword"
+                            href="/forgot-password"
+                            class="forgotPasswordLink"
+                        >
+                            Forgot your password?
+                        </Link>
+
+                        <PrimaryButton
+                            class="loginBtn"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            Log in
+                        </PrimaryButton>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </GuestLayout>
+</template>
+
 <script setup>
 import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
@@ -23,78 +93,119 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('login'), {
+    form.post('login', {
         onFinish: () => form.reset('password'),
     });
 };
 </script>
 
-<template>
-    <GuestLayout>
-        <Head title="Log in" />
+<style lang="scss" scoped>
+@use '../../../css/variables.scss' as *;
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
+.loginContainer {
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 67px);
+    height: 100%;
+    font-family: 'Orbitron', sans-serif;
+}
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+.loginBox {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: white;
+    border: 1px solid #333;
+}
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+.loginTitle {
+    font-size: 2rem;
+    color: $main-color;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+.inputGroup {
+    margin-bottom: 1.5rem;
+}
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+.inputField {
+    background-color: #2e2e2e;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem;
+    width: 100%;
+    color: white;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    transition: background 0.3s ease-in-out;
+}
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
+.inputField:focus {
+    background-color: #3a3a3a;
+    outline: none;
+    box-shadow: 0 0 6px $main-color;
+}
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+.rememberMe {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
 
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
+.rememberText {
+    margin-left: 0.5rem;
+    color: #bbb;
+    font-size: 0.9rem;
+}
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+}
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
-</template>
+.forgotPasswordLink {
+    color: white;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    transition: color 0.3s ease-in-out;
+
+    &:hover {
+        color: $main-color;
+    }
+}
+
+.loginBtn {
+    background-color: $main-color;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    width: 48%;
+
+    &:hover {
+        background-color: #e40068;
+    }
+
+    &.opacity-25 {
+        opacity: 0.25;
+    }
+}
+
+@media (max-width: 480px) {
+    .loginBox {
+        padding: 1.5rem;
+        width: 90%;
+    }
+}
+</style>

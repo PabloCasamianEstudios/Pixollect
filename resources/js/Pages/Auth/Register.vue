@@ -1,3 +1,92 @@
+<template>
+    <Head title="Register" />
+
+    <GuestLayout>
+        <div class="registerContainer">
+            <div class="registerBox">
+                <h2 class="registerTitle">Register</h2>
+
+                <form @submit.prevent="submit">
+                    <div class="inputGroup">
+                        <InputLabel for="name" value="Name" />
+                        <TextInput
+                            id="name"
+                            type="text"
+                            v-model="form.name"
+                            required
+                            autofocus
+                            class="inputField"
+                        />
+                        <InputError class="mt-2" :message="form.errors.name" />
+                    </div>
+
+                    <div class="inputGroup">
+                        <InputLabel for="email" value="Email" />
+                        <TextInput
+                            id="email"
+                            type="email"
+                            v-model="form.email"
+                            required
+                            autocomplete="username"
+                            class="inputField"
+                        />
+                        <InputError class="mt-2" :message="form.errors.email" />
+                    </div>
+
+                    <div class="inputGroup">
+                        <InputLabel for="password" value="Password" />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            v-model="form.password"
+                            required
+                            autocomplete="new-password"
+                            class="inputField"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.password"
+                        />
+                    </div>
+
+                    <div class="inputGroup">
+                        <InputLabel
+                            for="password_confirmation"
+                            value="Confirm Password"
+                        />
+                        <TextInput
+                            id="password_confirmation"
+                            type="password"
+                            v-model="form.password_confirmation"
+                            required
+                            autocomplete="new-password"
+                            class="inputField"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.password_confirmation"
+                        />
+                    </div>
+
+                    <div class="actions">
+                        <Link href="/login" class="alreadyRegisteredLink"
+                            >Already registered?</Link
+                        >
+
+                        <PrimaryButton
+                            class="registerBtn"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            Register
+                        </PrimaryButton>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </GuestLayout>
+</template>
+
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
@@ -14,100 +103,114 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('register'), {
+    form.post('register', {
         onFinish: () => form.reset('password', 'password_confirmation'),
+        onSuccess: () => {
+            console.log('Registro exitoso!');
+            // Aquí podrías redirigir o realizar otra acción tras el éxito
+        },
+        onError: () => {
+            console.error('Hubo un error al intentar registrar al usuario');
+        },
     });
 };
 </script>
 
-<template>
-    <GuestLayout>
-        <Head title="Register" />
+<style lang="scss" scoped>
+@use '../../../css/variables.scss' as *;
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+.registerContainer {
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 67px);
+    height: 100%;
+    font-family: 'Orbitron', sans-serif;
+}
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+.registerBox {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: white;
+    border: 1px solid #333;
+}
 
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
+.registerTitle {
+    font-size: 2rem;
+    color: $main-color;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+.inputGroup {
+    margin-bottom: 1.5rem;
+}
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
+.inputField {
+    background-color: #2e2e2e;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem;
+    width: 100%;
+    color: white;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    transition: background 0.3s ease-in-out;
+}
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+.inputField:focus {
+    background-color: #3a3a3a;
+    outline: none;
+    box-shadow: 0 0 6px $main-color;
+}
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+}
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+.alreadyRegisteredLink {
+    color: white;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    transition: color 0.3s ease-in-out;
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+    &:hover {
+        color: $main-color;
+    }
+}
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+.registerBtn {
+    background-color: $main-color;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    width: 48%;
 
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
+    &:hover {
+        background-color: #e40068;
+    }
 
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
+    &.opacity-25 {
+        opacity: 0.25;
+    }
+}
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
-</template>
+@media (max-width: 480px) {
+    .registerBox {
+        padding: 1.5rem;
+        width: 90%;
+    }
+}
+</style>
