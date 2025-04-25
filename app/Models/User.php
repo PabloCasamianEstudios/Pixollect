@@ -21,9 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        // 'rol',
-        // 'avatar',
-        // 'user_tags'
+        'role',
+        'avatar_url',
+        'user_tags',
     ];
 
     /**
@@ -46,6 +46,12 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'user_tags' => 'array',
         ];
     }
+
+    public function getRole(): string {
+        return $this->role;
+    }
+
 }

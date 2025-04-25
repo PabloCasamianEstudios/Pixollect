@@ -23,6 +23,9 @@ Route::get('/welcome', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/games', function () {
+    return Inertia::render('Games');
+});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

@@ -9,7 +9,6 @@
                     />
                     <h1>Pixollect</h1>
                 </LinkTo>
-
                 <button class="navBar__toggle" @click="toggleMenu">☰</button>
 
                 <ul
@@ -19,9 +18,9 @@
                     ]"
                 >
                     <li><LinkTo href="/">HOME</LinkTo></li>
-                    <li><LinkTo href="/welcome">GAMES</LinkTo></li>
-                    <li><LinkTo href="/about">COLLECTIONS</LinkTo></li>
-                    <li><LinkTo href="/about">RECOMMEND</LinkTo></li>
+                    <li><LinkTo href="/games">GAMES</LinkTo></li>
+                    <li><LinkTo href="/welcome">COLLECTIONS</LinkTo></li>
+                    <li><LinkTo href="/welcome">RECOMMEND</LinkTo></li>
                     <li><LinkTo href="/about">COMPARE</LinkTo></li>
                 </ul>
 
@@ -52,6 +51,9 @@
                             <LinkTo href="/profile/settings"
                                 >CONFIGURATION</LinkTo
                             >
+                        </li>
+                        <li v-if="currentUser.role === 'admin'">
+                            <LinkTo href="/admin-panel">ADMIN PANEL</LinkTo>
                         </li>
                     </ul>
                 </div>
@@ -279,15 +281,14 @@ export default {
                 cursor: pointer;
                 padding: 0.2rem 0.4rem;
                 border-radius: 4px;
-                transition: background 0.2s;
+                transition: all 0.2s ease;
                 display: flex;
                 align-items: center;
                 gap: 0.3rem;
 
                 &:hover {
-                    background-color: rgba(255, 255, 255, 0.1);
+                    background-color: rgba(255, 255, 255, 0.774);
                 }
-
                 .dropdownIcon {
                     transition: transform 0.3s;
                     display: inline-block;
