@@ -15,6 +15,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // así no tengo que crearlo tol rato
+        $admin = ['name' => 'admin', 'email'=>'admin@admin.com','password'=>'12345678', 'role' =>'admin'];
+        User::create($admin);
         User::factory()->count(10)->create();
     }
 }

@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Saga;
 use Inertia\Inertia;
+use App\Models\Genre;
+use App\Models\Theme;
+use App\Models\GameTag;
+use App\Models\GameMode;
+use App\Models\Platform;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,8 +20,17 @@ class GameController extends Controller
      */
     public function index()
     {
+
+         $games = Game::all();
+         $genres = Genre::all();
+         $platforms = Platform::all();
+         $themes = Theme::all();
+
         return Inertia::render('Games/Index', [
-            'games' => \App\Models\Game::all(),
+            'games' => $games,
+            'genres' => $genres,
+            'platforms' => $platforms,
+            'themes' => $themes,
             'successMessage' => session('success'),
         ]);
     }
@@ -43,7 +58,7 @@ class GameController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'release' => 'nullable|date',
+            'release_date' => 'nullable|date',
             'developer' => 'nullable|string',
             'publisher' => 'nullable|string',
             'price' => 'nullable|numeric',

@@ -15,9 +15,12 @@
             <input v-model="form.title" type="text" placeholder="Title" />
             <div v-if="errors.title" class="formError">{{ errors.title }}</div>
             <textarea v-model="form.description" placeholder="Description" />
-            <input v-model="form.release" type="date" />
-            <div v-if="errors.release" class="formError">
-                {{ errors.release }}
+            <div v-if="errors.description" class="formError">
+                {{ errors.description }}
+            </div>
+            <input v-model="form.release_date" type="date" />
+            <div v-if="errors.release_date" class="formError">
+                {{ errors.release_date }}
             </div>
 
             <input
@@ -170,7 +173,7 @@ defineProps({
 const form = useForm({
     title: '',
     description: '',
-    release: '',
+    release_date: '',
     developer: '',
     publisher: '',
     price: '',
@@ -185,19 +188,37 @@ const form = useForm({
 
 const errors = reactive({
     title: '',
-    release: '',
+    release_date: '',
     image_url: '',
     genre_ids: '',
     theme_ids: '',
     game_modes_ids: '',
     platform_ids: '',
     game_tag_ids: '',
+    description: '',
 });
+
+const isValidDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const hoy = new Date();
+
+    if (date > hoy) {
+        return false;
+    }
+    return true;
+};
 
 function validate() {
     let valid = true;
     errors.title = form.title.trim() ? '' : 'Title is required.';
-    errors.release = form.release ? '' : 'Release date is required.';
+    errors.description = form.description.trim()
+        ? ''
+        : 'Description is required.';
+    errors.release_date = form.release_date
+        ? isValidDate(form.release_date)
+            ? ''
+            : 'Release date must be a valid date.'
+        : 'Release date is required.';
     errors.image_url = form.image_url.trim()
         ? ''
         : 'URL image of the game is required.';
