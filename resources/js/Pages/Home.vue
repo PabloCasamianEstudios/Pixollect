@@ -8,14 +8,12 @@
         />
     </metaHead>
 
-    <h1> ROLE: {{ currentUser?.role || 'NO  ROLE'}}</h1>
+    <h1>ROLE: {{ currentUser?.role || 'NO  ROLE' }}</h1>
 
-    <div v-if="currentUser?.role === 'admin'"> you r n admin</div>
-    <div v-if="currentUser?.role === 'user'"> you r n user</div>
-    <div v-if="currentUser?.role === 'mute'"> you r  muted</div>
-    <div v-else> you r  random</div>
-
-
+    <div v-if="currentUser?.role === 'admin'">you r n admin</div>
+    <div v-if="currentUser?.role === 'user'">you r n user</div>
+    <div v-if="currentUser?.role === 'mute'">you r muted</div>
+    <div v-else>you r random</div>
 </template>
 
 <script>
