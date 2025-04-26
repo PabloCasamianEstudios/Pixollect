@@ -13,7 +13,6 @@
                             id="name"
                             type="text"
                             v-model="form.name"
-                            required
                             autofocus
                             class="inputField"
                         />
@@ -26,7 +25,6 @@
                             id="email"
                             type="email"
                             v-model="form.email"
-                            required
                             autocomplete="username"
                             class="inputField"
                         />
@@ -39,7 +37,6 @@
                             id="password"
                             type="password"
                             v-model="form.password"
-                            required
                             autocomplete="new-password"
                             class="inputField"
                         />
@@ -58,7 +55,6 @@
                             id="password_confirmation"
                             type="password"
                             v-model="form.password_confirmation"
-                            required
                             autocomplete="new-password"
                             class="inputField"
                         />

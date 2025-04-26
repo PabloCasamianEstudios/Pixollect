@@ -13,7 +13,6 @@
                             id="email"
                             type="email"
                             v-model="form.email"
-                            required
                             autofocus
                             autocomplete="username"
                             class="inputField"
@@ -27,7 +26,6 @@
                             id="password"
                             type="password"
                             v-model="form.password"
-                            required
                             autocomplete="current-password"
                             class="inputField"
                         />
