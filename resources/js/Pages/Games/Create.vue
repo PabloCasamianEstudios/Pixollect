@@ -1,12 +1,12 @@
 <template>
-    <Head>
+    <metaHead>
         <title>Create Game</title>
         <meta
             head-key="description"
             name="description"
             content="Create Game page of the application"
         />
-    </Head>
+    </metaHead>
 
     <div class="formContainer">
         <h1 class="formTitle">Crear Juego</h1>
@@ -39,6 +39,24 @@
                 step="0.01"
                 placeholder="Price"
             />
+            <div>
+                <label>Amount of achievements</label>
+                <input
+                    id="achievement_id"
+                    v-model="form.achievement_id"
+                    type="number"
+                    placeholder="Amount"
+                />
+            </div>
+            <input
+                v-model="form.achievements"
+                type="text"
+                placeholder="Achievements Amount"
+            />
+            <div v-if="errors.achievements" class="formError">
+                {{ errors.achievements }}
+            </div>
+
             <input
                 v-model="form.image_url"
                 type="text"
@@ -158,7 +176,7 @@
 </template>
 
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head as metaHead, useForm } from '@inertiajs/vue3';
 import { reactive } from 'vue';
 
 defineProps({
@@ -196,6 +214,7 @@ const errors = reactive({
     platform_ids: '',
     game_tag_ids: '',
     description: '',
+    achievements: '',
 });
 
 const isValidDate = (dateStr) => {
@@ -211,6 +230,10 @@ const isValidDate = (dateStr) => {
 function validate() {
     let valid = true;
     errors.title = form.title.trim() ? '' : 'Title is required.';
+    if (isNaN(form.achievements)) {
+        errors.achievements = 'Achievements must be numeric.';
+    }
+
     errors.description = form.description.trim()
         ? ''
         : 'Description is required.';
@@ -337,7 +360,7 @@ function submit() {
     transition: background-color 0.3s;
 
     &:hover {
-        background-color: lighten($main-color, 10%);
+        background-color: #FF3A5EFF;
     }
 }
 </style>

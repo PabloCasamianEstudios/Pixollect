@@ -50,6 +50,17 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/games/create', function () {
+    return Inertia::render('Games/Create', [
+        'genres' => \App\Models\Genre::all(),
+        'platforms' => \App\Models\Platform::all(),
+        'themes' => \App\Models\Theme::all(),
+        'gameModes' => \App\Models\GameMode::all(),
+        'gameTags' => \App\Models\GameTag::all(),
+        'sagas' => \App\Models\Saga::all()
+    ]);
+})->middleware(['auth', 'verified'])->name('createGame');
+
 Route::get('/games/{game}', [GameController::class, 'show'])->name('games.show');
 
 // Rutas protegidas
