@@ -15,7 +15,8 @@ class Game extends Model
         'publisher',
         'price',
         'image_url',
-        'saga_id'
+        'saga_id',
+        'achievements'
     ];
 
     public function genres()
@@ -46,5 +47,11 @@ public function themes()
 public function saga()
 {
     return $this->belongsTo(Saga::class);
+}
+
+// INTERACCIONES CON USER
+
+public function users(){
+    return $this->belongsToMany(User::class, 'user_games')->withTimestamps();
 }
 }

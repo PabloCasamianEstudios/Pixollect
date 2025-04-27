@@ -202,6 +202,7 @@ const form = useForm({
     game_mode_ids: [],
     game_tag_ids: [],
     saga_id: null,
+    achievements: 0,
 });
 
 const errors = reactive({

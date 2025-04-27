@@ -63,6 +63,7 @@ class GameController extends Controller
             'developer' => 'nullable|string',
             'publisher' => 'nullable|string',
             'price' => 'nullable|numeric',
+            'achievements' => 'nullable|numeric',
             'image_url' => 'nullable|string',
             'saga_id' => 'nullable|exists:sagas,id',
 
@@ -160,6 +161,7 @@ class GameController extends Controller
                 'developer' => 'nullable|string|max:255',
                 'publisher' => 'nullable|string|max:255',
                 'price' => 'nullable|numeric',
+                'achievements' => 'nullable|numeric',
                 'image_url' => 'nullable|url',
                 'genre_ids' => 'array',
                 'genre_ids.*' => 'integer|exists:genres,id',
