@@ -39,15 +39,6 @@
                 step="0.01"
                 placeholder="Price"
             />
-            <div>
-                <label>Amount of achievements</label>
-                <input
-                    id="achievement_id"
-                    v-model="form.achievement_id"
-                    type="number"
-                    placeholder="Amount"
-                />
-            </div>
             <input
                 v-model="form.achievements"
                 type="text"

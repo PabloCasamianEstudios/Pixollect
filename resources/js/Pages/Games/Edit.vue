@@ -42,6 +42,14 @@
                 placeholder="Price"
             />
             <input
+                v-model="form.achievements"
+                type="text"
+                placeholder="Achievements Amount"
+            />
+            <div v-if="errors.achievements" class="formError">
+                {{ errors.achievements }}
+            </div>
+            <input
                 v-model="form.image_url"
                 type="text"
                 placeholder="URL image"
@@ -209,6 +217,7 @@ const errors = reactive({
     platform_ids: '',
     game_tag_ids: '',
     description: '',
+    achievements: '',
 });
 
 const isValidDate = (dateStr) => {
@@ -229,6 +238,9 @@ function validateUrl(url) {
 function validate() {
     let valid = true;
     errors.title = form.title.trim() ? '' : 'Title is required.';
+    if (isNaN(form.achievements)) {
+        errors.achievements = 'Achievements must be numeric.';
+    }
     errors.description = form.description.trim()
         ? ''
         : 'Description is required.';
