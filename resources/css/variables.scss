@@ -3,3 +3,35 @@
 
 }
 $main-color: #ff1540;
+
+
+
+// Colores principales (base)
+$primary-blue: #4e9fc4; // Azul claro, tono principal (gamer)
+$secondary-blue: #3b7ea1; // Azul oscuro, para contrastes y detalles
+$highlight-yellow: #f4c542; // Amarillo neón para resaltar elementos
+$highlight-red: #f25c54; // Rojo neón para alertas y botones interactivos
+
+// Colores secundarios (detalles)
+$primary-dark: #1f1f1f; // Fondo oscuro, para contrastar con el texto claro
+$secondary-dark: #2d2d2d; // Oscuro, para áreas de menos énfasis
+$light-gray: #f4f4f4; // Gris claro, para texto principal y fondos suaves
+$secondary-gray: #b0b0b0; // Gris oscuro, para texto secundario
+
+// Colores de acento y texto
+$accent-blue: #00b0ff; // Azul vibrante, para hover y enlaces
+$accent-green: #1cd4a2; // Verde brillante para botones o interacciones
+$accent-orange: #ff8c42; // Naranja brillante, como color secundario de acción
+
+// Colores de borde y sombra
+$border-light: rgba(255, 255, 255, 0.1); // Borde suave en elementos
+$border-dark: rgba(0, 0, 0, 0.2); // Borde para contrastes sutiles
+
+// Transparencias para fondos
+$background-overlay: rgba(0, 0, 0, 0.7); // Capa oscura para overlays (efecto oscuro en el fondo)
+
+// Otros
+$error-red: #e74c3c; // Para errores o alertas
+$success-green: #2ecc71; // Para mensajes de éxito
+
+

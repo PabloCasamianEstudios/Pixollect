@@ -49,13 +49,20 @@ Route::get('/dashboard', function () {
 
 // Modelos
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('games', GameController::class);
+    Route::resource('games', GameController::class)->except(['show']);;
+    Route::put('/games/{game}', [GameController::class, 'update'])->name('games.update');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/games', [GameController::class, 'index'])->name('games.index');
 });
 
+
+// admin things
+
+Route::get('/admin-panel', function () {
+    return Inertia::render('AdminPanel');
+})->middleware(['auth', 'admin']);
 
 
 

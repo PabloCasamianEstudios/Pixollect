@@ -1,12 +1,12 @@
 <template>
-    <Head>
+    <metaHead>
         <title>Games</title>
         <meta
             head-key="description"
             name="description"
             content="Games page of the application"
         />
-    </Head>
+    </metaHead>
 
     <section class="gamesPage">
         <div class="gamesHeader">
@@ -63,10 +63,13 @@
 </template>
 
 <script>
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head as metaHead, usePage } from '@inertiajs/vue3';
 
 export default {
     name: 'Games',
+    components: {
+        metaHead,
+    },
     data() {
         const page = usePage();
         return {

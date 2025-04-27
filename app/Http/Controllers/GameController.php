@@ -55,6 +55,7 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -65,29 +66,30 @@ class GameController extends Controller
             'image_url' => 'nullable|string',
             'saga_id' => 'nullable|exists:sagas,id',
 
-            'genres' => 'array',
-            'genres.*' => 'exists:genres,id',
+            'genre_ids' => 'array',
+            'genre_ids.*' => 'exists:genres,id',
 
-            'platforms' => 'array',
-            'platforms.*' => 'exists:platforms,id',
+            'platform_ids' => 'array',
+            'platform_ids.*' => 'exists:platforms,id',
 
-            'themes' => 'array',
-            'themes.*' => 'exists:themes,id',
+            'theme_ids' => 'array',
+            'theme_ids.*' => 'exists:themes,id',
 
-            'game_modes' => 'array',
-            'game_modes.*' => 'exists:game_modes,id',
+            'game_mode_ids' => 'array',
+            'game_mode_ids.*' => 'exists:game_modes,id',
 
-            'game_tags' => 'array',
-            'game_tags.*' => 'exists:game_tags,id',
+            'game_tag_ids' => 'array',
+            'game_tag_ids.*' => 'exists:game_tags,id',
         ]);
 
         $game = Game::create($data);
 
-        $game->genres()->sync($data['genres'] ?? []);
-        $game->platforms()->sync($data['platforms'] ?? []);
-        $game->themes()->sync($data['themes'] ?? []);
-        $game->gameModes()->sync($data['game_modes'] ?? []);
-        $game->gameTags()->sync($data['game_tags'] ?? []);
+        $game->genres()->sync($data['genre_ids'] ?? []);
+        $game->platforms()->sync($data['platform_ids'] ?? []);
+        $game->themes()->sync($data['theme_ids'] ?? []);
+        $game->gameModes()->sync($data['game_mode_ids'] ?? []);
+        $game->gameTags()->sync($data['game_tag_ids'] ?? []);
+
 
         return Inertia::location(route('games.index'));
         //return response()->json($game->load(['genres', 'platforms', 'themes', 'gameModes', 'gameTags']), 201); SI QUISIESE QUE ME DEVUELVA UN JSON CON EL JUEGO
@@ -104,17 +106,69 @@ class GameController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Game $game)
     {
-        //
+
+        $game->load([
+            'genres',
+            'platforms',
+            'themes',
+            'gameModes',
+            'gameTags',
+            'saga',
+        ]);
+
+        return Inertia::render('Games/Edit', [
+            'game' => $game,
+            'genres' => Genre::all(),
+            'platforms' => Platform::all(),
+            'themes' => Theme::all(),
+            'gameModes' => GameMode::all(),
+            'gameTags' => GameTag::all(),
+            'sagas' => Saga::all(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Game $game)
     {
-        //
+
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'release_date' => 'nullable|date',
+                'developer' => 'nullable|string|max:255',
+                'publisher' => 'nullable|string|max:255',
+                'price' => 'nullable|numeric',
+                'image_url' => 'nullable|url',
+                'genre_ids' => 'array',
+                'genre_ids.*' => 'integer|exists:genres,id',
+                'platform_ids' => 'array',
+                'platform_ids.*' => 'integer|exists:platforms,id',
+                'theme_ids' => 'array',
+                'theme_ids.*' => 'integer|exists:themes,id',
+                'game_mode_ids' => 'array',
+                'game_mode_ids.*' => 'integer|exists:game_modes,id',
+                'game_tag_ids' => 'array',
+                'game_tag_ids.*' => 'integer|exists:game_tags,id',
+                'saga_id' => 'nullable|exists:sagas,id',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+        }
+
+        $game->update($validated);
+
+
+        $game->genres()->sync($validated['genre_ids'] ?? []);
+        $game->platforms()->sync($validated['platform_ids'] ?? []);
+        $game->themes()->sync($validated['theme_ids'] ?? []);
+        $game->gameModes()->sync($validated['game_mode_ids'] ?? []);
+        $game->gameTags()->sync($validated['game_tag_ids'] ?? []);
+
+        return redirect()->route('games.index')->with('success', 'Game updated successfully.');
     }
 
     /**

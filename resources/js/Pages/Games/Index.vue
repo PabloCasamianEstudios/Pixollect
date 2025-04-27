@@ -60,6 +60,7 @@
                 </tbody>
             </table>
         </div>
+        <button class="createButton" @click="createGame">+</button>
     </div>
 </template>
 
@@ -82,6 +83,9 @@ export default {
             if (confirm('¿Eliminar este juego?')) {
                 router.delete(`/games/${id}`);
             }
+        },
+        createGame() {
+            router.visit('/games/create');
         },
     },
 };
@@ -152,6 +156,25 @@ export default {
                     transform: scale(1.2);
                 }
             }
+        }
+    }
+    .createButton {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background-color: $main-color;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: scale(1.1);
         }
     }
 }
