@@ -19,9 +19,9 @@
                 >
                     <li><LinkTo href="/">HOME</LinkTo></li>
                     <li><LinkTo href="/gameList">GAMES</LinkTo></li>
-                    <li><LinkTo href="/welcome">COLLECTIONS</LinkTo></li>
-                    <li><LinkTo href="/welcome">RECOMMEND</LinkTo></li>
-                    <li><LinkTo href="/about">COMPARE</LinkTo></li>
+                    <li><LinkTo href="/collections">COLLECTIONS</LinkTo></li>
+                    <li><LinkTo href="/recommend">RECOMMEND</LinkTo></li>
+                    <li><LinkTo href="/compare">COMPARE</LinkTo></li>
                 </ul>
 
                 <div

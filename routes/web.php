@@ -10,17 +10,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 
-
-// Route::get('/', function () {
-//     return Inertia::render('Home', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-// Rutas base
+// Rutas PÚBLICAS
 Route::get('/', function () {
     return Inertia::render('Home');
 });
@@ -43,26 +33,33 @@ Route::get('/gameList', function () {
     ]);
 });
 
+Route::get('/compare', function () {
+    return Inertia::render('Compare');
+});
+Route::get('/recommend', function () {
+    return Inertia::render('Recommend');
+});
+Route::get('/collections', function () {
+    return Inertia::render('Collections');
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Modelos
+Route::get('/games/{game}', [GameController::class, 'show'])->name('games.show');
+
+// Rutas protegidas
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('games', GameController::class)->except(['show']);;
+    Route::resource('games', GameController::class)->except(['show']);
     Route::put('/games/{game}', [GameController::class, 'update'])->name('games.update');
-});
-
-Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/games', [GameController::class, 'index'])->name('games.index');
+
+    Route::get('/admin-panel', function () {
+        return Inertia::render('AdminPanel');
+    });
 });
 
-
-// admin things
-
-Route::get('/admin-panel', function () {
-    return Inertia::render('AdminPanel');
-})->middleware(['auth', 'admin']);
 
 
 

@@ -98,9 +98,26 @@ class GameController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Game $game)
     {
-        //
+        $platforms = Platform::all();
+        $genres = Genre::all();
+        $themes = Theme::all();
+        $gameTags = GameTag::all();
+        $gameModes = GameMode::all();
+        $sagas = Saga::all();
+
+        $game->load(['platforms', 'genres', 'themes', 'gameTags', 'gameModes', 'saga']);
+
+        return Inertia::render('Games/Show', [
+            'game' => $game,
+            'platforms' => $platforms,
+            'genres' => $genres,
+            'themes' => $themes,
+            'gameTags' => $gameTags,
+            'gameModes' => $gameModes,
+            'sagas' => $sagas
+        ]);
     }
 
     /**

@@ -27,7 +27,6 @@
                 </thead>
                 <tbody>
                     <tr v-for="game in games" :key="game.id">
-                    {{ console.log(game) }}
                         <td>{{ game.id }}</td>
                         <td>
                             <img

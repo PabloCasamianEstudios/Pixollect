@@ -52,7 +52,12 @@
         </div>
 
         <div class="gameGrid">
-            <div v-for="game in filteredGames" :key="game.id" class="gameCard">
+            <div
+                v-for="game in filteredGames"
+                :key="game.id"
+                @click="viewGame(game.id)"
+                class="gameCard"
+            >
                 <img :src="game.image_url" alt="Game cover" />
                 <div class="overlay">
                     <h2>{{ game.title }}</h2>
@@ -63,7 +68,7 @@
 </template>
 
 <script>
-import { Head as metaHead, usePage } from '@inertiajs/vue3';
+import { Head as metaHead, usePage, router } from '@inertiajs/vue3';
 
 export default {
     name: 'Games',
@@ -106,6 +111,11 @@ export default {
                     );
                 return matchTitle && matchGenre && matchPlatform && matchTheme;
             });
+        },
+    },
+    methods: {
+        viewGame(id) {
+            router.visit(`/games/${id}`);
         },
     },
 };
@@ -166,6 +176,7 @@ export default {
         border-radius: 12px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         transition: transform 0.3s;
+        cursor: pointer;
 
         &:hover {
             transform: scale(1.02);
