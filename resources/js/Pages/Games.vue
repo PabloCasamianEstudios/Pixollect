@@ -48,6 +48,16 @@
                         {{ theme.name }}
                     </option>
                 </select>
+                <select v-model="filters.saga">
+                    <option value="">All Sagas</option>
+                    <option
+                        v-for="saga in sagas"
+                        :key="saga.id"
+                        :value="saga.name"
+                    >
+                        {{ saga.name }}
+                    </option>
+                </select>
             </div>
         </div>
 
@@ -82,11 +92,13 @@ export default {
             genres: page.props.genres || [],
             platforms: page.props.platforms || [],
             themes: page.props.themes || [],
+            sagas: page.props.sagas || [],
             search: '',
             filters: {
                 genre: '',
                 platform: '',
                 theme: '',
+                saga: '',
             },
         };
     },
@@ -109,7 +121,15 @@ export default {
                     game.themes?.some(
                         (them) => them.name === this.filters.theme,
                     );
-                return matchTitle && matchGenre && matchPlatform && matchTheme;
+                    const matchSaga = !this.filters.saga || game.saga?.name === this.filters.saga;
+
+                return (
+                    matchTitle &&
+                    matchGenre &&
+                    matchPlatform &&
+                    matchTheme &&
+                    matchSaga
+                );
             });
         },
     },
@@ -136,6 +156,7 @@ export default {
         align-items: center;
         flex-wrap: wrap;
         margin-bottom: 2rem;
+        gap: 10px;
 
         .searchInput {
             background-color: #1c1c1c;
@@ -150,7 +171,7 @@ export default {
 
         .filters {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
 
             select {

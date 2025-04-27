@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Saga;
 
 // Rutas PÚBLICAS
 Route::get('/', function () {
@@ -20,16 +21,18 @@ Route::get('/welcome', function () {
 });
 
 Route::get('/gameList', function () {
-    $games = Game::all();
+    $games = Game::with(['saga', 'genres', 'platforms', 'themes'])->get();
     $genres = Genre::all();
     $platforms = Platform::all();
     $themes = Theme::all();
+    $sagas = Saga::all();
 
     return Inertia::render('Games', [
         'games' => $games,
         'genres' => $genres,
         'platforms' => $platforms,
         'themes' => $themes,
+        'sagas' => $sagas,
     ]);
 });
 
