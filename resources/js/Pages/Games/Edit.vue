@@ -196,6 +196,7 @@ const form = useForm({
     game_mode_ids: game.game_modes?.map((mode) => mode.id) || [],
     game_tag_ids: game.game_tags?.map((tag) => tag.id) || [],
     saga_id: game.saga_id || null,
+    achievements: game.achievements || 0,
 });
 
 const errors = reactive({

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('developer')->nullable();
             $table->string('publisher')->nullable();
             $table->decimal('price', 8, 2)->default(0);
+            $table->integer('achievements')->default(0);
             $table->string('image_url')->nullable();
             $table->foreignId('saga_id')->nullable()->constrained('sagas')->nullOnDelete();
             $table->timestamps();

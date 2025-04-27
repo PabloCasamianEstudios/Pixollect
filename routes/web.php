@@ -61,8 +61,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin-panel', function () {
         return Inertia::render('AdminPanel');
     });
+
 });
 
+
+Route::get('/games/create', [GameController::class, 'create'])
+    ->name('games.create')
+    ->middleware(['auth', 'admin']);
 
 
 

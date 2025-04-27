@@ -54,4 +54,15 @@ class User extends Authenticatable
         return $this->role;
     }
 
+    public function games()
+{
+    return $this->belongsToMany(Game::class, 'user_games')
+        ->withPivot([
+            'state', 'mastered', 'user_score', 'comment',
+            'progress', 'achievements_unlocked', 'hours_played',
+            'start_date', 'end_date'
+        ])
+        ->withTimestamps();
+}
+
 }

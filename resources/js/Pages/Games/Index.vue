@@ -1,12 +1,12 @@
 <template>
-    <Head>
+    <metaHead>
         <title>CRUD Games</title>
         <meta
             head-key="description"
             name="description"
             content="Index Game Admin Management page of the application"
         />
-    </Head>
+    </metaHead>
     <div class="gamesPage">
         <h1 class="gamesPage__title">Manage Games</h1>
 
@@ -65,11 +65,14 @@
 
 <script>
 // eslint-disable-next-line no-unused-vars
-import { Head, router } from '@inertiajs/vue3';
+import { Head as metaHead, router } from '@inertiajs/vue3';
 export default {
+    components: {
+        metaHead,
+    },
     props: {
         games: Array,
-        successMessage: String, // Recibimos el mensaje de éxito
+        successMessage: String,
     },
     methods: {
         viewGame(id) {
