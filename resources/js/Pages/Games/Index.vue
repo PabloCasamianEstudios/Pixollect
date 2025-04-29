@@ -101,7 +101,7 @@ export default {
     color: white;
     padding: 2rem;
     font-family: 'Orbitron', sans-serif;
-
+    min-height: 78.7vh;
     &__title {
         font-size: 2rem;
         color: $main-color;

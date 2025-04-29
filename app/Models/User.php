@@ -65,4 +65,8 @@ class User extends Authenticatable
         ->withTimestamps();
 }
 
+public function getRouteKeyName() {
+    return 'name';
+}
+
 }

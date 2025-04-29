@@ -33,7 +33,13 @@ class RegisteredUserController extends Controller
         logger()->info('Datos recibidos:', $request->all());
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => [
+        'required',
+        'string',
+        'max:30',
+        'unique:users,name',
+        'regex:/^[a-zA-Z0-9_]+$/'
+    ],
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);

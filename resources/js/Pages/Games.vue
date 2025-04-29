@@ -149,6 +149,7 @@ export default {
     color: white;
     font-family: 'Orbitron', sans-serif;
     padding: 2rem;
+    min-height: 78.7vh;
 
     .gamesHeader {
         display: flex;
