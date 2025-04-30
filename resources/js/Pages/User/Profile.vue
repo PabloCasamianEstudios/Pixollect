@@ -36,5 +36,6 @@ export default {
 .profile-container {
     padding: 2rem;
     color: white;
+    min-height: 81vh;
 }
 </style>

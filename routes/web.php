@@ -54,6 +54,11 @@ Route::get('/dashboard', function () {
 // USERS
 
 Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
+Route::get('/user/{user}/games', [UserController::class, 'games'])->name('user.games');
+
+// user / jueguitos
+Route::post('/games/{game}/add', [\App\Http\Controllers\UserGameController::class, 'store'])->middleware('auth');
+
 
 // Jueguitos
 Route::get('/games/create', function () {

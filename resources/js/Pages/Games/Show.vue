@@ -74,15 +74,21 @@
                 {{ game.developer }} and published by {{ game.publisher }}
             </p>
             <p class="gameDescription">{{ game.description }}</p>
+            <Button class="addBtn" @click="openModal">
+                Add to your Collection
+            </Button>
         </div>
+
+        <UserGameModal v-if="showModal" :game="game" @close="closeModal" />
     </div>
 </template>
 
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
+import UserGameModal from '@/Components/UserGameModal.vue';
 
-defineProps({
+const props = defineProps({
     game: Object,
     platforms: Array,
     genres: Array,
@@ -91,6 +97,32 @@ defineProps({
     gameModes: Array,
     sagas: Array,
 });
+const showModal = ref(false);
+
+// abrir modal
+function openModal() {
+    showModal.value = true;
+}
+// cerrar
+function closeModal() {
+    showModal.value = false;
+}
+
+// add games to your collection
+function addToCollection() {
+    router.post(
+        `/games/${props.game.id}/add`,
+        {},
+        {
+            onSuccess: () => {
+                alert('Game added to your collection!');
+            },
+            onError: () => {
+                alert('Error adding game. Maybe already added?');
+            },
+        },
+    );
+}
 
 function formatDate(date) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -181,25 +213,41 @@ function redirectToGameList() {
 
 .gameDetailRight {
     width: 65%;
-}
 
-.gameTitle {
-    font-size: 2rem;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 1rem;
-}
+    .gameTitle {
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 1rem;
+    }
 
-.gameRelease {
-    font-size: 1.2rem;
-    color: #a1a1a1;
-    margin-top: 0.5rem;
-}
+    .gameRelease {
+        font-size: 1.2rem;
+        color: #a1a1a1;
+        margin-top: 0.5rem;
+    }
 
-.gameDescription {
-    font-size: 1rem;
-    color: white;
-    margin-top: 1rem;
-    line-height: 1.6;
+    .gameDescription {
+        font-size: 1rem;
+        color: white;
+        margin-top: 1rem;
+        line-height: 1.6;
+    }
+
+    .addBtn {
+        background-color: $main-color;
+        color: black;
+        padding: 0.7rem 1.4rem;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 1rem;
+        margin-top: 2rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover {
+            background-color: lighten($main-color, 10%);
+        }
+    }
 }
 </style>
