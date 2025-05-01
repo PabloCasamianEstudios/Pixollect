@@ -54,8 +54,7 @@ class User extends Authenticatable
         return $this->role;
     }
 
-    public function games()
-{
+    public function games(){
     return $this->belongsToMany(Game::class, 'user_games')
         ->withPivot([
             'state', 'mastered', 'user_score', 'comment',
@@ -65,8 +64,11 @@ class User extends Authenticatable
         ->withTimestamps();
 }
 
-public function getRouteKeyName() {
-    return 'name';
-}
-
+    public function getRouteKeyName() {
+        return 'name';
+    }
+    // comprobar si tiene un juego
+    public function hasGame(int $gameId): bool{
+        return $this->games()->where('game_id',$gameId)->exists();
+    }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->enum('role', ['admin', 'user', 'mute'])->default('user');
-            $table->string('avatar_url')->nullable();
+            $table->string('avatar_url')->nullable()->default('/images/defaultIcon.png');
             $table->json('user_tags')->nullable();
             $table->timestamps();
         });

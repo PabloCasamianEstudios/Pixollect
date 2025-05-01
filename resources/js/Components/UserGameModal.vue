@@ -1,7 +1,9 @@
 <template>
     <div class="modal-backdrop" @click.self="$emit('close')">
         <div class="modal-content">
-            <h2 class="modal-title">Add "{{ game.title }}" to your Collection</h2>
+            <h2 class="modal-title">
+                Add "{{ game.title }}" to your Collection
+            </h2>
 
             <form @submit.prevent="submit">
                 <div class="form-group">
@@ -16,11 +18,21 @@
 
                 <div class="form-group">
                     <label>Rating</label>
-                    <input type="number" min="1" max="10" v-model="form.rating" />
+                    <input type="number" v-model="form.rating" />
+
+                    <span v-if="errors.rating" class="formError">
+                        {{ errors.rating }}
+                    </span>
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="cancel-btn" @click="$emit('close')">Cancel</button>
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        @click="$emit('close')"
+                    >
+                        Cancel
+                    </button>
                     <button type="submit" class="submit-btn">Save</button>
                 </div>
             </form>
@@ -28,31 +40,81 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import { reactive } from 'vue';
-import { router } from '@inertiajs/vue3';
-import { defineProps, defineEmits } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 
-const emit = defineEmits(['close']);
-const props = defineProps({ game: Object });
-
-const form = reactive({
-    game_id: props.game.id,
-    status: 'Playing',
-    rating: null,
-});
-
-function submit() {
-    router.post('/user-games', form, {
-        onSuccess: () => {
-            emit('close');
+export default {
+    props: {
+        game: Object,
+    },
+    emits: ['close'],
+    data() {
+        return {
+            form: reactive({
+                game_id: this.game.id,
+                status: 'Playing',
+                rating: null,
+            }),
+            errors: reactive({
+                rating: '',
+            }),
+        };
+    },
+    computed: {
+        currentUser() {
+            return usePage().props.auth.user;
         },
-    });
-}
+        currentUserGames() {
+            return usePage().props.auth.games;
+        },
+    },
+    methods: {
+        isGameInCollection(gameId) {
+            const userGames = this.currentUserGames || [];
+            return userGames.includes(gameId);
+        },
+        validate() {
+            let isValid = true;
+            //validar rating valido
+            if (
+                this.form.rating !== null &&
+                (this.form.rating < 0 || this.form.rating > 10)
+            ) {
+                this.errors.rating = 'Rating must be a number between 0 and 10';
+                isValid = false;
+            } else {
+                this.errors.rating = '';
+            }
+            return isValid;
+        },
+        submit() {
+            if (this.validate()) {
+                if (this.isGameInCollection(this.game_id)) {
+                    console.log('ya lo tiene');
+                } else {
+                    router.post(`/games/${this.form.game_id}/add`, this.form, {
+                        onSuccess: () => {
+                            this.$emit('close');
+                        },
+                    });
+                }
+            } else {
+                console.log('rating inválido');
+            }
+        },
+    },
+};
 </script>
-
 <style scoped lang="scss">
 @use '../../css/variables.scss' as *;
+
+.formError {
+    color: #e53935;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
 
 .modal-backdrop {
     position: fixed;

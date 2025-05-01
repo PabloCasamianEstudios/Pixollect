@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserGameController extends Controller
 {
-    // crear relación juegos del usuario
+    // crear relación juegos del usuario TODAVÍA ESTÁ EN PRUEBAS, POR ESO ESTABLEZCO LOS VALORES DEL JUEGO
     public function store(Game $game){
         $user = Auth::user();
 

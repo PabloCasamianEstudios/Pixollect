@@ -11,6 +11,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserGameController;
 
 // Rutas PÚBLICAS
 Route::get('/', function () {
@@ -57,7 +58,7 @@ Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
 Route::get('/user/{user}/games', [UserController::class, 'games'])->name('user.games');
 
 // user / jueguitos
-Route::post('/games/{game}/add', [\App\Http\Controllers\UserGameController::class, 'store'])->middleware('auth');
+Route::post('/games/{game}/add', [UserGameController::class, 'store'])->middleware('auth');
 
 
 // Jueguitos

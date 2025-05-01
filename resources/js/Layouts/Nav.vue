@@ -42,10 +42,12 @@
 
                     <ul v-if="userMenuOpen" class="userMenu">
                         <li>
-                            <LinkTo href="/profile/edit">EDIT PROFILE</LinkTo>
+                            <LinkTo :href="`/user/${currentUser.name}`"
+                                >YOUR PROFILE</LinkTo
+                            >
                         </li>
                         <li>
-                            <LinkTo href="/profile/stats">USER STATS</LinkTo>
+                            <LinkTo href="/profile/edit">EDIT PROFILE</LinkTo>
                         </li>
                         <li>
                             <LinkTo href="/profile/settings"
@@ -195,7 +197,8 @@ export default {
             display: flex;
             list-style: none;
             gap: 1.5rem;
-
+            z-index: 100;
+            width: 10%;
             li a {
                 color: white;
                 text-decoration: none;
@@ -216,6 +219,9 @@ export default {
                 &--open {
                     display: flex;
                     margin-bottom: 30px;
+                    background-color: #000;
+                    padding: 1rem;
+                    border-radius: 0 0 10px 10px;
                 }
             }
         }

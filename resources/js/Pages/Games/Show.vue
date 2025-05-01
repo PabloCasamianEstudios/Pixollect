@@ -74,9 +74,9 @@
                 {{ game.developer }} and published by {{ game.publisher }}
             </p>
             <p class="gameDescription">{{ game.description }}</p>
-            <Button class="addBtn" @click="openModal">
+            <button class="addBtn" @click="openModal">
                 Add to your Collection
-            </Button>
+            </button>
         </div>
 
         <UserGameModal v-if="showModal" :game="game" @close="closeModal" />

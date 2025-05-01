@@ -12,7 +12,9 @@ class UserController extends Controller {
     //  principal user
     public function show(User $user){
     $gamesCount = $user->games()->count();
-    $userGames = $user->games();
+    $userGames = $user->games()->withPivot('state','mastered','user_score','comment','progress','achievements_unlocked','hours_played','start_date','end_date')->get();
+
+
 
     return Inertia::render('User/Profile', [
         'user' => $user,
