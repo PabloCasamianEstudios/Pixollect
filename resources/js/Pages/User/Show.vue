@@ -7,9 +7,20 @@
             :content="'User place'"
         />
     </Head>
+
+    <UserLayout :user="user"></UserLayout>
 </template>
-<script setup>
+<script>
 import { Head, router } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
+import AppLayout from '@/Layouts/Layout.vue'
+import UserLayout from '@/Layouts/UserLayout.vue';
+
+export default {
+    layout: AppLayout,
+    components: {
+        UserLayout,
+    }
+}
 
 </script>

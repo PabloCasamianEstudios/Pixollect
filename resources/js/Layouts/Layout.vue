@@ -19,4 +19,12 @@ export default {
     },
 };
 </script>
-<style scoped></style>
+<style scoped>
+body {
+    min-height: 100vh;
+}
+main{
+    min-height: 100vh;
+
+}
+</style>

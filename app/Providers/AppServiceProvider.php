@@ -26,10 +26,28 @@ class AppServiceProvider extends ServiceProvider
         Inertia::share('auth', function () {
             $user = Auth::user();
 
-            return $user ? [
+
+            if (!$user) {
+                return [
+                    'user' => null,
+                    'games' => [],
+                ];
+            }
+
+            return [
                 'user' => $user,
-                'games' => $user->games()->pluck('games.id')->toArray(),
-            ] : null;
+                'games' => $user->games()->withPivot([
+                    'state',
+                    'mastered',
+                    'user_score',
+                    'comment',
+                    'progress',
+                    'achievements_unlocked',
+                    'hours_played',
+                    'start_date',
+                    'end_date',
+                ])->get(),
+            ];
         });
 
     }

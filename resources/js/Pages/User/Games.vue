@@ -1,35 +1,93 @@
 <template>
-    <div class="userGamesContainer">
-        <h1 class="sectionTitle">{{ user.name }}'s Collection</h1>
+    <metaHead>
+        <title>{{ user.name }} Games</title>
+        <meta
+            head-key="description"
+            name="description"
+            content="Home page of the application"
+        />
+    </metaHead>
+    <UserLayout :user="user">
+        <div class="userGamesContainer">
+            <h1 class="sectionTitle">{{ user.name }}'s Collection</h1>
 
-        <div v-if="games.length" class="gamesGrid">
-            <div v-for="game in games" :key="game.id" class="gameCard">
-                <img
-                    :src="game.image_url"
-                    :alt="game.title"
-                    class="gameImage"
-                />
-                <div class="gameInfo">
-                    <h2 class="gameTitle">{{ game.title }}</h2>
-                    <p class="gameProgress">
-                        Progress: {{ game.pivot.progress }}%
-                    </p>
-                    <p class="gameState">Status: {{ game.pivot.state }}</p>
+            <div v-if="games.length" class="gamesGrid">
+                <div
+                    v-for="game in games"
+                    :key="game.id"
+                    class="gameCard"
+                    @click="goToGame(game.id)"
+                >
+                    <div class="gameImageWrapper">
+                        <img
+                            :src="game.image_url"
+                            :alt="game.title"
+                            class="gameImage"
+                        />
+                        <div class="gameOverlay">
+                            <div class="gameActions">
+                                <button class="actionBtn">X</button>
+                                <button class="actionBtn">X</button>
+                                <button class="actionBtn">X</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gameInfo">
+                        <h2 class="gameTitle">{{ game.title }}</h2>
+                        <div class="gameStats">
+                            <span class="gameProgress"
+                                >{{ game.pivot.progress }}%</span
+                            >
+                            <span class="gameState">{{
+                                formatState(game.pivot.state)
+                            }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div v-else class="noGamesMessage">
-            <p>This user hasn’t added any games yet.</p>
+            <div v-else class="noGamesMessage">
+                <p>This user hasn't added any games yet.</p>
+            </div>
         </div>
-    </div>
+    </UserLayout>
 </template>
 
-<script setup>
-defineProps({
-    user: Object,
-    games: Array,
-});
+<script>
+import AppLayout from '@/Layouts/Layout.vue';
+import UserLayout from '@/Layouts/UserLayout.vue';
+import { Head as metaHead, router } from '@inertiajs/vue3';
+export default {
+    layout: AppLayout,
+    components: {
+        UserLayout,
+        metaHead,
+    },
+    props: {
+        user: {
+            type: Object,
+            required: true,
+        },
+        games: {
+            type: Array,
+            required: true,
+        },
+    },
+    methods: {
+        goToGame(gameId) {
+            router.visit(`/games/${gameId}`);
+        },
+        formatState(state) {
+            const states = {
+                pending: 'Pending',
+                playing: 'Playing',
+                completed: 'Completed',
+                dropped: 'Dropped',
+            };
+            return states[state] || state;
+        },
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -41,6 +99,8 @@ defineProps({
     min-height: 100vh;
     font-family: 'Orbitron', sans-serif;
     color: white;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .sectionTitle {
@@ -48,33 +108,93 @@ defineProps({
     color: $main-color;
     text-align: center;
     margin-bottom: 2rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .gamesGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1.5rem;
+    padding: 0 1rem;
 }
 
 .gameCard {
+    position: relative;
     background-color: #1e1e1e;
-    border: 1px solid #333;
-    border-radius: 8px;
+    border-radius: 6px;
     overflow: hidden;
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
 
     &:hover {
-        transform: scale(1.02);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+
+        .gameOverlay {
+            transform: translateY(0);
+        }
     }
 }
 
-.gameImage {
+.gameImageWrapper {
+    position: relative;
     width: 100%;
-    height: 200px;
+    height: 0;
+    padding-bottom: 150%;
+    overflow: hidden;
+}
+
+.gameImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
+
+    .gameCard:hover & {
+        transform: scale(1.05);
+    }
+}
+
+.gameOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    padding: 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    justify-content: center;
+}
+
+.gameActions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.actionBtn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: $main-color;
+        color: black;
+        transform: scale(1.1);
+    }
 }
 
 .gameInfo {
@@ -82,15 +202,31 @@ defineProps({
 }
 
 .gameTitle {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: $main-color;
+    font-size: 1rem;
+    margin: 0;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.gameProgress,
+.gameStats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+.gameProgress {
+    color: $main-color;
+    font-weight: bold;
+}
+
 .gameState {
-    font-size: 0.9rem;
-    color: #ccc;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
 }
 
 .noGamesMessage {
@@ -98,5 +234,17 @@ defineProps({
     margin-top: 3rem;
     font-size: 1.1rem;
     color: #aaa;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .gamesGrid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
 }
 </style>

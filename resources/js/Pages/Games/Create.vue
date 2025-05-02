@@ -209,6 +209,8 @@ const errors = reactive({
     achievements: '',
 });
 
+// Methodss
+
 const isValidDate = (dateStr) => {
     const date = new Date(dateStr);
     const hoy = new Date();
@@ -259,6 +261,7 @@ function validate() {
 
     return valid;
 }
+
 function submit() {
     if (!validate()) return;
     form.post('/games');
@@ -352,7 +355,7 @@ function submit() {
     transition: background-color 0.3s;
 
     &:hover {
-        background-color: #FF3A5EFF;
+        background-color: #ff3a5eff;
     }
 }
 </style>

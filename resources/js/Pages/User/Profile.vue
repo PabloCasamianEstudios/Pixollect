@@ -7,29 +7,25 @@
             content="Home page of the application"
         />
     </metaHead>
-    <div class="profile-header">
-        <img :src="user.avatar_url" alt="User Avatar" class="profile-avatar" />
+    <UserLayout :user="user">
         <div class="profile-info">
-            <h1 class="profile-name">
-                {{
-                    currentUser?.id === user?.id
-                        ? 'Your Profile'
-                        : user.name + "'s Profile"
-                }}
-            </h1>
             <p class="profile-stats">
                 Games in Collection:
                 {{ gamesCount.toString().padStart(3, '0') }}
             </p>
         </div>
-    </div>
+    </UserLayout>
 </template>
 
 <script>
+import AppLayout from '@/Layouts/Layout.vue';
+import UserLayout from '@/Layouts/UserLayout.vue';
 import { Head as metaHead, usePage } from '@inertiajs/vue3';
 export default {
+    layout: AppLayout,
     components: {
         metaHead,
+        UserLayout,
     },
     computed: {
         currentUser() {
@@ -43,7 +39,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @use '../../../css/variables.scss' as *;
 .profile-container {
     color: white;

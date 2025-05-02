@@ -12,6 +12,7 @@ use App\Models\GameMode;
 use App\Models\Platform;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
@@ -117,7 +118,19 @@ class GameController extends Controller
             'themes' => $themes,
             'gameTags' => $gameTags,
             'gameModes' => $gameModes,
-            'sagas' => $sagas
+            'sagas' => $sagas,
+
+            'userGames' => Auth::user() ? Auth::user()->games()->withPivot([
+                'state',
+                'mastered',
+                'user_score',
+                'comment',
+                'progress',
+                'achievements_unlocked',
+                'hours_played',
+                'start_date',
+                'end_date',
+            ])->get() : []
         ]);
     }
 

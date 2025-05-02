@@ -74,8 +74,19 @@
                 {{ game.developer }} and published by {{ game.publisher }}
             </p>
             <p class="gameDescription">{{ game.description }}</p>
-            <button class="addBtn" @click="openModal">
+            <button
+                v-if="!isGameInCollection"
+                class="addBtn"
+                @click="openModal"
+            >
                 Add to your Collection
+            </button>
+            <button
+                v-else
+                class="addBtn"
+                @click="removeFromCollection(game.id)"
+            >
+                Remove from Collection
             </button>
         </div>
 
@@ -84,8 +95,8 @@
 </template>
 
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
-import { defineProps, ref } from 'vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
+import { defineProps, ref, computed } from 'vue';
 import UserGameModal from '@/Components/UserGameModal.vue';
 
 const props = defineProps({
@@ -96,32 +107,31 @@ const props = defineProps({
     gameTags: Array,
     gameModes: Array,
     sagas: Array,
+    userGames: Array,
 });
 const showModal = ref(false);
 
-// abrir modal
+// methods
+
 function openModal() {
     showModal.value = true;
 }
-// cerrar
 function closeModal() {
     showModal.value = false;
 }
 
-// add games to your collection
-function addToCollection() {
-    router.post(
-        `/games/${props.game.id}/add`,
-        {},
-        {
-            onSuccess: () => {
-                alert('Game added to your collection!');
-            },
-            onError: () => {
-                alert('Error adding game. Maybe already added?');
-            },
-        },
-    );
+async function removeFromCollection(gameId) {
+    if (
+        confirm(
+            'Are you sure you want to remove this game from your collection?',
+        )
+    ) {
+        try {
+            await router.delete(`/games/${gameId}/remove`);
+        } catch (error) {
+            console.error('Error removing game:', error);
+        }
+    }
 }
 
 function formatDate(date) {
@@ -132,6 +142,9 @@ function formatDate(date) {
 function redirectToGameList() {
     router.visit('/gameList');
 }
+const isGameInCollection = computed(() =>
+    props.userGames.some((userGame) => userGame.id === props.game.id),
+);
 </script>
 
 <style scoped lang="scss">

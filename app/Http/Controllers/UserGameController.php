@@ -31,4 +31,20 @@ class UserGameController extends Controller
         return back();
     }
 
+    // borrar juego de la colección
+    public function destroy($gameId) {
+        $user = Auth::user();
+
+        if (!$user->games()->where('game_id', $gameId)->exists()) {
+            return back()->withErrors([
+                'error' => 'NO ESTÁ.'
+            ]);
+        }
+
+        $user->games()->detach($gameId);
+
+        return back()->with('success', 'Game removed from your collection successfully');
+
+    }
+
 }

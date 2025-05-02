@@ -8,15 +8,14 @@
         />
     </metaHead>
 
-    <h1>TAMOS EN COLLECTIONS</h1>
+    <div> <h1>A</h1></div>
 </template>
-
 <script>
 import { Head as metaHead } from '@inertiajs/vue3';
+
 export default {
-    name: 'Collections',
-    components: {
-        metaHead,
-    },
+
 };
 </script>
+
+<style scoped></style>

@@ -107,7 +107,7 @@ export default {
         async logout() {
             if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
                 await router.post(
-                    'logout',
+                    '/logout',
                     {},
                     {
                         onSuccess: () => {
