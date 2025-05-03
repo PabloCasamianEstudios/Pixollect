@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +46,29 @@ class UserGameController extends Controller
 
         return back()->with('success', 'Game removed from your collection successfully');
 
+    }
+
+
+    // obtener todos los juegos de un user
+    public function getUserGames($userId) {
+        $user = User::with(['games' => function ($query) {
+            $query->with('genres', 'platforms');
+        }])->findOrFail($userId);
+
+        return response()->json([
+            'games' => $user->games,
+        ]);
+    }
+
+    // todas horas de un user en todos sus juegos
+    public function getTotalHours ($userId) {
+        $user = User::findOrFail($userId);
+
+        $totalHours = $user->games()->sum('playtime');
+
+        return response()->json([
+            'total_hours' => $totalHours,
+        ]);
     }
 
 }

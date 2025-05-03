@@ -12,6 +12,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserGameController;
+use App\Http\Controllers\Api\GameApiController;
 
 // Rutas PÚBLICAS
 Route::get('/', function () {
@@ -98,6 +99,15 @@ Route::get('/games/create', [GameController::class, 'create'])
     ->name('games.create')
     ->middleware(['auth', 'admin']);
 
+
+// API
+
+Route::prefix('games')->group(function () {
+    Route::get('{id}', [GameApiController::class, 'show']);
+    Route::get('search', [GameApiController::class, 'search']);
+    Route::get('recommend/{userId}', [GameApiController::class, 'recommendByTags']);
+    Route::post('compare', [GameApiController::class, 'compare']);
+});
 
 
 // esto venía de base, no se toca por ahora
