@@ -12,7 +12,6 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserGameController;
-use App\Http\Controllers\Api\GameApiController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Rutas PÚBLICAS
@@ -88,7 +87,6 @@ Route::get('/games/{game}', [GameController::class, 'show'])->name('games.show')
 // Rutas protegidas
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('games', GameController::class)->except(['show']);
-    Route::put('/games/{game}', [GameController::class, 'update'])->name('games.update');
     Route::get('/games', [GameController::class, 'index'])->name('games.index');
 
     Route::get('/admin-panel', function () {
@@ -101,16 +99,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::get('/games/create', [GameController::class, 'create'])
     ->name('games.create')
     ->middleware(['auth', 'admin']);
-
-
-// API
-
-Route::prefix('games')->group(function () {
-    Route::get('{id}', [GameApiController::class, 'show']);
-    Route::get('search', [GameApiController::class, 'search']);
-    Route::get('recommend/{userId}', [GameApiController::class, 'recommendByTags']);
-    Route::post('compare', [GameApiController::class, 'compare']);
-});
 
 
 // esto venía de base, no se toca por ahora
