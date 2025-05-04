@@ -47,6 +47,7 @@ import { router, usePage } from '@inertiajs/vue3';
 export default {
     props: {
         game: Object,
+        userGames: Array,
     },
     emits: ['close'],
     data() {
@@ -65,14 +66,10 @@ export default {
         currentUser() {
             return usePage().props.auth.user;
         },
-        currentUserGames() {
-            return usePage().props.auth.games;
-        },
     },
     methods: {
         isGameInCollection(gameId) {
-            const userGames = this.currentUserGames || [];
-            return userGames.includes(gameId);
+            return this.userGames.find((game) => game.id === gameId);
         },
         validate() {
             let isValid = true;
@@ -90,14 +87,11 @@ export default {
         },
         submit() {
             if (this.validate()) {
-                if (this.isGameInCollection(this.game_id)) {
-                    console.log('ya lo tiene');
+                if (this.isGameInCollection(this.form.game_id)) {
+                    this.$emit('close');
                 } else {
-                    router.post(`/games/${this.form.game_id}/add`, this.form, {
-                        onSuccess: () => {
-                            this.$emit('close');
-                        },
-                    });
+                    router.post(`/games/${this.form.game_id}/add`, this.form, {});
+                    this.$emit('close');
                 }
             } else {
                 console.log('rating inválido');

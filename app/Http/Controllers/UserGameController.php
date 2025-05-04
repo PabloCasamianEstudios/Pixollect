@@ -29,7 +29,7 @@ class UserGameController extends Controller
             return back()->withErrors(['message' => 'Already added']);
         }
 
-        return back();
+        return back()->with('success', 'Game added to collection');;
     }
 
     // borrar juego de la colección

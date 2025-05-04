@@ -90,61 +90,69 @@
             </button>
         </div>
 
-        <UserGameModal v-if="showModal" :game="game" @close="closeModal" />
+        <UserGameModal v-if="showModal" :game="game" :userGames="userGames" @close="closeModal" />
     </div>
 </template>
 
-<script setup>
-import { Head, router, usePage } from '@inertiajs/vue3';
-import { defineProps, ref, computed } from 'vue';
+<script>
+import { Head, router } from '@inertiajs/vue3';
 import UserGameModal from '@/Components/UserGameModal.vue';
-
-const props = defineProps({
-    game: Object,
-    platforms: Array,
-    genres: Array,
-    themes: Array,
-    gameTags: Array,
-    gameModes: Array,
-    sagas: Array,
-    userGames: Array,
-});
-const showModal = ref(false);
-
-// methods
-
-function openModal() {
-    showModal.value = true;
-}
-function closeModal() {
-    showModal.value = false;
-}
-
-async function removeFromCollection(gameId) {
-    if (
-        confirm(
-            'Are you sure you want to remove this game from your collection?',
-        )
-    ) {
-        try {
-            await router.delete(`/games/${gameId}/remove`);
-        } catch (error) {
-            console.error('Error removing game:', error);
-        }
-    }
-}
-
-function formatDate(date) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(date).toLocaleDateString('en-US', options);
-}
-
-function redirectToGameList() {
-    router.visit('/gameList');
-}
-const isGameInCollection = computed(() =>
-    props.userGames.some((userGame) => userGame.id === props.game.id),
-);
+export default {
+    components: {
+        Head,
+        UserGameModal,
+    },
+    props: {
+        game: Object,
+        platforms: Array,
+        genres: Array,
+        themes: Array,
+        gameTags: Array,
+        gameModes: Array,
+        sagas: Array,
+        userGames: Array,
+    },
+    data() {
+        return {
+            showModal: false,
+        };
+    },
+    computed: {
+        isGameInCollection() {
+            return this.userGames.some(
+                (userGame) => userGame.id === this.game.id,
+            );
+        },
+    },
+    methods: {
+        openModal() {
+            this.showModal = true;
+        },
+        closeModal() {
+            this.showModal = false;
+        },
+        async removeFromCollection(gameId) {
+            if (
+                confirm(
+                    'Are you sure you want to remove this game from your collection?',
+                )
+            ) {
+                try {
+                    await router.delete(`/games/${gameId}/remove`);
+                } catch (error) {
+                    console.error('Error removing game:', error);
+                }
+            }
+        },
+        formatDate(date) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(date).toLocaleDateString('en-US', options);
+        },
+        redirectToGameList() {
+            router.visit('/gameList');
+        },
+    },
+};
 </script>
 
 <style scoped lang="scss">

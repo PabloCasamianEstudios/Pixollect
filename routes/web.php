@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\Api\GameApiController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Rutas PÚBLICAS
 Route::get('/', function () {
@@ -62,6 +63,8 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
 // user / jueguitos en COLECCIÓN
+Route::get('/user/{id}/games', [UserGameController::class, 'getUserGames']);
+
 Route::post('/games/{game}/add', [UserGameController::class, 'store'])->middleware('auth');
 
 Route::delete('/games/{game}/remove', [UserGameController::class, 'destroy'])

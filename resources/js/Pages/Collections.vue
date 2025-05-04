@@ -14,7 +14,9 @@
 import { Head as metaHead } from '@inertiajs/vue3';
 
 export default {
-
+    components: {
+        metaHead,
+    },
 };
 </script>
 
