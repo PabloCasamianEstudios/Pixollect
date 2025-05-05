@@ -45,9 +45,8 @@ Route::get('/compare', function () {
 Route::get('/recommend', function () {
     return Inertia::render('Recommend');
 });
-Route::get('/collections', function () {
-    return Inertia::render('Collections');
-});
+Route::get('/collections', [UserController::class, 'collections'])->name('collections');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

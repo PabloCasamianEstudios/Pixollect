@@ -35,4 +35,12 @@ public function games(User $user) {
     ]);
 }
 
+    // sacar todas las collections
+    public function collections() {
+        $users = User::with('games')->select('id','name','avatar_url')->get();
+        return Inertia::render('Collections', [
+            'users' => $users,
+        ]);
+    }
+
 }
