@@ -108,4 +108,14 @@ public function index()
             ->get();
     }
 
+    // misma sagas
+    public function sameSaga(Game $game) {
+        if (!$game->saga) {
+            return response()->json(['games' => []]);
+        }
+        $games = $game->saga->games()->where('id', '!=', $game->id)->inRandomOrder()->take(3)->get();
+
+        return response()->json(['games' => $games]);
+    }
+
 }

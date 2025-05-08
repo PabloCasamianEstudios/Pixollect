@@ -8,4 +8,6 @@ Route::prefix('games')->group(function () {
     Route::get('/search', [GameApiController::class, 'search']);
     Route::get('/{game}', [GameApiController::class, 'show']);
     Route::get('/{game}/similar', [GameApiController::class, 'similarGames']);
+    Route::get('/{game}/same-saga', [GameApiController::class, 'sameSaga'])->name('games.sameSaga');
+
 });

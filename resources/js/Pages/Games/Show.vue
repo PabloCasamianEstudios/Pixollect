@@ -88,6 +88,21 @@
             >
                 Remove from Collection
             </button>
+
+            <div v-if="game.saga && sameSagaGames.length" class="same-saga-section">
+                <h3>More from the "{{ game.saga.name }}" saga</h3>
+                <div class="saga-game-list">
+                    <div
+                        v-for="sagaGame in sameSagaGames"
+                        :key="sagaGame.id"
+                        class="saga-game-card"
+                        @click="goToGame(sagaGame.id)"
+                    >
+                        <img :src="sagaGame.image_url" alt="Game Cover" class="saga-cover" />
+                        <p class="saga-title">{{ sagaGame.title }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <UserGameModal v-if="showModal" :game="game" :userGames="userGames" @close="closeModal" />
@@ -115,7 +130,11 @@ export default {
     data() {
         return {
             showModal: false,
+            sameSagaGames: [],
         };
+    },
+    mounted() {
+        this.fetchSameSagaGames();
     },
     computed: {
         isGameInCollection() {
@@ -125,11 +144,20 @@ export default {
         },
     },
     methods: {
+        async fetchSameSagaGames() {
+            const response = await fetch(
+            `${window.location.protocol}//${window.location.host}/api/games/${this.game.id}/same-saga`
+            );
+            this.sameSagaGames = (await response.json()).games;
+        },
         openModal() {
             this.showModal = true;
         },
         closeModal() {
             this.showModal = false;
+        },
+        goToGame(gameId) {
+            router.visit(`/games/${gameId}`);
         },
         async removeFromCollection(gameId) {
             if (
@@ -268,6 +296,62 @@ export default {
 
         &:hover {
             background-color: lighten($main-color, 10%);
+        }
+    }
+}
+
+.same-saga-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid lighten(#1c1c1c, 10%);
+
+    h3 {
+        color: $main-color;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+    }
+
+    .saga-game-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .saga-game-card {
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #2a2a2a;
+        border-radius: 10px;
+        padding: 0.8rem;
+        text-align: center;
+
+        &:hover {
+            transform: translateY(-5px);
+
+            .saga-title {
+                color: $main-color;
+            }
+        }
+
+        .saga-cover {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-bottom: 0.8rem;
+            border: 2px solid transparent;
+        }
+
+        .saga-title {
+            font-size: 0.95rem;
+            color: #ddd;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }
