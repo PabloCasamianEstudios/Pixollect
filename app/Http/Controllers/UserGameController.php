@@ -20,19 +20,30 @@ class UserGameController extends Controller
         if ($user->games()->where('game_id', $game->id)->exists()) {
             return back()->withErrors(['message' => 'Already added']);
         }
-
+        // IMPORTANTE!!! cuando deje de procrastinar, tengo q meter likes y reviews de cada user.
         $validated = $request->validate([
             'status' => 'required|string',
             'rating' => 'nullable|numeric|min:0|max:10',
-            'progress' => 'nullable|integer|min:0',
+            'achievements_unlocked' => 'nullable|integer|min:0|max:' . $game->achievements,
+            'hours_played' => 'nullable|integer|min:0',
+            'start_date' => 'nullable|date|after_or_equal:' . $game->release_date,
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'mastered' => 'nullable|boolean',
+            // 'liked' => 'nullable|boolean',
+            // 'review' => 'nullable|string|max:1000',
         ]);
+
 
         $user->games()->attach($game->id, [
             'state' => $validated['status'],
-            'user_score' => $validated['rating'],
-            'progress' => $validated['progress'] ?? 0,
+            'user_score' => $validated['rating'] ?? null,
+            'progress' => $validated['achievements_unlocked'] ?? 0,
+            'hours_played' => $validated['hours_played'] ?? 0,
             'mastered' => $validated['mastered'] ?? false,
+            'start_date' => $validated['start_date'] ?? null,
+            'end_date' => $validated['end_date'] ?? null,
+            // 'liked' => $validated['liked'] ?? false,
+            // 'review' => $validated['review'] ?? null,
         ]);
 
         return back()->with('success', 'Game added to collection');;
