@@ -91,6 +91,7 @@ class GameController extends Controller
         $game->themes()->sync($data['theme_ids'] ?? []);
         $game->gameModes()->sync($data['game_mode_ids'] ?? []);
         $game->gameTags()->sync($data['game_tag_ids'] ?? []);
+        $game->syncAutoTags();
 
 
         return Inertia::location(route('games.index'));
@@ -199,6 +200,8 @@ class GameController extends Controller
         $game->themes()->sync($validated['theme_ids'] ?? []);
         $game->gameModes()->sync($validated['game_mode_ids'] ?? []);
         $game->gameTags()->sync($validated['game_tag_ids'] ?? []);
+
+        $game->syncAutoTags();
 
         return redirect()->route('games.index')->with('success', 'Game updated successfully.');
     }

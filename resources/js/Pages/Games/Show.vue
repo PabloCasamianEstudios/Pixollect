@@ -236,7 +236,7 @@ export default {
     width: 65%;
 
     .gameTitle {
-        font-size: 2rem;
+        font-size: 4rem;
         font-weight: bold;
         color: white;
         margin-bottom: 1rem;

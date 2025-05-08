@@ -10,24 +10,30 @@ use Illuminate\Support\Facades\Auth;
 
 class UserGameController extends Controller
 {
-    // crear relación juegos del usuario TODAVÍA ESTÁ EN PRUEBAS, POR ESO ESTABLEZCO LOS VALORES DEL JUEGO
-    public function store(Game $game){
+    public function store(Request $request, Game $game){
         $user = Auth::user();
 
         if ($user->games()->where('game_id', $game->id)->exists()) {
             return back()->withErrors(['message' => 'Already added']);
         }
 
-        $user->games()->attach($game->id, [
-            'state' => 'planned',
-            'progress' => 0,
-            'user_score' => null,
-            'mastered' => false,
-        ]);
-
         if ($user->games()->where('game_id', $game->id)->exists()) {
             return back()->withErrors(['message' => 'Already added']);
         }
+
+        $validated = $request->validate([
+            'status' => 'required|string',
+            'rating' => 'nullable|numeric|min:0|max:10',
+            'progress' => 'nullable|integer|min:0',
+            'mastered' => 'nullable|boolean',
+        ]);
+
+        $user->games()->attach($game->id, [
+            'state' => $validated['status'],
+            'user_score' => $validated['rating'],
+            'progress' => $validated['progress'] ?? 0,
+            'mastered' => $validated['mastered'] ?? false,
+        ]);
 
         return back()->with('success', 'Game added to collection');;
     }

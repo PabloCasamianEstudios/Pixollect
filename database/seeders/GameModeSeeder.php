@@ -14,10 +14,12 @@ class GameModeSeeder extends Seeder
     public function run(): void
     {
         $modes = [
-            ['name' => 'Single Player', 'description' => 'Play alone in a story or experience.'],
-            ['name' => 'Multiplayer', 'description' => 'Play with or against other players online or locally.'],
-            ['name' => 'Co-op', 'description' => 'Team up with others to complete objectives together.'],
-            ['name' => 'MMO', 'description' => 'Massively Multiplayer Online, persistent world with thousands of players.'],
+            ['name' => 'Single Player', 'description' => 'A game mode that supports only one player (online or offline).'],
+            ['name' => 'Split Screen', 'description' => 'The game can be played by multiple players at the same time on the same screen.'],
+            ['name' => 'Co-Operative (Co-Op)', 'description' => 'Players work together as teammates against computer-controlled opponents.'],
+            ['name' => 'Multiplayer', 'description' => 'Supports multiple players playing together online or offline.'],
+            ['name' => 'Battle Royale', 'description' => 'Online multiplayer mode blending survival, exploration, and last-man-standing gameplay.'],
+            ['name' => 'Massively Multiplayer Online (MMO)', 'description' => 'Supports large numbers of players simultaneously in a virtual world.'],
         ];
 
         foreach ($modes as $mode) {

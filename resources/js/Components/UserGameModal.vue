@@ -13,16 +13,40 @@
                         <option value="Playing">Playing</option>
                         <option value="Backlog">Backlog</option>
                         <option value="Wishlist">Wishlist</option>
+                        <option value="Dropped">Dropped</option>
+                        <option value="Planned">Planned</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Rating</label>
-                    <input type="number" v-model="form.rating" />
+                    <input type="number" v-model="form.rating" min="0" value="0" placeholder="0"/>
 
                     <span v-if="errors.rating" class="formError">
                         {{ errors.rating }}
                     </span>
+                </div>
+                <div v-if="game.achievements > 0" class="form-group">
+                    <label>Achievements Progress</label>
+                    <input type="number" v-model="form.progress" min="0"/>
+
+                    <small>
+                        of {{ game.achievements ?? 0 }} total achievements
+                    </small>
+                    <span v-if="errors.achievements" class="formError">
+                        {{ errors.achievements }}
+                    </span>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input
+                            type="checkbox"
+                            v-model="form.mastered"
+                            :checked="form.progress == game.achievements"
+                        />
+                        Mastered
+                    </label>
                 </div>
 
                 <div class="modal-actions">
@@ -55,10 +79,13 @@ export default {
             form: reactive({
                 game_id: this.game.id,
                 status: 'Playing',
-                rating: null,
+                rating: 0,
+                progress: 0,
+                mastered: false,
             }),
             errors: reactive({
                 rating: '',
+                achievements: '',
             }),
         };
     },
@@ -73,7 +100,6 @@ export default {
         },
         validate() {
             let isValid = true;
-            //validar rating valido
             if (
                 this.form.rating !== null &&
                 (this.form.rating < 0 || this.form.rating > 10)
@@ -83,14 +109,29 @@ export default {
             } else {
                 this.errors.rating = '';
             }
+
+            if(this.form.achievements < 0 || this.form.achievements > this.game.achievements) {
+                this.errors.achievements = 'Achievements must be a number between 0 and ', this.game.achievements;
+            }
+
+
             return isValid;
         },
         submit() {
+            if (this.form.progress == this.game.achievements && this.game.achievements != 0) {
+                this.form.mastered = true;
+                this.form.status = 'completed';
+            }
+
             if (this.validate()) {
                 if (this.isGameInCollection(this.form.game_id)) {
                     this.$emit('close');
                 } else {
-                    router.post(`/games/${this.form.game_id}/add`, this.form, {});
+                    router.post(
+                        `/games/${this.form.game_id}/add`,
+                        this.form,
+                        {},
+                    );
                     this.$emit('close');
                 }
             } else {

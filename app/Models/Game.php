@@ -54,4 +54,24 @@ public function saga()
 public function users(){
     return $this->belongsToMany(User::class, 'user_games')->withTimestamps();
 }
+
+// sincronizar las tags de cada game
+
+public function syncAutoTags()
+{
+    $tagNames = collect()
+        ->merge($this->genres->pluck('name'))
+        ->merge($this->themes->pluck('name'))
+        ->merge($this->platforms->pluck('name'))
+        ->merge($this->gameModes->pluck('name'));
+
+    if ($this->saga) {
+        $tagNames->push($this->saga->name);
+    }
+
+    $tags = GameTag::whereIn('name', $tagNames->unique())->get();
+
+    $this->gameTags()->sync($tags->pluck('id'));
+}
+
 }

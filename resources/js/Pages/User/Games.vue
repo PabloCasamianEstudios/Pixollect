@@ -35,7 +35,7 @@
                     <div class="gameInfo">
                         <h2 class="gameTitle">{{ game.title }}</h2>
                         <div class="gameStats">
-                            <span class="gameProgress"
+                            <span v-if="game.achievements > 0" class="gameProgress"
                                 >{{ game.pivot.progress }}%</span
                             >
                             <span class="gameState">{{
@@ -79,10 +79,12 @@ export default {
         },
         formatState(state) {
             const states = {
-                pending: 'Pending',
+                whishlist: 'Whishlist',
                 playing: 'Playing',
                 completed: 'Completed',
                 dropped: 'Dropped',
+                planned: 'Planned',
+                backlog: 'Backlog',
             };
             return states[state] || state;
         },

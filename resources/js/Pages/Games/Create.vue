@@ -145,7 +145,7 @@
                 </div>
             </div>
 
-            <div class="checkboxGroup">
+            <!-- <div class="checkboxGroup">
                 <label>Tags</label>
                 <div v-for="tag in gameTags" :key="tag.id" class="checkboxItem">
                     <input
@@ -159,7 +159,7 @@
                 <div v-if="errors.game_tag_ids" class="formError">
                     {{ errors.game_tag_ids }}
                 </div>
-            </div>
+            </div> -->
 
             <button type="submit" class="submitBtn">Create Game</button>
         </form>
@@ -251,9 +251,10 @@ function validate() {
     errors.theme_ids = form.theme_ids.length
         ? ''
         : 'You have to select at least one game theme.';
-    errors.game_tag_ids = form.game_tag_ids.length
-        ? ''
-        : 'You have to select at least one game tag.';
+
+    // errors.game_tag_ids = form.game_tag_ids.length
+    //     ? ''
+    //     : 'You have to select at least one game tag.';
 
     for (let key in errors) {
         if (errors[key]) valid = false;

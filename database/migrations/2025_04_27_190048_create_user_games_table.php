@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('game_id')->constrained()->onDelete('cascade');
 
-            $table->enum('state', ['playing', 'completed', 'dropped', 'whitelist', 'planned', 'backlog'])->default('planned');
+            $table->enum('state', ['playing', 'completed', 'dropped', 'wishlist', 'planned', 'backlog'])->default('planned');
 
             $table->boolean('mastered')->default(false);
             $table->tinyInteger('user_score')->nullable();

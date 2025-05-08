@@ -49,11 +49,6 @@
                         <li>
                             <LinkTo href="/profile/edit">EDIT PROFILE</LinkTo>
                         </li>
-                        <li>
-                            <LinkTo href="/profile/settings"
-                                >CONFIGURATION</LinkTo
-                            >
-                        </li>
                         <li v-if="currentUser.role === 'admin'">
                             <LinkTo href="/admin-panel">ADMIN PANEL</LinkTo>
                         </li>
