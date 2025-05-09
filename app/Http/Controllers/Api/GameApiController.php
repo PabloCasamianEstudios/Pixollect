@@ -80,6 +80,13 @@ public function index()
     public function search(Request $request){
         $query = $request->input('query');
         $games = Game::where('title','like','%'.$query.'%')
+        ->with([
+            'genres:id,name',
+            'platforms:id,name',
+            'gameModes:id,name',
+            'themes:id,name',
+            'saga:id,name'
+        ])
         ->select('id','title','description','release_date','developer','publisher','price','achievements','image_url')
         ->take(10)
         ->get();
