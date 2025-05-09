@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import UserGameModal from '@/Components/UserGameModal.vue';
 export default {
     components: {
@@ -144,6 +144,9 @@ export default {
         },
     },
     methods: {
+        currentUser() {
+            return usePage().props.auth.user;
+        },
         async fetchSameSagaGames() {
             const response = await fetch(
             `${window.location.protocol}//${window.location.host}/api/games/${this.game.id}/same-saga`
@@ -151,7 +154,11 @@ export default {
             this.sameSagaGames = (await response.json()).games;
         },
         openModal() {
-            this.showModal = true;
+            if(this.currentUser() !== null) {
+                 this.showModal = true;
+            } else {
+                console.log('you need to be registered'); // PABLO DEL FUTURO HAZ UN AVISO PARA EL USUARIO DE Q ESTO NO FUSCA PQ NO ESTÁ LOGGED
+            }
         },
         closeModal() {
             this.showModal = false;

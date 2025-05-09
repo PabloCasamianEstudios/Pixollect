@@ -7,8 +7,10 @@
             content="Compare your favorite games"
         />
     </Head>
+                {{ console.log(currentUser()) }}
 
-    <div class="comparator-container">
+
+    <div v-if="currentUser() !== null" class="comparator-container">
         <div class="search-section">
             <div class="search-box">
                 <input
@@ -97,11 +99,18 @@
             <p>No games added yet. Start by searching and adding your favorite titles!</p>
         </div>
     </div>
+    <div v-else class="comparator-container">
+      <div class="empty-message">
+      <h1>SORRY!!!</h1>
+            <p>You Must be logged to start comparing videogames</p>
+        </div>
+    </div>
 </template>
 
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
 const searchTerm = ref('');
 const searchResults = ref([]);
@@ -165,6 +174,10 @@ const formatDate = (dateString) => {
         return 'N/A';
     }
 };
+
+function currentUser() {
+            return usePage().props.auth.user;
+        }
 const formatRelation = (relation) => {
     if (!relation || !relation.length) return 'N/A';
     return relation.map(item => item.name).join(', ');
