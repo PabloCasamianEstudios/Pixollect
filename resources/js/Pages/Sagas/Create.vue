@@ -1,25 +1,23 @@
 <template>
-    <Head>
-        <title>Edit Game</title>
+    <metaHead>
+        <title>Create Game</title>
         <meta
             head-key="description"
             name="description"
-            content="Edit Game page of the application"
+            content="Create Game page of the application"
         />
-    </Head>
+    </metaHead>
 
     <div class="formContainer">
-        <h1 class="formTitle">Editar Juego</h1>
+        <h1 class="formTitle">Crear Juego</h1>
 
         <form @submit.prevent="submit" class="formFields">
             <input v-model="form.title" type="text" placeholder="Title" />
             <div v-if="errors.title" class="formError">{{ errors.title }}</div>
-
             <textarea v-model="form.description" placeholder="Description" />
             <div v-if="errors.description" class="formError">
                 {{ errors.description }}
             </div>
-
             <input v-model="form.release_date" type="date" />
             <div v-if="errors.release_date" class="formError">
                 {{ errors.release_date }}
@@ -49,6 +47,7 @@
             <div v-if="errors.achievements" class="formError">
                 {{ errors.achievements }}
             </div>
+
             <input
                 v-model="form.image_url"
                 type="text"
@@ -57,7 +56,6 @@
             <div v-if="errors.image_url" class="formError">
                 {{ errors.image_url }}
             </div>
-
             <select v-model="form.saga_id">
                 <option :value="null">Saga</option>
                 <option v-for="saga in sagas" :key="saga.id" :value="saga.id">
@@ -142,8 +140,8 @@
                     />
                     <label :for="'mode-' + mode.id">{{ mode.name }}</label>
                 </div>
-                <div v-if="errors.game_mode_ids" class="formError">
-                    {{ errors.game_mode_ids }}
+                <div v-if="errors.game_modes_ids" class="formError">
+                    {{ errors.game_modes_ids }}
                 </div>
             </div>
 
@@ -163,17 +161,16 @@
                 </div>
             </div> -->
 
-            <button type="submit" class="submitBtn">Actualizar Juego</button>
+            <button type="submit" class="submitBtn">Create Game</button>
         </form>
     </div>
 </template>
 
 <script setup>
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head as metaHead, useForm } from '@inertiajs/vue3';
 import { reactive } from 'vue';
 
-const props = defineProps({
-    game: Object,
+defineProps({
     genres: Array,
     platforms: Array,
     themes: Array,
@@ -182,27 +179,21 @@ const props = defineProps({
     sagas: Array,
 });
 
-const game = props.game;
-const genres = props.genres;
-const platforms = props.platforms;
-const themes = props.themes;
-const gameModes = props.gameModes;
-const sagas = props.sagas;
-
 const form = useForm({
-    title: game.title || '',
-    description: game.description || '',
-    release_date: game.release_date || '',
-    developer: game.developer || '',
-    publisher: game.publisher || '',
-    price: game.price || '',
-    image_url: game.image_url || '',
-    genre_ids: game.genres?.map((genre) => genre.id) || [],
-    platform_ids: game.platforms?.map((platform) => platform.id) || [],
-    theme_ids: game.themes?.map((theme) => theme.id) || [],
-    game_mode_ids: game.game_modes?.map((mode) => mode.id) || [],
-    saga_id: game.saga_id || null,
-    achievements: game.achievements || 0,
+    title: '',
+    description: '',
+    release_date: '',
+    developer: '',
+    publisher: '',
+    price: '',
+    image_url: '',
+    genre_ids: [],
+    platform_ids: [],
+    theme_ids: [],
+    game_mode_ids: [],
+    game_tag_ids: [],
+    saga_id: null,
+    achievements: 0,
 });
 
 const errors = reactive({
@@ -211,11 +202,14 @@ const errors = reactive({
     image_url: '',
     genre_ids: '',
     theme_ids: '',
-    game_mode_ids: '',
+    game_modes_ids: '',
     platform_ids: '',
+    game_tag_ids: '',
     description: '',
     achievements: '',
 });
+
+// Methodss
 
 const isValidDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -227,17 +221,13 @@ const isValidDate = (dateStr) => {
     return true;
 };
 
-function validateUrl(url) {
-    const regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-    return regex.test(url);
-}
-
 function validate() {
     let valid = true;
     errors.title = form.title.trim() ? '' : 'Title is required.';
     if (isNaN(form.achievements)) {
         errors.achievements = 'Achievements must be numeric.';
     }
+
     errors.description = form.description.trim()
         ? ''
         : 'Description is required.';
@@ -247,9 +237,7 @@ function validate() {
             : 'Release date must be a valid date.'
         : 'Release date is required.';
     errors.image_url = form.image_url.trim()
-        ? validateUrl(form.image_url) // Validación de URL
-            ? ''
-            : 'URL image must be a valid URL starting with http:// or https://.'
+        ? ''
         : 'URL image of the game is required.';
     errors.genre_ids = form.genre_ids.length
         ? ''
@@ -264,19 +252,24 @@ function validate() {
         ? ''
         : 'You have to select at least one game theme.';
 
+    // errors.game_tag_ids = form.game_tag_ids.length
+    //     ? ''
+    //     : 'You have to select at least one game tag.';
+
     for (let key in errors) {
         if (errors[key]) valid = false;
     }
 
     return valid;
 }
+
 function submit() {
     if (!validate()) return;
-    form.put(`/games/${game.id}`);
+    form.post('/games');
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @use '../../../css/variables.scss' as *;
 
 .formError {
@@ -363,7 +356,7 @@ function submit() {
     transition: background-color 0.3s;
 
     &:hover {
-        background-color: #ff5b79;
+        background-color: #ff3a5eff;
     }
 }
 </style>

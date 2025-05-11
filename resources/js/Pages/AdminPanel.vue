@@ -38,6 +38,7 @@ export default {
         return {
             adminSections: [
                 { name: 'games', label: 'Games', route: '/games' },
+                { name: 'sagas', label: 'Sagas', route: '/sagas' },
                 { name: 'users', label: 'Users', route: '/users' },
                 { name: 'themes', label: 'Themes', route: '/themes' },
                 { name: 'genres', label: 'Genres', route: '/genres' },

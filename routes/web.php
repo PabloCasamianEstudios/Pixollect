@@ -99,6 +99,8 @@ Route::get('/games/create', [GameController::class, 'create'])
     ->name('games.create')
     ->middleware(['auth', 'admin']);
 
+    // sagas
+
 
 // esto venía de base, no se toca por ahora
 Route::middleware('auth')->group(function () {

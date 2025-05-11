@@ -51,7 +51,9 @@
                         </span>
                     </div>
                 </div>
-                <div class="downTags">
+                <!-- pablo del futuro decide si ponerlas o no
+
+                 <div class="downTags">
                     <strong>Tags:</strong>
                     <div class="pill-container">
                         <span
@@ -63,7 +65,7 @@
                             {{ tag.name }}
                         </span>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
