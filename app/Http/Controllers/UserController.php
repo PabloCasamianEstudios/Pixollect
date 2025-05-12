@@ -43,4 +43,11 @@ public function games(User $user) {
         ]);
     }
 
+    // user achievements (los de Pixollect)
+    public function achievements(User $user){
+    return Inertia::render('User/Achievements', [
+        'user' => $user,
+    ]);
+}
+
 }

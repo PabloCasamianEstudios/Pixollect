@@ -27,6 +27,14 @@
             >
                 COLLECTION
             </Link>
+            <Link
+                :href="`/user/${user.name}/achievements`"
+                :class="{
+                    'active-tab': $page.url === `/user/${user.name}/achievements`,
+                }"
+            >
+                ACHIEVEMENTS
+            </Link>
         </div>
 
         <div class="profile-content">

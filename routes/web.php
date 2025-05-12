@@ -56,6 +56,8 @@ Route::get('/dashboard', function () {
 
 Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
 Route::get('/user/{user}/games', [UserController::class, 'games'])->name('user.games');
+Route::get('/user/{user}/achievements', [UserController::class, 'achievements']);
+
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
@@ -68,6 +70,10 @@ Route::post('/games/{game}/add', [UserGameController::class, 'store'])->middlewa
 Route::delete('/games/{game}/remove', [UserGameController::class, 'destroy'])
     ->middleware('auth')
     ->name('games.remove');
+
+Route::put('/games/{game}/update', [UserGameController::class, 'update'])
+    ->middleware('auth')
+    ->name('games.update');
 
 // Jueguitos
 Route::get('/games/create', function () {

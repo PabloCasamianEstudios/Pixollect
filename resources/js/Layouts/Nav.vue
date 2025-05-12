@@ -30,7 +30,6 @@
                     ref="userMenuRef"
                     @click="toggleUserMenu"
                 >
-                    <button class="logoutBtn" @click.stop="logout">⛔</button>
                     <span class="userName">
                         {{ currentUser.name }}
                         <span
@@ -47,7 +46,7 @@
                             >
                         </li>
                         <li>
-                            <LinkTo href="/profile/edit">EDIT PROFILE</LinkTo>
+                            <LinkTo @click.stop="logout">LOGOUT</LinkTo>
                         </li>
                         <li v-if="currentUser.role === 'admin'">
                             <LinkTo href="/admin-panel">ADMIN PANEL</LinkTo>

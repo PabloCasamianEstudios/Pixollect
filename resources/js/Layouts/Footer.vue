@@ -5,6 +5,7 @@
             <LinkTo href="/contact" class="footer-link">Contact Us</LinkTo>
             <LinkTo href="/terms" class="footer-link">Terms</LinkTo>
             <LinkTo href="/privacy" class="footer-link">Privacy</LinkTo>
+            <a  href="/manualUsuario.pdf" download="manualUsuario.pdf" class="footer-link">Ayuda Usuario</a>
         </div>
         <div class="footer-bottom">
             <p>Pixollect - {{ currentYear }}</p>

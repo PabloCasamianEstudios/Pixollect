@@ -3,16 +3,25 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <h2 class="modal-title">{{ game.title }}  <span class="release-year">{{ new Date(game.release_date).getFullYear() }}</span></h2>
-
+                    <h2 class="modal-title">
+                        {{ game.title }}
+                        <span class="release-year">{{
+                            new Date(game.release_date).getFullYear()
+                        }}</span>
+                    </h2>
                 </div>
-                <button v-if="isGameInCollection(game.id)" class="close-btn" @click="confirmDelete">✕</button>
+                <button class="close-btn" @click="confirmDelete">✕</button>
             </div>
 
             <form @submit.prevent="submit" class="modal-body">
                 <div class="side-panel">
-                    <img :src="game.image_url" alt="Game Cover" class="game-cover" />
-                    <select v-model="form.status">
+                    <img
+                        :src="game.image_url"
+                        alt="Game Cover"
+                        class="game-cover"
+                    />
+                    <!--  Esta mrda no pilla el valor por defecto que debería, ni el mastered tampoco. -->
+                    <select v-model="form.status" :selected="userGame?.state">
                         <option value="Completed">Completed</option>
                         <option value="Playing">Playing</option>
                         <option value="Backlog">Backlog</option>
@@ -20,12 +29,6 @@
                         <option value="Dropped">Dropped</option>
                         <option value="Planned">Planned</option>
                     </select>
-
-                    <!-- SE ME OCURRIÓ METERLE LIKE, PERO COMO TENDRÉ QUE MODIFICAR LA TABLE LO DEJO ASIN POR AHORA (para el pablo del futuro)
-
-                    <div class="form-group">
-                        <label><input type="checkbox" v-model="form.liked" /> Like</label>
-                    </div> -->
                 </div>
 
                 <div class="main-panel">
@@ -33,49 +36,81 @@
                         <div class="form-group">
                             <label>Start Date</label>
                             <input type="date" v-model="form.start_date" />
-                            <span v-if="errors.start_date" class="formError">{{ errors.start_date }}</span>
+                            <span v-if="errors.start_date" class="formError">{{
+                                errors.start_date
+                            }}</span>
                         </div>
                         <div class="form-group">
                             <label>End Date</label>
                             <input type="date" v-model="form.end_date" />
-                            <span v-if="errors.end_date" class="formError">{{ errors.end_date }}</span>
+                            <span v-if="errors.end_date" class="formError">{{
+                                errors.end_date
+                            }}</span>
                         </div>
                         <div class="form-group">
                             <label>Hours Played</label>
-                            <input type="number" v-model="form.hours_played" min="0" />
-                            <span v-if="errors.hours_played" class="formError">{{ errors.hours_played }}</span>
+                            <input
+                                type="number"
+                                v-model="form.hours_played"
+                                min="0"
+                            />
+                            <span
+                                v-if="errors.hours_played"
+                                class="formError"
+                                >{{ errors.hours_played }}</span
+                            >
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Rating</label>
-                            <input type="number" v-model="form.rating" min="0" max="10" />
-                            <span v-if="errors.rating" class="formError">{{ errors.rating }}</span>
+                            <label>user_score</label>
+                            <input
+                                type="number"
+                                v-model="form.user_score"
+                                min="0"
+                                max="10"
+                            />
+                            <span v-if="errors.user_score" class="formError">{{
+                                errors.user_score
+                            }}</span>
                         </div>
 
                         <div class="form-group checkbox-group">
-                            <label><input type="checkbox" v-model="form.mastered" /> Mastered</label>
+                            <label
+                                ><input
+                                    type="checkbox"
+                                    v-model="form.mastered"
+                                />
+                                Mastered</label
+                            >
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Achievements Unlocked</label>
-                        <input type="number" v-model="form.achievements_unlocked" min="0" />
+                        <input
+                            type="number"
+                            v-model="form.achievements_unlocked"
+                            min="0"
+                        />
                         <small>of {{ game.achievements }} achievements</small>
-                        <span v-if="errors.achievements_unlocked" class="formError">{{ errors.achievements_unlocked }}</span>
+                        <span
+                            v-if="errors.achievements_unlocked"
+                            class="formError"
+                            >{{ errors.achievements_unlocked }}</span
+                        >
                     </div>
 
-                    <!-- (para el pablo del futuro) YA DE PASO PENSAR QUE HACER CON LOS COMENTARIOS...
-
-                    <div class="form-group">
-                        <label>Review</label>
-                        <textarea v-model="form.review"></textarea>
-                    </div> -->
-
                     <div class="modal-actions">
-                        <button type="button" class="cancel-btn" @click="$emit('close')">Cancel</button>
-                        <button type="submit" class="submit-btn">Save</button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            @click="$emit('close')"
+                        >
+                            Cancel
+                        </button>
+                        <button type="submit" class="submit-btn">Update</button>
                     </div>
                 </div>
             </form>
@@ -84,31 +119,26 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
-import { router } from '@inertiajs/vue3';
-
 export default {
     props: {
         game: Object,
-        userGames: Array,
+        userGame: Object,
     },
     emits: ['close'],
     data() {
         return {
-            form: reactive({
+            form: {
                 game_id: this.game.id,
-                status: 'Playing',
-                rating: 0,
-                hours_played: null,
-                achievements_unlocked: 0,
-                mastered: false,
-                start_date: '',
-                end_date: '',
-                // liked: false,
-                // review: '',
-            }),
+                status: this.userGame.state,
+                user_score: this.userGame.user_score,
+                hours_played: this.userGame.hours_played,
+                achievements_unlocked: this.userGame.achievements_unlocked,
+                mastered: this.userGame.mastered,
+                start_date: this.userGame.start_date,
+                end_date: this.userGame.end_date,
+            },
             errors: {
-                rating: '',
+                user_score: '',
                 achievements_unlocked: '',
                 hours_played: '',
                 start_date: '',
@@ -117,23 +147,24 @@ export default {
         };
     },
     methods: {
-        isGameInCollection(id) {
-            return this.userGames.some((game) => game.id === id);
-        },
         confirmDelete() {
-            if (confirm('Are you sure you want to remove this game from your collection?')) {
-                router.delete(`/games/${this.game.id}/remove`);
+            if (
+                confirm(
+                    'Are you sure you want to remove this game from your collection?',
+                )
+            ) {
+                this.$inertia.delete(`/games/${this.game.id}/remove`);
                 this.$emit('close');
             }
         },
         validate() {
             let valid = true;
 
-            if (this.form.rating < 0 || this.form.rating > 10) {
-                this.errors.rating = 'Rating must be between 0 and 10';
+            if (this.form.user_score < 0 || this.form.user_score > 10) {
+                this.errors.user_score = 'user_score must be between 0 and 10';
                 valid = false;
             } else {
-                this.errors.rating = '';
+                this.errors.user_score = '';
             }
 
             if (
@@ -157,7 +188,8 @@ export default {
                 this.form.start_date &&
                 this.form.start_date < this.game.release_date
             ) {
-                this.errors.start_date = 'Start date cannot be before release date';
+                this.errors.start_date =
+                    'Start date cannot be before release date';
                 valid = false;
             } else {
                 this.errors.start_date = '';
@@ -177,15 +209,21 @@ export default {
             return valid;
         },
         submit() {
-            if (this.form.achievements_unlocked == this.game.achievements && this.game.achievements !== 0) {
+            if (
+                this.form.achievements_unlocked == this.game.achievements &&
+                this.game.achievements !== 0
+            ) {
                 this.form.mastered = true;
             }
 
             if (!this.validate()) return;
 
             const payload = { ...this.form };
-            router.post(`/games/${this.form.game_id}/add`, payload);
-            this.$emit('close');
+            this.$inertia.put(`/games/${this.form.game_id}/update`, payload, {
+                onSuccess: () => {
+                    this.$emit('close');
+                },
+            });
         },
     },
 };

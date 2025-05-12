@@ -24,9 +24,14 @@
                             :alt="game.title"
                             class="gameImage"
                         />
-                        <div class="gameOverlay">
+                        <div v-if="currentUser?.id === user.id" class="gameOverlay">
                             <div class="gameActions">
-                                <button class="actionBtn">X</button>
+                                <button
+                                    class="actionBtn"
+                                    @click.stop="openUpdateModal(game)"
+                                >
+                                    O
+                                </button>
                                 <button class="actionBtn">X</button>
                                 <button class="actionBtn">X</button>
                             </div>
@@ -35,7 +40,9 @@
                     <div class="gameInfo">
                         <h2 class="gameTitle">{{ game.title }}</h2>
                         <div class="gameStats">
-                            <span v-if="game.achievements > 0" class="gameProgress"
+                            <span
+                                v-if="game.achievements > 0"
+                                class="gameProgress"
                                 >{{ game.pivot.progress }}%</span
                             >
                             <span class="gameState">{{
@@ -45,6 +52,13 @@
                     </div>
                 </div>
             </div>
+
+            <UserUpdateGameModal
+                v-if="showModal && selectedGame && selectedUserGame"
+                :game="selectedGame"
+                :userGame="selectedUserGame"
+                @close="closeModal"
+            />
 
             <div v-else class="noGamesMessage">
                 <p>This user hasn't added any games yet.</p>
@@ -56,12 +70,16 @@
 <script>
 import AppLayout from '@/Layouts/Layout.vue';
 import UserLayout from '@/Layouts/UserLayout.vue';
-import { Head as metaHead, router } from '@inertiajs/vue3';
+import { Head as metaHead, router, usePage } from '@inertiajs/vue3';
+
+import UserUpdateGameModal from '../../Components/UserUpdateGameModal.vue';
+
 export default {
     layout: AppLayout,
     components: {
         UserLayout,
         metaHead,
+        UserUpdateGameModal,
     },
     props: {
         user: {
@@ -73,9 +91,39 @@ export default {
             required: true,
         },
     },
+    data() {
+        return {
+            showModal: false,
+            selectedGame: null,
+            selectedUserGame: null,
+        };
+    },
+    computed: {
+        currentUser() {
+            return usePage().props.auth.user;
+        },
+    },
     methods: {
         goToGame(gameId) {
             router.visit(`/games/${gameId}`);
+        },
+        openUpdateModal(game) {
+            this.selectedGame = game;
+            this.selectedUserGame = {
+                state: game.pivot.state,
+                user_score: game.pivot.user_score,
+                hours_played: game.pivot.hours_played,
+                achievements_unlocked: game.pivot.achievements_unlocked,
+                mastered: game.pivot.mastered,
+                start_date: game.pivot.start_date,
+                end_date: game.pivot.end_date,
+            };
+            this.showModal = true;
+        },
+        closeModal() {
+            this.showModal = false;
+            this.selectedGame = null;
+            this.selectedUserGame = null;
         },
         formatState(state) {
             const states = {

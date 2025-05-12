@@ -23,7 +23,7 @@ class UserGameController extends Controller
         // IMPORTANTE!!! cuando deje de procrastinar, tengo q meter likes y reviews de cada user.
         $validated = $request->validate([
             'status' => 'required|string',
-            'rating' => 'nullable|numeric|min:0|max:10',
+            'user_score' => 'nullable|numeric|min:0|max:10',
             'achievements_unlocked' => 'nullable|integer|min:0|max:' . $game->achievements,
             'hours_played' => 'nullable|integer|min:0',
             'start_date' => 'nullable|date|after_or_equal:' . $game->release_date,
@@ -36,7 +36,7 @@ class UserGameController extends Controller
 
         $user->games()->attach($game->id, [
             'state' => $validated['status'],
-            'user_score' => $validated['rating'] ?? null,
+            'user_score' => $validated['user_score'] ?? null,
             'progress' => $validated['achievements_unlocked'] ?? 0,
             'hours_played' => $validated['hours_played'] ?? 0,
             'mastered' => $validated['mastered'] ?? false,
@@ -63,6 +63,34 @@ class UserGameController extends Controller
 
         return back()->with('success', 'Game removed from your collection successfully');
 
+    }
+
+    // updatear un juego de la colección de un usuario
+    public function update(Request $request, Game $game)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'status' => 'required|string',
+            'user_score' => 'nullable|numeric|min:0|max:10',
+            'hours_played' => 'nullable|numeric|min:0',
+            'achievements_unlocked' => 'nullable|integer|min:0',
+            'mastered' => 'nullable|boolean',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $user->games()->updateExistingPivot($game->id, [
+            'state' => $validated['status'],
+            'user_score' => $validated['user_score'] ?? null,
+            'hours_played' => $validated['hours_played'] ?? null,
+            'achievements_unlocked' => $validated['achievements_unlocked'] ?? 0,
+            'mastered' => $validated['mastered'] ?? false,
+            'start_date' => $validated['start_date'] ?? null,
+            'end_date' => $validated['end_date'] ?? null,
+        ]);
+
+        return back()->with('success', 'Game updated successfully');
     }
 
 
