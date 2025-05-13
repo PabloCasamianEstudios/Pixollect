@@ -9,13 +9,11 @@
     </metaHead>
 
     <section class="gamesPage">
-    <FlashMessage />
+        <FlashMessage />
         <div class="gamesHeader">
-            <input
-                v-model="search"
-                type="text"
-                class="searchInput"
-                placeholder="Search games..."
+            <SearchBar
+                @search="handleSearch"
+                placeholder="Search all games..."
             />
 
             <div class="filters">
@@ -80,13 +78,15 @@
 
 <script>
 import FlashMessage from '@/Components/FlashMessage.vue';
+import SearchBar from '@/Components/search-bar/SearchBar.vue';
 import { Head as metaHead, usePage, router } from '@inertiajs/vue3';
 
 export default {
     name: 'Games',
     components: {
         metaHead,
-        FlashMessage
+        FlashMessage,
+        SearchBar,
     },
     data() {
         const page = usePage();
@@ -102,6 +102,12 @@ export default {
                 platform: '',
                 theme: '',
                 saga: '',
+            },
+            filterOptions: {
+                genres: usePage().props.genres,
+                platforms: usePage().props.platforms,
+                themes: usePage().props.themes,
+                sagas: usePage().props.sagas,
             },
         };
     },
@@ -124,7 +130,8 @@ export default {
                     game.themes?.some(
                         (them) => them.name === this.filters.theme,
                     );
-                    const matchSaga = !this.filters.saga || game.saga?.name === this.filters.saga;
+                const matchSaga =
+                    !this.filters.saga || game.saga?.name === this.filters.saga;
 
                 return (
                     matchTitle &&
@@ -139,6 +146,10 @@ export default {
     methods: {
         viewGame(id) {
             router.visit(`/games/${id}`);
+        },
+        handleSearch(query) {
+            this.search = query;
+            this.filterGames();
         },
     },
 };

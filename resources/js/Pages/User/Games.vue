@@ -44,7 +44,7 @@
                             <span
                                 v-if="game.achievements > 0"
                                 class="gameProgress"
-                                >{{ ((game.pivot.progress*100)/game.achievements).toFixed(2) }}%</span>
+                                >{{ ((game.pivot.achievements_unlocked*100)/game.achievements).toFixed(2) }}%</span>
                                 <span
                                 v-else
                                 class="gameProgress"
@@ -75,7 +75,7 @@ import UserLayout from '@/Layouts/UserLayout.vue';
 import { Head as metaHead, router, usePage } from '@inertiajs/vue3';
 
 import UserUpdateGameModal from '../../Components/UserUpdateGameModal.vue';
-import FlashMessage from '../../Components/FlashMessage.vue'
+import FlashMessage from '../../Components/FlashMessage.vue';
 
 
 export default {
@@ -84,7 +84,7 @@ export default {
         UserLayout,
         metaHead,
         UserUpdateGameModal,
-        FlashMessage
+        FlashMessage,
     },
     props: {
         user: {
