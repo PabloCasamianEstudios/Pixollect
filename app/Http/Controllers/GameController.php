@@ -93,8 +93,7 @@ class GameController extends Controller
         $game->gameTags()->sync($data['game_tag_ids'] ?? []);
         $game->syncAutoTags();
 
-
-        return Inertia::location(route('games.index'));
+        return redirect()->route('games.index')->with('message', 'Game created successfully.');
         //return response()->json($game->load(['genres', 'platforms', 'themes', 'gameModes', 'gameTags']), 201); SI QUISIESE QUE ME DEVUELVA UN JSON CON EL JUEGO
     }
 
@@ -203,7 +202,7 @@ class GameController extends Controller
 
         $game->syncAutoTags();
 
-        return redirect()->route('games.index')->with('success', 'Game updated successfully.');
+        return redirect()->route('games.index')->with('message', 'Game updated successfully.');
     }
 
     /**
@@ -212,6 +211,8 @@ class GameController extends Controller
     public function destroy( Game $game)
     {
         $game->delete();
+        return redirect()->route('games.index')->with('message', 'Game deleted successfully.');
+
     }
 }
 

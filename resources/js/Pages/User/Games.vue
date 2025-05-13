@@ -7,6 +7,7 @@
             content="Home page of the application"
         />
     </metaHead>
+    <FlashMessage />
     <UserLayout :user="user">
         <div class="userGamesContainer">
             <h1 class="sectionTitle">{{ user.name }}'s Collection</h1>
@@ -43,8 +44,11 @@
                             <span
                                 v-if="game.achievements > 0"
                                 class="gameProgress"
-                                >{{ game.pivot.progress }}%</span
-                            >
+                                >{{ ((game.pivot.progress*100)/game.achievements).toFixed(2) }}%</span>
+                                <span
+                                v-else
+                                class="gameProgress"
+                                ></span>
                             <span class="gameState">{{
                                 formatState(game.pivot.state)
                             }}</span>
@@ -52,17 +56,15 @@
                     </div>
                 </div>
             </div>
-
+            <div v-else class="noGamesMessage">
+                <p>This user hasn't added any games yet.</p>
+            </div>
             <UserUpdateGameModal
                 v-if="showModal && selectedGame && selectedUserGame"
                 :game="selectedGame"
                 :userGame="selectedUserGame"
                 @close="closeModal"
             />
-
-            <div v-else class="noGamesMessage">
-                <p>This user hasn't added any games yet.</p>
-            </div>
         </div>
     </UserLayout>
 </template>
@@ -73,6 +75,8 @@ import UserLayout from '@/Layouts/UserLayout.vue';
 import { Head as metaHead, router, usePage } from '@inertiajs/vue3';
 
 import UserUpdateGameModal from '../../Components/UserUpdateGameModal.vue';
+import FlashMessage from '../../Components/FlashMessage.vue'
+
 
 export default {
     layout: AppLayout,
@@ -80,6 +84,7 @@ export default {
         UserLayout,
         metaHead,
         UserUpdateGameModal,
+        FlashMessage
     },
     props: {
         user: {

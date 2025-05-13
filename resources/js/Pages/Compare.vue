@@ -366,7 +366,6 @@ const formatRelation = (relation) => {
     }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .comparison-section {
         font-size: 0.9rem;

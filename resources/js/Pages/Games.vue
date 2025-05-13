@@ -9,6 +9,7 @@
     </metaHead>
 
     <section class="gamesPage">
+    <FlashMessage />
         <div class="gamesHeader">
             <input
                 v-model="search"
@@ -78,12 +79,14 @@
 </template>
 
 <script>
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, usePage, router } from '@inertiajs/vue3';
 
 export default {
     name: 'Games',
     components: {
         metaHead,
+        FlashMessage
     },
     data() {
         const page = usePage();

@@ -10,6 +10,8 @@
     <div class="gamesPage">
         <h1 class="gamesPage__title">Manage Games</h1>
 
+        <FlashMessage />
+
         <div class="gamesPage__tableWrapper">
             <table class="gamesPage__table">
                 <thead>
@@ -65,10 +67,12 @@
 
 <script>
 // eslint-disable-next-line no-unused-vars
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, router } from '@inertiajs/vue3';
 export default {
     components: {
         metaHead,
+        FlashMessage
     },
     props: {
         games: Array,

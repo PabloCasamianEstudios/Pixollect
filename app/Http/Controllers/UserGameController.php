@@ -46,7 +46,7 @@ class UserGameController extends Controller
             // 'review' => $validated['review'] ?? null,
         ]);
 
-        return back()->with('success', 'Game added to collection');;
+        return back()->with('message', 'Game added to collection');
     }
 
     // borrar juego de la colección
@@ -61,7 +61,9 @@ class UserGameController extends Controller
 
         $user->games()->detach($gameId);
 
-        return back()->with('success', 'Game removed from your collection successfully');
+    return back()->with('message', 'Game removed from your collection successfully')
+                ->withErrors(['error' => 'Game not found in your collection']);
+
 
     }
 
@@ -90,7 +92,7 @@ class UserGameController extends Controller
             'end_date' => $validated['end_date'] ?? null,
         ]);
 
-        return back()->with('success', 'Game updated successfully');
+        return back()->with('message', 'Game updated successfully');
     }
 
 

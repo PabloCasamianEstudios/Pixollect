@@ -9,6 +9,8 @@
     </Head>
 
     <div class="gameDetailContainer">
+        <FlashMessage />
+
         <div class="gameDetailLeft">
             <img :src="game.image_url" alt="Game Cover" class="gameCover" />
             <div class="gameInfo">
@@ -114,10 +116,12 @@
 <script>
 import { Head, router, usePage } from '@inertiajs/vue3';
 import UserGameModal from '@/Components/UserGameModal.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 export default {
     components: {
         Head,
         UserGameModal,
+        FlashMessage
     },
     props: {
         game: Object,
