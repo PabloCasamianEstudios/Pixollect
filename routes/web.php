@@ -47,7 +47,6 @@ Route::get('/recommend', function () {
 });
 Route::get('/collections', [UserController::class, 'collections'])->name('collections');
 
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -58,6 +57,10 @@ Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
 Route::get('/user/{user}/games', [UserController::class, 'games'])->name('user.games');
 Route::get('/user/{user}/achievements', [UserController::class, 'achievements']);
 
+
+Route::post('/user/{user}/avatar', [UserController::class, 'updateAvatar'])
+    ->middleware('auth')
+    ->name('user.avatar.update');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');

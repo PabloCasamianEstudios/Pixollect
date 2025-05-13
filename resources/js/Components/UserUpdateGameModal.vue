@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" v-if="game.achievements > 0">
                         <label>Achievements Unlocked</label>
                         <input
                             type="number"
@@ -101,6 +101,8 @@
                             >{{ errors.achievements_unlocked }}</span
                         >
                     </div>
+                    <div v-else style="padding:43px;"></div>
+
 
                     <div class="modal-actions">
                         <button

@@ -59,12 +59,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" v-if="game.achievements > 0">
                         <label>Achievements Unlocked</label>
                         <input type="number" v-model="form.achievements_unlocked" min="0" />
                         <small>of {{ game.achievements }} achievements</small>
                         <span v-if="errors.achievements_unlocked" class="formError">{{ errors.achievements_unlocked }}</span>
                     </div>
+                    <div v-else style="padding:43px;"></div>
 
                     <!-- (para el pablo del futuro) YA DE PASO PENSAR QUE HACER CON LOS COMENTARIOS...
 

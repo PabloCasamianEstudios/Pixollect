@@ -6,6 +6,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller {
 
@@ -50,4 +51,25 @@ public function games(User $user) {
     ]);
 }
 
+/**
+ * Cambiar foto de perfil de un usuario
+ */
+public function updateAvatar(Request $request, User $user) {
+    $validated = $request->validate([
+        'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
+
+    if ($user->avatar_url && file_exists(public_path($user->avatar_url))) {
+        unlink(public_path($user->avatar_url));
+    }
+
+    $filename = time().'.'.$request->avatar->extension();
+    $request->avatar->move(public_path('avatars'), $filename);
+
+    $user->update([
+        'avatar_url' => '/avatars/'.$filename
+    ]);
+
+    return back()->with('success', 'Avatar actualizado!');
+}
 }

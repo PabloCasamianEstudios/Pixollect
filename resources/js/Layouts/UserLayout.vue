@@ -1,11 +1,34 @@
 <template>
     <div class="user-profile-container">
         <div class="profile-header">
+            <div
+                v-if="isCurrentUser"
+                class="avatar-container"
+                @click="openFileInput"
+            >
+                <img
+                    :src="user.avatar_url || '/images/default-avatar.png'"
+                    class="profile-avatar"
+                    alt="User avatar"
+                />
+                <div class="avatar-overlay">
+                    <span>Change Avatar</span>
+                </div>
+                <input
+                    type="file"
+                    ref="fileInput"
+                    @change="handleFileUpload"
+                    accept="image/*"
+                    style="display: none"
+                />
+            </div>
             <img
+                v-else
                 :src="user.avatar_url || '/images/default-avatar.png'"
                 class="profile-avatar"
                 alt="User avatar"
             />
+
             <div class="profile-info">
                 <h1>{{ user.name }}</h1>
                 <p class="role-badge">{{ user.role.toUpperCase() }}</p>
@@ -13,28 +36,29 @@
         </div>
 
         <div class="profile-tabs">
-            <Link
-                :href="`/user/${user.name}`"
-                :class="{ 'active-tab': $page.url === `/user/${user.id}` }"
+            <LinkTo
+                :href="`/user/${user}`"
+                :class="{ 'active-tab': $page.url === `/user/${user.name}` }"
             >
                 PROFILE
-            </Link>
-            <Link
+            </LinkTo>
+            <LinkTo
                 :href="`/user/${user.name}/games`"
                 :class="{
                     'active-tab': $page.url === `/user/${user.name}/games`,
                 }"
             >
                 COLLECTION
-            </Link>
-            <Link
+            </LinkTo>
+            <LinkTo
                 :href="`/user/${user.name}/achievements`"
                 :class="{
-                    'active-tab': $page.url === `/user/${user.name}/achievements`,
+                    'active-tab':
+                        $page.url === `/user/${user.name}/achievements`,
                 }"
             >
                 ACHIEVEMENTS
-            </Link>
+            </LinkTo>
         </div>
 
         <div class="profile-content">
@@ -44,17 +68,53 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
+import { Link as LinkTo, usePage } from '@inertiajs/vue3';
 
 export default {
-    components: { Link },
+    components: { LinkTo },
     props: {
         user: Object,
+    },
+    data() {
+        return {
+            fileInput: null,
+        };
+    },
+    computed: {
+        isCurrentUser() {
+            const currentUser = usePage().props.auth.user;
+            return currentUser && currentUser.id === this.user.id;
+        },
+    },
+    methods: {
+        openFileInput() {
+            this.$refs.fileInput.click();
+        },
+        handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            this.$inertia.post(`/user/${this.user.name}/avatar`, formData, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    event.target.value = '';
+                },
+                onError: (errors) => {
+                    alert(errors.message || 'Error uploading avatar');
+                },
+            });
+        },
+    },
+    mounted() {
+        this.fileInput = this.$refs.fileInput;
     },
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @use '../../css/variables.scss' as *;
 
 .user-profile-container {
@@ -135,5 +195,43 @@ export default {
 
 .profile-content {
     padding: 2rem;
+}
+.avatar-container {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+
+    &:hover .avatar-overlay {
+        opacity: 1;
+    }
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid $main-color;
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    span {
+        color: white;
+        font-size: 0.8rem;
+        text-align: center;
+    }
 }
 </style>
