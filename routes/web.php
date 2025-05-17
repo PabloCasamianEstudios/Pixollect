@@ -12,6 +12,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserGameController;
+use App\Http\Controllers\UserExportController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Rutas PÚBLICAS
@@ -78,6 +79,11 @@ Route::put('/games/{game}/update', [UserGameController::class, 'update'])
     ->middleware('auth')
     ->name('games.update');
 
+// EXPORTAR CSV
+
+Route::get('/user/{user:name}/games/export/csv', [UserExportController::class, 'exportCsv'])->middleware('auth');
+
+
 // Jueguitos
 Route::get('/games/create', function () {
     return Inertia::render('Games/Create', [
@@ -109,6 +115,7 @@ Route::get('/games/create', [GameController::class, 'create'])
     ->middleware(['auth', 'admin']);
 
     // sagas
+
 
 
 // esto venía de base, no se toca por ahora

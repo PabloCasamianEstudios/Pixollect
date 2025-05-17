@@ -148,8 +148,9 @@ export default {
         align-items: center;
         padding: 1rem 2rem;
         flex-wrap: wrap;
-
         &__logo {
+            flex-shrink: 0;
+
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -172,6 +173,10 @@ export default {
             &:hover {
                 transform: scale(1.1);
             }
+
+            @media (max-width: 432px) {
+                display: none;
+            }
         }
 
         &__toggle {
@@ -182,7 +187,7 @@ export default {
             border: none;
             cursor: pointer;
 
-            @media (max-width: 865px) {
+            @media (max-width: 1200px) {
                 display: block;
             }
         }
@@ -204,7 +209,7 @@ export default {
                 }
             }
 
-            @media (max-width: 865px) {
+            @media (max-width: 1200px) {
                 flex-direction: column;
                 width: 100%;
                 margin-top: 1rem;
@@ -294,7 +299,7 @@ export default {
                     display: inline-block;
 
                     &.open {
-                        transform: rotate(180deg); // o usa ▲ si prefieres
+                        transform: rotate(180deg);
                     }
                 }
             }

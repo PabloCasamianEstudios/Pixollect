@@ -11,9 +11,12 @@
     <section class="gamesPage">
         <FlashMessage />
         <div class="gamesHeader">
-            <SearchBar
-                @search="handleSearch"
-                placeholder="Search all games..."
+            <input
+                v-model="search"
+                type="text"
+                class="searchInput"
+                :placeholder="placeholder"
+                @input="handleSearch"
             />
 
             <div class="filters">
@@ -78,7 +81,6 @@
 
 <script>
 import FlashMessage from '@/Components/FlashMessage.vue';
-import SearchBar from '@/Components/search-bar/SearchBar.vue';
 import { Head as metaHead, usePage, router } from '@inertiajs/vue3';
 
 export default {
@@ -86,7 +88,6 @@ export default {
     components: {
         metaHead,
         FlashMessage,
-        SearchBar
     },
     data() {
         const page = usePage();

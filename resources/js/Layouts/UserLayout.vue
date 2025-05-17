@@ -37,7 +37,7 @@
 
         <div class="profile-tabs">
             <LinkTo
-                :href="`/user/${user}`"
+                :href="`/user/${user.name}`"
                 :class="{ 'active-tab': $page.url === `/user/${user.name}` }"
             >
                 PROFILE
@@ -59,6 +59,18 @@
             >
                 ACHIEVEMENTS
             </LinkTo>
+
+            <a
+                v-if="isCurrentUser"
+                :href="`/user/${user.name}/games/export/csv`"
+                :class="{
+                    'active-tab':
+                        $page.url === `/user/${user.name}/achievements`,
+                }"
+                target="_blank"
+            >
+                Export CSV
+            </a>
         </div>
 
         <div class="profile-content">
