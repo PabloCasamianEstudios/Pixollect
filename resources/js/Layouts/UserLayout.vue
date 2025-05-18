@@ -59,18 +59,21 @@
             >
                 ACHIEVEMENTS
             </LinkTo>
-
-            <a
+            <LinkTo
+                v-if="isCurrentUser"
+                :href="`/user/${user.name}/settings`"
+                :class="{ 'active-tab': $page.url === `/user/${user.name}/settings` }"
+            >
+                SETTINGS
+            </LinkTo>
+             <a
                 v-if="isCurrentUser"
                 :href="`/user/${user.name}/games/export/csv`"
-                :class="{
-                    'active-tab':
-                        $page.url === `/user/${user.name}/achievements`,
-                }"
                 target="_blank"
             >
                 Export CSV
             </a>
+
         </div>
 
         <div class="profile-content">

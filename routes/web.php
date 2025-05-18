@@ -79,6 +79,11 @@ Route::put('/games/{game}/update', [UserGameController::class, 'update'])
     ->middleware('auth')
     ->name('games.update');
 
+ Route::middleware('auth')->group(function () {
+    Route::get('/user/{user:name}/settings', [UserController::class, 'editSettings'])->name('user.settings');
+    Route::patch('/user/{user:name}/settings', [UserController::class, 'updateSettings']);
+});
+
 // EXPORTAR CSV
 
 Route::get('/user/{user:name}/games/export/csv', [UserExportController::class, 'exportCsv'])->middleware('auth');

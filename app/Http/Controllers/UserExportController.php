@@ -28,6 +28,8 @@ class UserExportController extends Controller
             }
             fclose($handle);
         };
+
+        session()->flash('success', 'Exported.');
         return response()->stream($callback, 200, $headers);
     }
 }

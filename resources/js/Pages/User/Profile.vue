@@ -7,6 +7,8 @@
             content="Home page of the application"
         />
     </metaHead>
+        <FlashMessage />
+
     <UserLayout :user="user">
         <div class="profile-info">
             <p class="profile-stats">
@@ -18,6 +20,7 @@
 </template>
 
 <script>
+import FlashMessage from '@/Components/FlashMessage.vue';
 import AppLayout from '@/Layouts/Layout.vue';
 import UserLayout from '@/Layouts/UserLayout.vue';
 import { Head as metaHead, usePage } from '@inertiajs/vue3';
@@ -26,6 +29,7 @@ export default {
     components: {
         metaHead,
         UserLayout,
+        FlashMessage
     },
     computed: {
         currentUser() {

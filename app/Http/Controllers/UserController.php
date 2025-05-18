@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller {
@@ -70,6 +73,47 @@ public function updateAvatar(Request $request, User $user) {
         'avatar_url' => '/avatars/'.$filename
     ]);
 
-    return back()->with('success', 'Avatar actualizado!');
+    return back()->with('success', 'Updated profile picture.');
+}
+
+// setting del usuario
+public function editSettings(User $user)
+{
+    if (Auth::id() !== $user->id) {
+        abort(403);
+    }
+
+    return Inertia::render('User/Settings', [
+        'user' => $user,
+    ]);
+}
+
+public function updateSettings(Request $request, User $user)
+{
+    if (Auth::id() !== $user->id) {
+        abort(403);
+    }
+
+    $request->validate([
+        'name' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
+        'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+        'current_password' => ['required'],
+        'password' => ['nullable', 'confirmed', 'min:8'],
+    ]);
+
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->withErrors(['current_password' => 'Incorrect current password.']);
+    }
+
+    $user->name = $request->name;
+    $user->email = $request->email;
+
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->password);
+    }
+
+    $user->save();
+
+    return back()->with('success', 'Account settings updated.');
 }
 }
