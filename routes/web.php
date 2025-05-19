@@ -55,8 +55,11 @@ Route::get('/dashboard', function () {
 // USERS
 
 Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
+Route::get('/user/{user}/counts', [UserController::class, 'getUserCounts']);
+Route::get('/user/{user}/stats', [UserController::class, 'getUserStats']);
 Route::get('/user/{user}/games', [UserController::class, 'games'])->name('user.games');
 Route::get('/user/{user}/achievements', [UserController::class, 'achievements']);
+
 
 
 Route::post('/user/{user}/avatar', [UserController::class, 'updateAvatar'])

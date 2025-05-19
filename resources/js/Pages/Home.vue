@@ -20,13 +20,12 @@
       <h1>ESSENTIALS QUE FALTAN</h1>
             <p>1 | CUSTOM RECOMENDATOR - <span>YA PENSADO Y VERSIÓN SIMPLE</span></p>
             <p>2 | USER AND SAGAS CRUD  - <span class="meh">REPETIR COMO CON GAMES *ez*</span></p>
-            <p>3 | USER STATS - <span class="meh">chart.js</span></p>
-            <p>4 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
-            <p>5 | USER GAME SECTION: BUTTONS y filtrar - <span class="meh">falta uno, por decidir</span></p>
-            <p>6 | USER SECTION ACHIEVEMENTS   - <span class="meh"> FALTA DECIDIR SI MODIFICAR USER.PHP</span></p>
-            <p>7 | PÁGINAS BLA BLA BLA (HOME, ABOUT, TERMS, PRIVACY, CONTACT)</p>
-            <p>8 | Contact con PHPMAILER</p>
-            <p>9 | UNIFICAR ESTILOS Y VARIABLES</p>
+            <p>3 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
+            <p>4 | USER GAME SECTION: BUTTONS y filtrar - <span class="meh">falta uno, por decidir</span></p>
+            <p>5 | USER SECTION ACHIEVEMENTS   - <span class="meh"> FALTA DECIDIR SI MODIFICAR USER.PHP</span></p>
+            <p>6 | PÁGINAS BLA BLA BLA (HOME, ABOUT, TERMS, PRIVACY, CONTACT)</p>
+            <p>7| Contact con PHPMAILER</p>
+            <p>8 | UNIFICAR ESTILOS Y VARIABLES</p>
 
         </div>
     </div>

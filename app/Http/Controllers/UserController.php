@@ -116,4 +116,119 @@ public function updateSettings(Request $request, User $user)
 
     return back()->with('success', 'Account settings updated.');
 }
+
+// contadores de cada usuario
+public function getUserCounts($userId) {
+    $user = User::findOrFail($userId);
+
+    $games = $user->games()
+        ->withPivot([
+            'hours_played',
+            'achievements_unlocked'
+        ])
+        ->get();
+
+    $stats = [
+        'total_games' => 0,
+        'total_hours' => 0,
+        'total_achievements' => 0,
+        'total_spent' => 0
+    ];
+
+    foreach ($games as $game) {
+        $hours = floatval($game->pivot->hours_played) ?? 0;
+        $achievements = intval($game->pivot->achievements_unlocked) ?? 0;
+        $price = floatval($game->price) ?? 0;
+
+        $stats['total_games']++;
+        $stats['total_hours'] += $hours;
+        $stats['total_achievements'] += $achievements;
+        $stats['total_spent'] += $price;
+    }
+
+    return response()->json($stats);
+}
+
+// STATS
+public function getUserStats($userId) {
+    $user = User::findOrFail($userId);
+
+    return response()->json([
+        'gamesByGenre' => $this->getGamesByGenreStats($user),
+        'gamesByState' => $this->getGamesByStateStats($user),
+        'gamesBySaga' => $this->getGamesBySagaStats($user),
+        'gamesMastered' => [
+            'mastered_count' => $user->games()->wherePivot('mastered', true)->count(),
+            'not_mastered_count' => $user->games()->wherePivot('mastered', false)->count()
+        ]
+          ]);
+}
+
+protected function getGamesByGenreStats(User $user){
+    return $user->games()
+        ->with('genres:id,name')
+        ->get()
+        ->flatMap(function ($game) {
+            return $game->genres->map(function ($genre) {
+                return [
+                    'id' => $genre->id,
+                    'name' => $genre->name
+                ];
+            });
+        })
+        ->groupBy('name')
+        ->map(function ($items, $genreName) {
+            return [
+                'title' => $genreName,
+                'userGames' => count($items)
+            ];
+        })
+        ->values()
+        ->sortByDesc('userGames')
+        ->take(10)
+        ->values();
+}
+
+protected function getGamesByStateStats(User $user){
+    return $user->games()
+        ->get()
+        ->groupBy('pivot.state')
+        ->map(function ($games, $state) {
+            return [
+                'title' => ucfirst($state),
+                'count' => $games->count()
+            ];
+        })
+        ->values()
+        ->sortByDesc('count')
+        ->values();
+}
+
+protected function getGamesBySagaStats(User $user){
+    return $user->games()
+        ->with('saga:id,name')
+        ->get()
+        ->groupBy('saga.name')
+        ->map(function ($games, $sagaName) {
+            return [
+                'title' => $sagaName ?: 'Sin saga',
+                'count' => $games->count(),
+                'hours' => $games->sum('pivot.hours_played')
+            ];
+        })
+        ->values()
+        ->sortByDesc('count')
+        ->values();
+}
+
+protected function getGamesMasteredStats(User $user) {
+    $mastered = $user->games()->wherePivot('mastered', true)->count();
+    $notMastered = $user->games()->wherePivot('mastered', false)->count();
+
+    return [
+        'mastered_count' => $mastered,
+        'not_mastered_count' => $notMastered
+    ];
+}
+
 }

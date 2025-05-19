@@ -70,7 +70,7 @@
                 @click="viewGame(game.id)"
                 class="gameCard"
             >
-                <img :src="game.image_url" alt="Game cover" />
+                <img :src="game.image_url" :alt="game.title" />
                 <div class="overlay">
                     <h2>{{ game.title }}</h2>
                 </div>
