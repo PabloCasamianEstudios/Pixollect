@@ -25,7 +25,6 @@
             <p>5 | USER SECTION ACHIEVEMENTS   - <span class="meh"> FALTA DECIDIR SI MODIFICAR USER.PHP</span></p>
             <p>6 | PÁGINAS BLA BLA BLA (HOME, ABOUT, TERMS, PRIVACY, CONTACT)</p>
             <p>7| Contact con PHPMAILER</p>
-            <p>8 | UNIFICAR ESTILOS Y VARIABLES</p>
 
         </div>
     </div>

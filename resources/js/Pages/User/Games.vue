@@ -12,9 +12,58 @@
         <div class="userGamesContainer">
             <h1 class="sectionTitle">{{ user.name }}'s Collection</h1>
 
-            <div v-if="games.length" class="gamesGrid">
+            <div class="gamesHeader">
+                <input
+                    v-model="search"
+                    type="text"
+                    class="searchInput"
+                    placeholder="Search in collection..."
+                    @input="handleSearch"
+                />
+
+                 <select v-model="filters.state" class="filterSelect">
+                    <option value="">All States</option>
+                    <option value="whishlist">Whishlist</option>
+                    <option value="playing">Playing</option>
+                    <option value="completed">Completed</option>
+                    <option value="dropped">Dropped</option>
+                    <option value="planned">Planned</option>
+                    <option value="backlog">Backlog</option>
+                </select>
+
+                <select v-model="filters.genre" class="filterSelect">
+            <option value="">All Genres</option>
+            <option v-for="genre in uniqueGenres" :key="genre" :value="genre">
+                {{ genre }}
+            </option>
+        </select>
+
+        <select v-model="filters.platform" class="filterSelect">
+            <option value="">All Platforms</option>
+            <option v-for="platform in uniquePlatforms" :key="platform" :value="platform">
+                {{ platform }}
+            </option>
+        </select>
+
+        <select v-model="filters.theme" class="filterSelect">
+            <option value="">All Themes</option>
+            <option v-for="theme in uniqueThemes" :key="theme" :value="theme">
+                {{ theme }}
+            </option>
+        </select>
+
+        <select v-model="filters.saga" class="filterSelect">
+            <option value="">All Sagas</option>
+            <option v-for="saga in uniqueSagas" :key="saga" :value="saga">
+                {{ saga }}
+            </option>
+        </select>
+
+            </div>
+
+            <div v-if="filteredGames.length" class="gamesGrid">
                 <div
-                    v-for="game in games"
+                    v-for="game in filteredGames"
                     :key="game.id"
                     class="gameCard"
                     @click="goToGame(game.id)"
@@ -25,7 +74,10 @@
                             :alt="game.title"
                             class="gameImage"
                         />
-                        <div v-if="currentUser?.id === user.id" class="gameOverlay">
+                        <div
+                            v-if="currentUser?.id === user.id"
+                            class="gameOverlay"
+                        >
                             <div class="gameActions">
                                 <button
                                     class="actionBtn"
@@ -33,8 +85,13 @@
                                 >
                                     O
                                 </button>
-                                <button class="actionBtn">X</button>
-                                <button class="actionBtn">X</button>
+                                <button class="actionBtn">W</button>
+                                <button
+                                    class="actionBtn"
+                                    @click.stop="removeGame(game.id)"
+                                >
+                                    X
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -44,11 +101,15 @@
                             <span
                                 v-if="game.achievements > 0"
                                 class="gameProgress"
-                                >{{ ((game.pivot.achievements_unlocked*100)/game.achievements).toFixed(2) }}%</span>
-                                <span
-                                v-else
-                                class="gameProgress"
-                                ></span>
+                                >{{
+                                    (
+                                        (game.pivot.achievements_unlocked *
+                                            100) /
+                                        game.achievements
+                                    ).toFixed(2)
+                                }}%</span
+                            >
+                            <span v-else class="gameProgress"></span>
                             <span class="gameState">{{
                                 formatState(game.pivot.state)
                             }}</span>
@@ -56,8 +117,11 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="noGamesMessage">
-                <p>This user hasn't added any games yet.</p>
+            <div v-else class="empty-message">
+                <h1>EMPTY</h1>
+                <p>
+                    No games here
+                </p>
             </div>
             <UserUpdateGameModal
                 v-if="showModal && selectedGame && selectedUserGame"
@@ -76,7 +140,6 @@ import { Head as metaHead, router, usePage } from '@inertiajs/vue3';
 
 import UserUpdateGameModal from '../../Components/UserUpdateGameModal.vue';
 import FlashMessage from '../../Components/FlashMessage.vue';
-
 
 export default {
     layout: AppLayout,
@@ -101,11 +164,68 @@ export default {
             showModal: false,
             selectedGame: null,
             selectedUserGame: null,
+            search: '',
+            filters: {
+                state: '',
+                genre: '',
+                platform: '',
+                theme: '',
+                saga: ''
+            },
         };
     },
     computed: {
         currentUser() {
             return usePage().props.auth.user;
+        },
+        uniqueGenres() {
+            const genres = new Set();
+            this.games.forEach(game => {
+                game.genres?.forEach(genre => genres.add(genre.name));
+            });
+            return Array.from(genres).sort();
+        },
+        uniquePlatforms() {
+            const platforms = new Set();
+            this.games.forEach(game => {
+                game.platforms?.forEach(platform => platforms.add(platform.name));
+            });
+            return Array.from(platforms).sort();
+        },
+        uniqueThemes() {
+            const themes = new Set();
+            this.games.forEach(game => {
+                game.themes?.forEach(theme => themes.add(theme.name));
+            });
+            return Array.from(themes).sort();
+        },
+        uniqueSagas() {
+            const sagas = new Set();
+            this.games.forEach(game => {
+                if (game.saga?.name) {
+                    sagas.add(game.saga.name);
+                }
+            });
+            return Array.from(sagas).sort();
+        },
+        filteredGames() {
+            return this.games.filter(game => {
+                const matchesSearch = !this.search ||
+                    game.title.toLowerCase().includes(this.search.toLowerCase());
+                const matchesState = !this.filters.state ||
+                    game.pivot.state === this.filters.state;
+                const matchesGenre = !this.filters.genre ||
+                    game.genres?.some(g => g.name === this.filters.genre);
+                const matchesPlatform = !this.filters.platform ||
+                    game.platforms?.some(p => p.name === this.filters.platform);
+                const matchesTheme = !this.filters.theme ||
+                    game.themes?.some(t => t.name === this.filters.theme);
+                const matchesSaga = !this.filters.saga ||
+                    (game.saga?.name === this.filters.saga);
+
+                return matchesSearch && matchesState && matchesGenre &&
+                       matchesPlatform && matchesTheme && matchesSaga;
+            });
         },
     },
     methods: {
@@ -140,6 +260,17 @@ export default {
                 backlog: 'Backlog',
             };
             return states[state] || state;
+        },
+        removeGame(gameId) {
+            if (
+                confirm(
+                    'Are you sure you want to remove this game from your collection?',
+                )
+            ) {
+                router.delete(`/games/${gameId}/remove`, {
+                    preserveScroll: true,
+                });
+            }
         },
     },
 };
@@ -297,9 +428,86 @@ export default {
     margin-right: auto;
 }
 
+.gamesHeader {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+    gap: 10px;
+
+    .searchInput {
+        background-color: #1c1c1c;
+        border: 1px solid #333;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .filters-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .filterSelect {
+        background-color: #1c1c1c;
+        border: 1px solid #333;
+        color: white;
+        padding: 0.5rem;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        flex: 1;
+        min-width: 110px;
+
+        &:focus {
+            outline: none;
+            border-color: $main-color;
+        }
+    }
+}
+.empty-message {
+    background-color: #1e1e1e;
+    border: 1px dashed $main-color;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #aaa;
+    font-family: 'Orbitron', sans-serif;
+    margin-top: 2rem;
+
+    h1 {
+        color: $main-color;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    p {
+        margin: 0;
+        color: lighten($main-color, 15%);
+        font-size: 1.2rem;
+    }
+}
+
 @media (max-width: 768px) {
     .gamesGrid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .gamesHeader {
+        padding: 0 0.5rem;
+            flex-direction: column;
+         .filters-container {
+            flex-direction: column;
+
+            .filterSelect {
+                width: 100%;
+            }
+        }
     }
 }
 </style>
