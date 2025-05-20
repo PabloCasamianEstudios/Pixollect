@@ -58,7 +58,7 @@
             </div>
             <select v-model="form.saga_id">
                 <option :value="null">Saga</option>
-                <option v-for="saga in sagas" :key="saga.id" :value="saga.id">
+                <option v-for="saga in sortedSagas" :key="saga.id" :value="saga.id">
                     {{ saga.name }}
                 </option>
             </select>
@@ -168,7 +168,7 @@
 
 <script setup>
 import { Head as metaHead, useForm } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 
 defineProps({
     genres: Array,
@@ -177,6 +177,10 @@ defineProps({
     gameModes: Array,
     gameTags: Array,
     sagas: Array,
+});
+
+const sortedSagas = computed(() => {
+    return [...props.sagas].sort((a, b) => a.name.localeCompare(b.name));
 });
 
 const form = useForm({

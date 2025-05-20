@@ -15,7 +15,7 @@
                 v-model="search"
                 type="text"
                 class="searchInput"
-                :placeholder="placeholder"
+                placeholder="Search..."
                 @input="handleSearch"
             />
 

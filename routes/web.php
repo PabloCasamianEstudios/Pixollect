@@ -61,13 +61,14 @@ Route::get('/user/{user}/games', [UserController::class, 'games'])->name('user.g
 Route::get('/user/{user}/achievements', [UserController::class, 'achievements']);
 
 
-
 Route::post('/user/{user}/avatar', [UserController::class, 'updateAvatar'])
     ->middleware('auth')
     ->name('user.avatar.update');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
+
+Route::post('/user/{id}/update-role', [UserController::class, 'updateRole'])->middleware('auth')->middleware('admin');
 
 // user / jueguitos en COLECCIÓN
 Route::get('/user/{id}/games', [UserGameController::class, 'getUserGames']);

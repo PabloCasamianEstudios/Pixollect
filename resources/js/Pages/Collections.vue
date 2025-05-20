@@ -22,22 +22,46 @@
             <div
                 v-for="user in filteredUsers"
                 :key="user.id"
-                class="user-card"
                 @click="goToProfile(user.name)"
             >
-                <div class="avatar-container">
-                    <img :src="user.avatar_url" alt="Avatar" class="avatar" />
-                </div>
-                <div class="card-content">
-                    <div class="username">{{ user.name }}</div>
-                    <div class="game-count">{{ user.games.length }} juegos</div>
+                <div class="user-card" v-if="isAdmin || user.role !== 'mute'">
+                    <div class="avatar-container">
+                        <img
+                            :src="user.avatar_url"
+                            alt="Avatar"
+                            class="avatar"
+                        />
+                    </div>
+                    <div class="card-content">
+                        <div class="username">{{ user.name }}</div>
+                        <div class="game-count">
+                            {{ user.games.length }} juegos
+                        </div>
+
+                        <div v-if="isAdmin" class="role-select" @click.stop>
+                            <select
+                                v-model="user.role"
+                                @change="updateUserRole(user)"
+                            >
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                                <option value="mute">Mute</option>
+                                <option
+                                    value="deleteuser"
+                                    class="delete-option"
+                                >
+                                    Delete User
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { Head as metaHead } from '@inertiajs/vue3';
+import { Head as metaHead, usePage } from '@inertiajs/vue3';
 
 export default {
     components: {
@@ -55,17 +79,29 @@ export default {
         filteredUsers() {
             const query = this.search.toLowerCase();
 
-            const usersWithGames = this.users.filter(
-                (user) => user.games && user.games.length > 0,
-            );
-            return usersWithGames.filter((user) =>
-                user.name.toLowerCase().includes(query),
-            );
+            return this.users
+                .filter((user) => user.games && user.games.length > 0)
+                .filter((user) => {
+                    const match = user.name.toLowerCase().includes(query);
+                    const visible = this.isAdmin || user.role !== 'mute';
+                    return match && visible;
+                });
+        },
+        currentUserRole() {
+            return usePage().props.auth.user.role;
+        },
+        isAdmin() {
+            return this.currentUserRole === 'admin';
         },
     },
     methods: {
         goToProfile(name) {
             this.$inertia.visit(`/user/${name}`);
+        },
+        updateUserRole(user) {
+            this.$inertia.post(`/user/${user.id}/update-role`, {
+                role: user.role,
+            });
         },
     },
 };
@@ -173,5 +209,23 @@ export default {
     &:hover .overlay {
         opacity: 1;
     }
+}
+
+.role-select {
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.role-select select {
+    padding: 0.25rem;
+    border-radius: 6px;
+    background-color: #2c2c2c;
+    color: white;
+    border: 1px solid #444;
+}
+
+.delete-option {
+    background-color: #b00020;
+    color: white;
 }
 </style>

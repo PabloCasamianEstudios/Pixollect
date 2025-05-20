@@ -41,7 +41,7 @@ public function games(User $user) {
 
     // sacar todas las collections
     public function collections() {
-        $users = User::with('games')->select('id','name','avatar_url')->get();
+        $users = User::with('games')->select('id','name','avatar_url','role')->get();
         return Inertia::render('Collections', [
             'users' => $users,
         ]);
@@ -229,6 +229,30 @@ protected function getGamesMasteredStats(User $user) {
         'mastered_count' => $mastered,
         'not_mastered_count' => $notMastered
     ];
+}
+
+public function updateRole(Request $request, $id){
+    $request->validate([
+        'role' => 'required|in:admin,user,mute,deleteuser',
+    ]);
+
+    $currentUser = Auth::user();
+
+    if ($currentUser->role !== 'admin') {
+        abort(403);
+    }
+
+    $user = User::findOrFail($id);
+
+    if ($request->role === 'deleteuser') {
+        $user->delete();
+        return redirect()->back()->with('message', 'Deleted user.');
+    }
+
+    $user->role = $request->role;
+    $user->save();
+
+    return redirect()->back()->with('message', 'Updated role.');
 }
 
 }
