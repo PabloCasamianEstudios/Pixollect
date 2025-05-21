@@ -22,6 +22,21 @@
                 {{ item.label }}
             </button>
         </div>
+
+
+           <div class="container">
+      <div class="message">
+      <h1>ESSENTIALS QUE FALTAN</h1>
+            <p>1 | CUSTOM RECOMENDATOR - <span>YA PENSADO Y VERSIÓN SIMPLE</span></p>
+            <p>2 | USER AND SAGAS CRUD  - <span class="meh">REPETIR COMO CON GAMES *ez*</span></p>
+            <p>3 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
+            <p>4 | USER GAME SECTION: buton<span class="meh">falta uno, por decidir</span></p>
+            <p>5| Contact con PHPMAILER</p>
+
+        </div>
+    </div>
+
+
     </section>
 </template>
 
@@ -103,4 +118,41 @@ export default {
         }
     }
 }
+
+
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    color: white;
+    border-radius: 12px;
+
+    background-color: #1c1c1c;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.message {
+    background-color: #1e1e1e;
+    border: 1px dashed $main-color;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #aaa;
+    font-family: 'Orbitron', sans-serif;
+
+    p {
+        margin: 10px;
+        color: lighten($main-color, 15%);
+        span {
+            color: green;
+
+        }
+        .meh {
+                color: yellow;
+            }
+
+    }
+    }
 </style>

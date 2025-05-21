@@ -47,12 +47,6 @@ public function games(User $user) {
         ]);
     }
 
-    // user achievements (los de Pixollect)
-    public function achievements(User $user){
-    return Inertia::render('User/Achievements', [
-        'user' => $user,
-    ]);
-}
 
 /**
  * Cambiar foto de perfil de un usuario
@@ -255,4 +249,30 @@ public function updateRole(Request $request, $id){
     return redirect()->back()->with('message', 'Updated role.');
 }
 
+
+// los achievements del sitio (todo esto por no añadirlo al user: NOTA PARA EL PABLO DEL FUTURO)
+public function achievements(User $user) {
+    $games = $user->games()
+        ->with(['genres', 'platforms', 'themes'])
+        ->withPivot([
+            'state', 'mastered', 'user_score', 'comment',
+            'progress', 'achievements_unlocked', 'hours_played',
+            'start_date', 'end_date'
+        ])
+        ->get();
+    $stats = [
+        'total_games' => $games->count(),
+        'total_hours' => $games->sum('pivot.hours_played'),
+        'total_achievements' => $games->sum('pivot.achievements_unlocked'),
+        'rated_games' => $games->where('pivot.user_score', '>', 0)->count(),
+        'completed_games' => $games->where('pivot.state', 'completed')->count(),
+        'mastered_games' => $games->where('pivot.mastered', true)->count(),
+        'unique_genres' => $games->flatMap->genres->unique('id')->count(),
+    ];
+
+    return Inertia::render('User/Achievements', [
+        'user' => $user,
+        'stats' => $stats,
+    ]);
+}
 }

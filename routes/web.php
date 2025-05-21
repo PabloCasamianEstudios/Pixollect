@@ -18,7 +18,20 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 // Rutas PÚBLICAS
 Route::get('/', function () {
     return Inertia::render('Home');
-});
+})->name('home');
+
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
+
+Route::get('/terms', function () {
+    return Inertia::render('Terms');
+})->name('terms');
+
+Route::get('/privacy', function () {
+    return Inertia::render('Privacy');
+})->name('privacy');
+
 
 Route::get('/welcome', function () {
     return Inertia::render('Welcome');

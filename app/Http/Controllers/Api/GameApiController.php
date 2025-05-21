@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -125,4 +126,24 @@ public function index()
         return response()->json(['games' => $games]);
     }
 
+    // ultimos lanzamientos
+    public function latestGames(){
+    $games = Game::with(['genres:id,name', 'platforms:id,name'])
+        ->orderBy('release_date', 'desc')
+        ->take(10)
+        ->get();
+
+    return response()->json(['data' => $games]);
 }
+
+// STATS GLBALES DE PIXOLLECT
+public function globalStats(){
+        return response()->json([
+            'total_users' => User::count(),
+            'total_games' => Game::count(),
+        ]);
+}
+
+
+}
+

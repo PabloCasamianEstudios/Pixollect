@@ -8,6 +8,8 @@
         />
     </metaHead>
 
+<FlashMessage />
+
     <div class="collections-page">
         <div class="search-bar">
             <input
@@ -61,11 +63,13 @@
     </div>
 </template>
 <script>
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, usePage } from '@inertiajs/vue3';
 
 export default {
     components: {
         metaHead,
+        FlashMessage
     },
     props: {
         users: [],
@@ -88,7 +92,7 @@ export default {
                 });
         },
         currentUserRole() {
-            return usePage().props.auth.user.role;
+            return usePage().props.auth?.user?.role ?? null;
         },
         isAdmin() {
             return this.currentUserRole === 'admin';
