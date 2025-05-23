@@ -144,6 +144,37 @@ public function globalStats(){
         ]);
 }
 
+// subir 1 achievements
+public function incrementAchievement(Request $request, $gameId) {
+
+     $user = $request->user();
+    $game = Game::findOrFail($gameId);
+
+    $userGame = $user->games()->where('game_id', $gameId)->first();
+
+    $newCount = $userGame->pivot->achievements_unlocked + 1;
+    $maxAchievements = $game->achievements;
+
+    $updateData = ['achievements_unlocked' => min($newCount, $maxAchievements)];
+
+    if ($newCount >= $maxAchievements) {
+        $updateData['state'] = 'completed';
+        $updateData['mastered'] = true;
+    }
+
+    $user->games()->updateExistingPivot($gameId, $updateData);
+
+     return response()->json([
+        'message' => $newCount >= $maxAchievements
+            ? 'Congratulations! You mastered this game!'
+            : 'Achievement unlocked!',
+        'achievements_unlocked' => $updateData['achievements_unlocked'],
+        'state' => $updateData['state'] ?? $userGame->pivot->state,
+        'mastered' => $updateData['mastered'] ?? false
+    ]);
+
+}
+
 
 }
 

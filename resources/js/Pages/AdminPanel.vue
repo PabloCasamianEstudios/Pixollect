@@ -28,10 +28,12 @@
       <div class="message">
       <h1>ESSENTIALS QUE FALTAN</h1>
             <p>1 | CUSTOM RECOMENDATOR - <span>YA PENSADO Y VERSIÓN SIMPLE</span></p>
-            <p>2 | USER AND SAGAS CRUD  - <span class="meh">REPETIR COMO CON GAMES *ez*</span></p>
-            <p>3 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
-            <p>4 | USER GAME SECTION: buton<span class="meh">falta uno, por decidir</span></p>
-            <p>5| Contact con PHPMAILER</p>
+            <p>2 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
+            <p>3 | Contact con PHPMAILER</p>
+
+            <h1> OPTIONAL </h1>
+            <p> 1 | Comparator reseña final</p>
+            <p> 2 | EN CADA GAME PONER PUNTUACIÓN MEDIA (sobre cuanta gente), rating por puntuación, cuanta gente lo tiene, y en que estados. [debajo foto] (se podrían mover las tags a una nueva columna derecha)</p>
 
         </div>
     </div>
@@ -55,10 +57,10 @@ export default {
                 { name: 'games', label: 'Games', route: '/games' },
                 { name: 'sagas', label: 'Sagas', route: '/sagas' },
                 { name: 'users', label: 'Users', route: '/users' },
-                { name: 'themes', label: 'Themes', route: '/themes' },
-                { name: 'genres', label: 'Genres', route: '/genres' },
-                { name: 'platforms', label: 'Platforms', route: '/platforms' },
-            ],
+                // { name: 'themes', label: 'Themes', route: '/themes' },
+            //     { name: 'genres', label: 'Genres', route: '/genres' },
+            //     { name: 'platforms', label: 'Platforms', route: '/platforms' },
+             ],
         };
     },
     methods: {

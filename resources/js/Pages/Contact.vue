@@ -1,0 +1,96 @@
+<template>
+
+     <MetaHead>
+        <title>Contact</title>
+        <meta
+            head-key="description"
+            name="description"
+            content="Contact of Pixollect"
+        />
+    </MetaHead>
+    <FlashMessage />
+    <div class="formContainer">
+        <h1>Contact</h1>
+        <form @submit.prevent="submit">
+            <input v-model="form.name" type="text" placeholder="Name" />
+            <input v-model="form.email" type="email" placeholder="Email" />
+            <textarea v-model="form.message" placeholder="Message"></textarea>
+
+            <div v-if="form.errors" class="errors">
+                <div v-for="(error, field) in form.errors" :key="field">
+                    {{ error }}
+                </div>
+            </div>
+
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</template>
+
+<script>
+import FlashMessage from '@/Components/FlashMessage.vue';
+import { useForm, Head as MetaHead } from '@inertiajs/vue3';
+
+export default {
+    name: 'Contact',
+    components: {
+        FlashMessage,
+        MetaHead,
+    },
+    props: {
+        errors: Object,
+        auth: Object,
+        flash: Object
+    },
+    setup() {
+        const form = useForm({
+            name: '',
+            email: '',
+            message: '',
+        });
+
+        function submit() {
+            form.post('/contact/send', {
+                preserveScroll: true,
+                onSuccess: () => {
+                    form.reset();
+                }
+            });
+        }
+
+        return { form, submit };
+    },
+};
+</script>
+
+<style lang="scss" scoped>
+@use '../../css/variables.scss' as *;
+
+.formContainer {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #1c1c1c;
+    border-radius: 10px;
+    color: white;
+}
+
+input, textarea {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: #121212;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: white;
+}
+
+button {
+    background-color: $main-color;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+</style>

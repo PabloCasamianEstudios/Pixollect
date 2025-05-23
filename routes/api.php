@@ -15,3 +15,5 @@ Route::prefix('games')->group(function () {
     Route::get('/games/latest', [GameApiController::class, 'latestGames']);
 
 });
+
+Route::post('/games/{game}/increment-achievement', [GameApiController::class, 'incrementAchievement']);

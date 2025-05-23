@@ -21,7 +21,7 @@
                     @input="handleSearch"
                 />
 
-                 <select v-model="filters.state" class="filterSelect">
+                <select v-model="filters.state" class="filterSelect">
                     <option value="">All States</option>
                     <option value="whishlist">Whishlist</option>
                     <option value="playing">Playing</option>
@@ -32,33 +32,48 @@
                 </select>
 
                 <select v-model="filters.genre" class="filterSelect">
-            <option value="">All Genres</option>
-            <option v-for="genre in uniqueGenres" :key="genre" :value="genre">
-                {{ genre }}
-            </option>
-        </select>
+                    <option value="">All Genres</option>
+                    <option
+                        v-for="genre in uniqueGenres"
+                        :key="genre"
+                        :value="genre"
+                    >
+                        {{ genre }}
+                    </option>
+                </select>
 
-        <select v-model="filters.platform" class="filterSelect">
-            <option value="">All Platforms</option>
-            <option v-for="platform in uniquePlatforms" :key="platform" :value="platform">
-                {{ platform }}
-            </option>
-        </select>
+                <select v-model="filters.platform" class="filterSelect">
+                    <option value="">All Platforms</option>
+                    <option
+                        v-for="platform in uniquePlatforms"
+                        :key="platform"
+                        :value="platform"
+                    >
+                        {{ platform }}
+                    </option>
+                </select>
 
-        <select v-model="filters.theme" class="filterSelect">
-            <option value="">All Themes</option>
-            <option v-for="theme in uniqueThemes" :key="theme" :value="theme">
-                {{ theme }}
-            </option>
-        </select>
+                <select v-model="filters.theme" class="filterSelect">
+                    <option value="">All Themes</option>
+                    <option
+                        v-for="theme in uniqueThemes"
+                        :key="theme"
+                        :value="theme"
+                    >
+                        {{ theme }}
+                    </option>
+                </select>
 
-        <select v-model="filters.saga" class="filterSelect">
-            <option value="">All Sagas</option>
-            <option v-for="saga in uniqueSagas" :key="saga" :value="saga">
-                {{ saga }}
-            </option>
-        </select>
-
+                <select v-model="filters.saga" class="filterSelect">
+                    <option value="">All Sagas</option>
+                    <option
+                        v-for="saga in uniqueSagas"
+                        :key="saga"
+                        :value="saga"
+                    >
+                        {{ saga }}
+                    </option>
+                </select>
             </div>
 
             <div v-if="filteredGames.length" class="gamesGrid">
@@ -85,7 +100,12 @@
                                 >
                                     O
                                 </button>
-                                <button class="actionBtn">W</button>
+                                <button
+                                    class="actionBtn"
+                                    @click.stop="incrementAchievement(game)"
+                                >
+                                    W
+                                </button>
                                 <button
                                     class="actionBtn"
                                     @click.stop="removeGame(game.id)"
@@ -119,9 +139,7 @@
             </div>
             <div v-else class="empty-message">
                 <h1>EMPTY</h1>
-                <p>
-                    No games here
-                </p>
+                <p>No games here</p>
             </div>
             <UserUpdateGameModal
                 v-if="showModal && selectedGame && selectedUserGame"
@@ -170,7 +188,7 @@ export default {
                 genre: '',
                 platform: '',
                 theme: '',
-                saga: ''
+                saga: '',
             },
         };
     },
@@ -180,28 +198,30 @@ export default {
         },
         uniqueGenres() {
             const genres = new Set();
-            this.games.forEach(game => {
-                game.genres?.forEach(genre => genres.add(genre.name));
+            this.games.forEach((game) => {
+                game.genres?.forEach((genre) => genres.add(genre.name));
             });
             return Array.from(genres).sort();
         },
         uniquePlatforms() {
             const platforms = new Set();
-            this.games.forEach(game => {
-                game.platforms?.forEach(platform => platforms.add(platform.name));
+            this.games.forEach((game) => {
+                game.platforms?.forEach((platform) =>
+                    platforms.add(platform.name),
+                );
             });
             return Array.from(platforms).sort();
         },
         uniqueThemes() {
             const themes = new Set();
-            this.games.forEach(game => {
-                game.themes?.forEach(theme => themes.add(theme.name));
+            this.games.forEach((game) => {
+                game.themes?.forEach((theme) => themes.add(theme.name));
             });
             return Array.from(themes).sort();
         },
         uniqueSagas() {
             const sagas = new Set();
-            this.games.forEach(game => {
+            this.games.forEach((game) => {
                 if (game.saga?.name) {
                     sagas.add(game.saga.name);
                 }
@@ -209,22 +229,37 @@ export default {
             return Array.from(sagas).sort();
         },
         filteredGames() {
-            return this.games.filter(game => {
-                const matchesSearch = !this.search ||
-                    game.title.toLowerCase().includes(this.search.toLowerCase());
-                const matchesState = !this.filters.state ||
+            return this.games.filter((game) => {
+                const matchesSearch =
+                    !this.search ||
+                    game.title
+                        .toLowerCase()
+                        .includes(this.search.toLowerCase());
+                const matchesState =
+                    !this.filters.state ||
                     game.pivot.state === this.filters.state;
-                const matchesGenre = !this.filters.genre ||
-                    game.genres?.some(g => g.name === this.filters.genre);
-                const matchesPlatform = !this.filters.platform ||
-                    game.platforms?.some(p => p.name === this.filters.platform);
-                const matchesTheme = !this.filters.theme ||
-                    game.themes?.some(t => t.name === this.filters.theme);
-                const matchesSaga = !this.filters.saga ||
-                    (game.saga?.name === this.filters.saga);
+                const matchesGenre =
+                    !this.filters.genre ||
+                    game.genres?.some((g) => g.name === this.filters.genre);
+                const matchesPlatform =
+                    !this.filters.platform ||
+                    game.platforms?.some(
+                        (p) => p.name === this.filters.platform,
+                    );
+                const matchesTheme =
+                    !this.filters.theme ||
+                    game.themes?.some((t) => t.name === this.filters.theme);
+                const matchesSaga =
+                    !this.filters.saga || game.saga?.name === this.filters.saga;
 
-                return matchesSearch && matchesState && matchesGenre &&
-                       matchesPlatform && matchesTheme && matchesSaga;
+                return (
+                    matchesSearch &&
+                    matchesState &&
+                    matchesGenre &&
+                    matchesPlatform &&
+                    matchesTheme &&
+                    matchesSaga
+                );
             });
         },
     },
@@ -270,6 +305,44 @@ export default {
                 router.delete(`/games/${gameId}/remove`, {
                     preserveScroll: true,
                 });
+            }
+        },
+        async incrementAchievement(game) {
+            if (!confirm('Do you want to add one achievement to this game?'))
+                return;
+
+            try {
+                const response = await fetch(
+                    `/api/games/${game.id}/increment-achievement`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document
+                                .querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content'),
+                        },
+                        body: JSON.stringify({}),
+                    },
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                const updatedGame = this.games.find((g) => g.id === game.id);
+                if (updatedGame) {
+                    updatedGame.pivot.achievements_unlocked =
+                        data.achievements_unlocked;
+                    updatedGame.pivot.state = data.state;
+                    updatedGame.pivot.mastered = data.mastered;
+                }
+            } catch (error) {
+                console.error('Error incrementing achievement:', error);
+                alert('Failed to increment achievement');
             }
         },
     },
@@ -500,8 +573,8 @@ export default {
 
     .gamesHeader {
         padding: 0 0.5rem;
-            flex-direction: column;
-         .filters-container {
+        flex-direction: column;
+        .filters-container {
             flex-direction: column;
 
             .filterSelect {

@@ -1,93 +1,72 @@
 <template>
     <metaHead>
-        <title>CRUD Games</title>
+        <title>Manage Sagas</title>
         <meta
             head-key="description"
             name="description"
-            content="Index Game Admin Management page of the application"
+            content=" Saga Management page of the application"
         />
     </metaHead>
-    <div class="gamesPage">
-        <h1 class="gamesPage__title">Manage Games</h1>
 
-        <div class="gamesPage__tableWrapper">
-            <table class="gamesPage__table">
+      <FlashMessage />
+    <div class="sagasPage">
+        <h1 class="sagasPage__title">Manage Sagas</h1>
+
+
+
+        <div class="sagasPage__tableWrapper">
+            <table class="sagasPage__table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Image</th>
-                        <th>Title</th>
+                        <th>Name</th>
                         <th>Description</th>
-                        <th>Release</th>
-                        <th>Developer</th>
-                        <th>Publisher</th>
-                        <th>Price</th>
+                        <th>Games Count</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="game in games" :key="game.id">
-                        <td>{{ game.id }}</td>
-                        <td>
-                            <img
-                                :src="game.image_url"
-                                alt="Imagen del juego"
-                                class="gameImg"
-                            />
-                        </td>
-                        <td>{{ game.title }}</td>
-                        <td class="descriptionCell">{{ game.description }}</td>
-                        <td>{{ game.release_date }}</td>
-                        <td>{{ game.developer }}</td>
-                        <td>{{ game.publisher }}</td>
-                        <td>${{ game.price }}</td>
+                    <tr v-for="saga in sagas" :key="saga.id">
+                        <td>{{ saga.id }}</td>
+                        <td>{{ saga.name }}</td>
+                        <td class="descriptionCell">{{ saga.description }}</td>
+                        <td>{{ saga.games_count }}</td>
                         <td class="actionBtns">
-                            <button @click="viewGame(game.id)" title="Ver">
-                                👁️
-                            </button>
-                            <button @click="editGame(game.id)" title="Editar">
-                                ✏️
-                            </button>
-                            <button
-                                @click="deleteGame(game.id)"
-                                title="Eliminar"
-                            >
-                                ❌
-                            </button>
+                            <button @click="editSaga(saga.id)" title="Edit">✏️</button>
+                            <button @click="deleteSaga(saga.id)" title="Delete">❌</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <button class="createButton" @click="createGame">+</button>
+        <button class="createButton" @click="createSaga">+</button>
     </div>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, router } from '@inertiajs/vue3';
+
 export default {
     components: {
         metaHead,
+        FlashMessage,
     },
     props: {
-        games: Array,
+        sagas: Array,
         successMessage: String,
     },
     methods: {
-        viewGame(id) {
-            router.visit(`/games/${id}`);
+        createSaga() {
+            router.visit('/sagas/create');
         },
-        editGame(id) {
-            router.visit(`/games/${id}/edit`);
+        editSaga(id) {
+            router.visit(`/sagas/${id}/edit`);
         },
-        deleteGame(id) {
-            if (confirm('¿Eliminar este juego?')) {
-                router.delete(`/games/${id}`);
+        deleteSaga(id) {
+            if (confirm('Delete this saga?')) {
+                router.delete(`/sagas/${id}`);
             }
-        },
-        createGame() {
-            router.visit('/games/create');
         },
     },
 };
@@ -96,12 +75,12 @@ export default {
 <style lang="scss" scoped>
 @use '../../../css/variables.scss' as *;
 
-.gamesPage {
+.sagasPage {
     background-color: #121212;
     color: white;
     padding: 2rem;
-    font-family: 'Orbitron', sans-serif;
     min-height: 78.7vh;
+
     &__title {
         font-size: 2rem;
         color: $main-color;
@@ -121,19 +100,11 @@ export default {
             padding: 0.75rem 1rem;
             text-align: left;
             border-bottom: 1px solid #2e2e2e;
-            min-height: 107px;
-            max-height: 107px;
         }
 
         th {
             background-color: #1c1c1c;
             color: $main-color;
-        }
-
-        .gameImg {
-            width: 50px;
-            height: auto;
-            border-radius: 6px;
         }
 
         .descriptionCell {
@@ -160,6 +131,7 @@ export default {
             }
         }
     }
+
     .createButton {
         position: fixed;
         bottom: 2rem;

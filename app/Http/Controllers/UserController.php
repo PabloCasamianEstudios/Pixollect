@@ -275,4 +275,60 @@ public function achievements(User $user) {
         'stats' => $stats,
     ]);
 }
+
+
+ public function index() {
+        $users = User::withCount('games')
+            ->orderBy('id')
+            ->get();
+
+        return Inertia::render('Users/Index', [
+            'users' => $users,
+            'successMessage' => session('success'),
+        ]);
+}
+
+
+public function destroy( User $user) {
+    $user->delete();
+    return redirect()->route('users.index')->with('message', 'User deleted successfully.');
+
+}
+
+
+public function edit(User $user){
+    return Inertia::render('Users/Edit', [
+        'user' => $user,
+    ]);
+}
+
+public function update(Request $request, User $user){
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'password' => 'nullable|string|min:6',
+        'avatar_url' => 'nullable|url',
+        'role' => 'required|in:user,admin',
+    ]);
+
+    $user->name = $validated['name'];
+    $user->email = $validated['email'];
+    $user->avatar_url = $validated['avatar_url'] ?: '/images/defaultIcon.png';
+    $user->role = $validated['role'];
+
+
+    $user->avatar_url = $validated['avatar_url'] ?? null;
+    if (empty($user->avatar_url)) {
+        $user->avatar_url = '/images/defaultIcon.png';
+    }
+
+    if (!empty($validated['password'])) {
+        $user->password = Hash::make($validated['password']);
+    }
+
+    $user->save();
+
+    return redirect()->route('users.index')->with('success', 'User updated successfully.');
+}
+
 }

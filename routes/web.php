@@ -9,7 +9,9 @@ use App\Models\Platform;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\SagaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\UserExportController;
@@ -31,6 +33,9 @@ Route::get('/terms', function () {
 Route::get('/privacy', function () {
     return Inertia::render('Privacy');
 })->name('privacy');
+
+Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
 
 Route::get('/welcome', function () {
@@ -129,14 +134,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return Inertia::render('AdminPanel');
     });
 
+    // Users
+    Route::resource('users', UserController::class);
+
+    // Sagas
+    Route::resource('sagas', SagaController::class);
+
 });
 
 
 Route::get('/games/create', [GameController::class, 'create'])
     ->name('games.create')
     ->middleware(['auth', 'admin']);
-
-    // sagas
 
 
 
