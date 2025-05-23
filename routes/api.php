@@ -17,3 +17,5 @@ Route::prefix('games')->group(function () {
 });
 
 Route::post('/games/{game}/increment-achievement', [GameApiController::class, 'incrementAchievement']);
+Route::get('/recommend/{userId}', [GameApiController::class, 'recommendByTags']);
+

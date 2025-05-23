@@ -49,9 +49,9 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Rating</label>
-                            <input type="number" v-model="form.rating" min="0" max="10" />
-                            <span v-if="errors.rating" class="formError">{{ errors.rating }}</span>
+                            <label>user_score</label>
+                            <input type="number" v-model="form.user_score" min="0" max="10" />
+                            <span v-if="errors.user_score" class="formError">{{ errors.user_score }}</span>
                         </div>
 
                         <div class="form-group checkbox-group">
@@ -99,7 +99,7 @@ export default {
             form: reactive({
                 game_id: this.game.id,
                 status: 'Playing',
-                rating: 0,
+                user_score: 0,
                 hours_played: null,
                 achievements_unlocked: 0,
                 mastered: false,
@@ -109,7 +109,7 @@ export default {
                 // review: '',
             }),
             errors: {
-                rating: '',
+                user_score: '',
                 achievements_unlocked: '',
                 hours_played: '',
                 start_date: '',
@@ -130,11 +130,11 @@ export default {
         validate() {
             let valid = true;
 
-            if (this.form.rating < 0 || this.form.rating > 10) {
-                this.errors.rating = 'Rating must be between 0 and 10';
+            if (this.form.user_score < 0 || this.form.user_score > 10) {
+                this.errors.user_score = 'user_score must be between 0 and 10';
                 valid = false;
             } else {
-                this.errors.rating = '';
+                this.errors.user_score = '';
             }
 
             if (

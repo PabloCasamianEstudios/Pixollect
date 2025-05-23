@@ -67,7 +67,7 @@ class ContactController extends Controller
             Mail::to('no-reply@pixollect.com')->send(new ContactMail($data));
 
             // Redirigir con message de éxito
-            return redirect()->back()->with('success', 'Succesfull sended');
+            return redirect()->back()->with('message', 'Succesfull sended');
         } catch (\Exception $e) {
             // Redirigir con message de error si falla
             return redirect()->back()->with('error', 'ERROR: ' . $e->getMessage());

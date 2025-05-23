@@ -67,7 +67,7 @@ public function updateAvatar(Request $request, User $user) {
         'avatar_url' => '/avatars/'.$filename
     ]);
 
-    return back()->with('success', 'Updated profile picture.');
+    return back()->with('message', 'Updated profile picture.');
 }
 
 // setting del usuario
@@ -108,7 +108,7 @@ public function updateSettings(Request $request, User $user)
 
     $user->save();
 
-    return back()->with('success', 'Account settings updated.');
+    return back()->with('message', 'Account settings updated.');
 }
 
 // contadores de cada usuario
@@ -328,7 +328,7 @@ public function update(Request $request, User $user){
 
     $user->save();
 
-    return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    return redirect()->route('users.index')->with('message', 'User updated successfully.');
 }
 
 }

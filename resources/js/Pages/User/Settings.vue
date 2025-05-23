@@ -2,6 +2,7 @@
     <metaHead>
         <title>{{ user.name }} Settings</title>
     </metaHead>
+
     <FlashMessage />
 
 <UserLayout :user="user">
@@ -123,8 +124,9 @@ input {
 }
 
 button {
-    background: #00ffc3;
+    background: $main-color;
     padding: 0.75rem 1.5rem;
+    border-radius: 8px;
     border: none;
     font-weight: bold;
     cursor: pointer;

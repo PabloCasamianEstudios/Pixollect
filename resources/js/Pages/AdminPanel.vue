@@ -27,9 +27,7 @@
            <div class="container">
       <div class="message">
       <h1>ESSENTIALS QUE FALTAN</h1>
-            <p>1 | CUSTOM RECOMENDATOR - <span>YA PENSADO Y VERSIÓN SIMPLE</span></p>
-            <p>2 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
-            <p>3 | Contact con PHPMAILER</p>
+            <p>1 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
 
             <h1> OPTIONAL </h1>
             <p> 1 | Comparator reseña final</p>

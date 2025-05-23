@@ -189,7 +189,8 @@ export default {
     font-size: 2rem;
     text-align: center;
     margin-bottom: 2rem;
-    color: #4CAF50;
+    color: $main-color;
+    text-transform: uppercase;
 }
 
 .achievements-grid {
@@ -228,7 +229,7 @@ export default {
 
 .achievement-content h3 {
     margin: 0 0 0.5rem 0;
-    color: #4CAF50;
+    color: $main-color;
 }
 
 .achievement-content p {
@@ -239,7 +240,7 @@ export default {
 
 .progress {
     font-size: 0.8rem;
-    color: #4CAF50;
+    color: $main-color;
 }
 
 @media (max-width: 768px) {

@@ -41,7 +41,7 @@ class SagaController extends Controller
 
         Saga::create($validated);
 
-        return redirect()->route('sagas.index')->with('success', 'Created Saga successfully.');
+        return redirect()->route('sagas.index')->with('message', 'Created Saga successfully.');
     }
 
     /**
@@ -72,7 +72,7 @@ class SagaController extends Controller
 
         $saga->update($validated);
 
-        return redirect()->route('sagas.index')->with('success', 'Updated Saga successfully.');
+        return redirect()->route('sagas.index')->with('message', 'Updated Saga successfully.');
     }
 
     /**
