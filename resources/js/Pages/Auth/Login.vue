@@ -8,7 +8,7 @@
 
                 <form @submit.prevent="submit">
                     <div class="inputGroup">
-                        <InputLabel for="email" value="Email" />
+                        <InputLabel for="email" value="{{__('Email') }}"  />
                         <TextInput
                             id="email"
                             type="email"

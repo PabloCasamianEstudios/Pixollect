@@ -155,6 +155,7 @@
 import AppLayout from '@/Layouts/Layout.vue';
 import UserLayout from '@/Layouts/UserLayout.vue';
 import { Head as metaHead, router, usePage } from '@inertiajs/vue3';
+import Swal from 'sweetalert2';
 
 import UserUpdateGameModal from '../../Components/UserUpdateGameModal.vue';
 import FlashMessage from '../../Components/FlashMessage.vue';
@@ -296,20 +297,43 @@ export default {
             };
             return states[state] || state;
         },
-        removeGame(gameId) {
-            if (
-                confirm(
-                    'Are you sure you want to remove this game from your collection?',
-                )
-            ) {
+        async removeGame(gameId) {
+            const result = await Swal.fire({
+                title: 'Remove game?',
+                text: 'Are you sure you want to remove this game from your collection?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'YES',
+                cancelButtonText: 'NO',
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540',
+            });
+
+            if (result.isConfirmed) {
                 router.delete(`/games/${gameId}/remove`, {
                     preserveScroll: true,
                 });
             }
         },
         async incrementAchievement(game) {
-            if (!confirm('Do you want to add one achievement to this game?'))
-                return;
+            const result = await Swal.fire({
+                title: 'Increment achievement?',
+                text: 'Do you want to add one achievement to this game?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'YES',
+                cancelButtonText: 'NO',
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540',
+            });
+
+            if (!result.isConfirmed) return;
 
             try {
                 const response = await fetch(
@@ -342,7 +366,14 @@ export default {
                 }
             } catch (error) {
                 console.error('Error incrementing achievement:', error);
-                alert('Failed to increment achievement');
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to increment achievement',
+                    icon: 'error',
+                    confirmButtonColor: '#ff1540',
+                    background: '#262626',
+                    color: '#fff',
+                });
             }
         },
     },

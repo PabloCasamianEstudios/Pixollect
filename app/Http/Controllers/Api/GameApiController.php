@@ -12,7 +12,6 @@ class GameApiController extends Controller
 {
 
     // TODOS
-    // En tu GameApiController.php
     public function index()
     {
         $games = Game::with([
@@ -63,6 +62,41 @@ class GameApiController extends Controller
 
         return response()->json(['data' => $games]);
     }
+
+    // stats de 1
+    public function gameStats($id){
+    $game = Game::withCount('users as total_players')
+        ->with(['users' => function($query) {
+            $query->select('users.id')->withPivot('user_score');
+        }])
+        ->findOrFail($id);
+
+    $allGames = Game::withCount('users')
+        ->with(['users' => function($query) {
+            $query->select('users.id')->withPivot('user_score');
+        }])
+        ->get()
+        ->map(function($g) {
+            return [
+                'id' => $g->id,
+                'average_score' => $g->users->avg('pivot.user_score'),
+                'total_players' => $g->users_count
+            ];
+        })
+        ->filter(fn($g) => $g['average_score'] !== null)
+        ->sortByDesc('average_score')
+        ->values();
+
+    $rank = $allGames->search(fn($g) => $g['id'] == $id) + 1;
+
+    return response()->json([
+        'total_players' => $game->total_players,
+        'average_score' => $game->users->avg('pivot.user_score'),
+        'popularity' => $game->users->count(),
+        'rank' => $rank <= count($allGames) ? $rank : null
+    ]);
+}
+
    // 1 juego
    public function show($id){
        return Game::with([

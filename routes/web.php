@@ -13,6 +13,7 @@ use App\Http\Controllers\SagaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\UserExportController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -147,6 +148,9 @@ Route::get('/games/create', [GameController::class, 'create'])
     ->name('games.create')
     ->middleware(['auth', 'admin']);
 
+
+    // lang
+    Route::get("lang/{language}", LanguageController::class)->name('language');
 
 
 // esto venía de base, no se toca por ahora

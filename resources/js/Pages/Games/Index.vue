@@ -69,6 +69,8 @@
 // eslint-disable-next-line no-unused-vars
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, router } from '@inertiajs/vue3';
+import Swal from 'sweetalert2';
+
 export default {
     components: {
         metaHead,
@@ -85,8 +87,24 @@ export default {
         editGame(id) {
             router.visit(`/games/${id}/edit`);
         },
-        deleteGame(id) {
-            if (confirm('¿Eliminar este juego?')) {
+        async deleteGame(id) {
+            const result = await Swal.fire({
+                title: 'DELETE GAME?',
+                text: 'Are you sure you want to delete this game?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'DELETE',
+                cancelButtonText: 'CANCEL',
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540',
+                buttonsStyling: true,
+                reverseButtons: true
+            });
+
+            if (result.isConfirmed) {
                 router.delete(`/games/${id}`);
             }
         },

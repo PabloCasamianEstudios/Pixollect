@@ -121,6 +121,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
     props: {
         game: Object,
@@ -149,12 +151,22 @@ export default {
         };
     },
     methods: {
-        confirmDelete() {
-            if (
-                confirm(
-                    'Are you sure you want to remove this game from your collection?',
-                )
-            ) {
+        async confirmDelete() {
+            const result = await Swal.fire({
+                title: 'Confirm removal',
+                text: 'Are you sure you want to remove this game from your collection?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540'
+            });
+
+            if (result.isConfirmed) {
                 this.$inertia.delete(`/games/${this.game.id}/remove`);
                 this.$emit('close');
             }

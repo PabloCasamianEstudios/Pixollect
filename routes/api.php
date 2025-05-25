@@ -13,6 +13,7 @@ Route::prefix('games')->group(function () {
     Route::get('/{game}/similar', [GameApiController::class, 'similarGames']);
     Route::get('/{game}/same-saga', [GameApiController::class, 'sameSaga'])->name('games.sameSaga');
     Route::get('/games/latest', [GameApiController::class, 'latestGames']);
+    Route::get('/{game}/stats', [GameApiController::class, 'gameStats']);
 
 });
 

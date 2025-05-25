@@ -23,20 +23,14 @@
             </button>
         </div>
 
-
-           <div class="container">
-      <div class="message">
-      <h1>ESSENTIALS QUE FALTAN</h1>
-            <p>1 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
-
-            <h1> OPTIONAL </h1>
-            <p> 1 | Comparator reseña final</p>
-            <p> 2 | EN CADA GAME PONER PUNTUACIÓN MEDIA (sobre cuanta gente), rating por puntuación, cuanta gente lo tiene, y en que estados. [debajo foto] (se podrían mover las tags a una nueva columna derecha)</p>
-
+        <div class="container">
+            <div class="message">
+                <h1>ESSENTIALS QUE FALTAN</h1>
+                <p>1 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
+                <h1>OPTIONAL</h1>
+                <p>1 | Comparator reseña final</p>
+            </div>
         </div>
-    </div>
-
-
     </section>
 </template>
 
@@ -56,9 +50,9 @@ export default {
                 { name: 'sagas', label: 'Sagas', route: '/sagas' },
                 { name: 'users', label: 'Users', route: '/users' },
                 // { name: 'themes', label: 'Themes', route: '/themes' },
-            //     { name: 'genres', label: 'Genres', route: '/genres' },
-            //     { name: 'platforms', label: 'Platforms', route: '/platforms' },
-             ],
+                //     { name: 'genres', label: 'Genres', route: '/genres' },
+                //     { name: 'platforms', label: 'Platforms', route: '/platforms' },
+            ],
         };
     },
     methods: {
@@ -119,8 +113,6 @@ export default {
     }
 }
 
-
-
 .container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -147,12 +139,10 @@ export default {
         color: lighten($main-color, 15%);
         span {
             color: green;
-
         }
         .meh {
-                color: yellow;
-            }
-
+            color: yellow;
+        }
     }
-    }
+}
 </style>

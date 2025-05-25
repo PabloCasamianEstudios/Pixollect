@@ -1,4 +1,7 @@
 <template>
+
+    {{ $t('Email') }}
+
     <NavLayout />
 
     <main>
@@ -17,6 +20,14 @@ export default {
         NavLayout,
         FooterLayout,
     },
+    data() {
+        return {
+            locale: '',
+        }
+    },
+    mounted() {
+        this.locale = window.locale;
+    }
 };
 </script>
 <style scoped>

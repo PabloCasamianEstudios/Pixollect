@@ -51,6 +51,39 @@
                         <li v-if="currentUser.role === 'admin'">
                             <LinkTo href="/admin-panel">ADMIN PANEL</LinkTo>
                         </li>
+                        <li
+                            class="languageMenuItem"
+                            @click.stop="toggleLanguageMenu"
+                        >
+                            <div class="languageTrigger">
+                                LANGUAGE
+                                <span
+                                    class="languageDropdownIcon"
+                                    :class="{ open: languageMenuOpen }"
+                                    >▼</span
+                                >
+                            </div>
+                            <ul
+                                v-if="languageMenuOpen"
+                                class="languageDropdown"
+                            >
+                                <li
+                                    v-for="(lang, code) in languages"
+                                    :key="code"
+                                >
+                                    <LinkTo
+                                        href="#"
+                                        @click.prevent="changeLanguage(code)"
+                                        class="languageLink"
+                                        :class="{
+                                            active: currentLanguage === code,
+                                        }"
+                                    >
+                                        {{ lang.name }} {{ lang.flag }}
+                                    </LinkTo>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
                 <div v-else class="authButtons">
@@ -60,6 +93,28 @@
                     <LinkTo href="/register">
                         <button class="authBtn">Register</button>
                     </LinkTo>
+                    <button
+                        class="authBtn languageBtn"
+                        @click="languageMenuOpenGuest = !languageMenuOpenGuest"
+                    >
+                        🌐
+                    </button>
+                    <ul
+                        v-if="languageMenuOpenGuest"
+                        class="languageDropdownGuest"
+                    >
+                        <li v-for="(lang, code) in languages" :key="code">
+                            <LinkTo
+                                href="#"
+                                v-model="locale"
+                                @click.prevent="changeLanguage(code)"
+                                class="languageLink"
+                                :class="{ active: currentLanguage === code }"
+                            >
+                                {{ lang.name }} {{ lang.flag }}
+                            </LinkTo>
+                        </li>
+                    </ul>
                 </div>
             </nav>
         </header>
@@ -68,6 +123,8 @@
 
 <script>
 import { Link as LinkTo, usePage, router } from '@inertiajs/vue3';
+import Swal from 'sweetalert2'
+
 export default {
     components: {
         LinkTo,
@@ -76,6 +133,13 @@ export default {
         return {
             menuOpen: false,
             userMenuOpen: false,
+            languageMenuOpen: false,
+            currentLanguage: 'en', // DE ALGUN MODO TENGO QUE SACAR EL LOCAL
+            languages: {
+                en: { name: 'English', flag: '🇬🇧', letras: 'en' },
+                es: { name: 'Español', flag: '🇪🇸', letras: 'es' },
+            },
+            languageMenuOpenGuest: false,
         };
     },
     computed: {
@@ -89,6 +153,12 @@ export default {
         },
         toggleUserMenu() {
             this.userMenuOpen = !this.userMenuOpen;
+            if (!this.userMenuOpen) {
+                this.languageMenuOpen = false;
+            }
+        },
+        toggleLanguageMenu() {
+            this.languageMenuOpen = !this.languageMenuOpen;
         },
         handleClickOutside(e) {
             if (
@@ -96,23 +166,64 @@ export default {
                 !this.$refs.userMenuRef.contains(e.target)
             ) {
                 this.userMenuOpen = false;
+                this.languageMenuOpen = false;
+            }
+            const guestLangBtn = this.$el.querySelector('.languageBtn');
+            const guestLangDropdown = this.$el.querySelector(
+                '.languageDropdownGuest',
+            );
+            if (
+                guestLangBtn &&
+                guestLangDropdown &&
+                !guestLangBtn.contains(e.target) &&
+                !guestLangDropdown.contains(e.target)
+            ) {
+                this.languageMenuOpenGuest = false;
             }
         },
         async logout() {
-            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+            const result = await Swal.fire({
+                title: 'Close session?',
+                text: 'Are you sure you want to close session?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'YES',
+                cancelButtonText: 'NO',
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                customClass: {
+                    confirmButton: 'swal-confirm-btn',
+                    cancelButton: 'swal-cancel-btn',
+                    popup: 'swal-custom-popup',
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text',
+                    actions: 'swal-custom-actions',
+                },
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540',
+            });
+
+            if (result.isConfirmed) {
                 await router.post(
                     '/logout',
                     {},
                     {
-                        onSuccess: () => {
-                            router.reload({ only: ['auth'] });
-                        },
-                        onError: () => {
-                            console.error('Error al cerrar sesión');
-                        },
+                        onSuccess: () => router.reload({ only: ['auth'] }),
+                        onError: () => console.error('ERROR'),
                     },
                 );
             }
+        },
+        changeLanguage(code) {
+            localStorage.setItem('locale', code);
+            window.$i18n.locale = code;
+            this.$root.$i18n.locale = code;
+            this.locale = code;
+            window.locale = code;
+
+            this.currentLanguage = code;
+            this.languageMenuOpen = false;
         },
     },
     mounted() {
@@ -148,9 +259,9 @@ export default {
         align-items: center;
         padding: 1rem 2rem;
         flex-wrap: wrap;
+
         &__logo {
             flex-shrink: 0;
-
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -198,6 +309,7 @@ export default {
             gap: 1.5rem;
             z-index: 100;
             width: 10%;
+
             li a {
                 color: white;
                 text-decoration: none;
@@ -248,6 +360,7 @@ export default {
                 li {
                     padding: 0.5rem 1rem;
                     list-style: none;
+                    position: relative;
 
                     a {
                         color: white;
@@ -262,26 +375,63 @@ export default {
                             background-color: $main-color;
                             color: black;
                         }
+
+                        &.active {
+                            background-color: rgba($main-color, 0.7);
+                            color: black;
+                        }
+                    }
+                }
+
+                .languageMenuItem {
+                    cursor: pointer;
+
+                    .languageTrigger {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 0.5rem;
+                        border-radius: 5px;
+                        transition: background 0.2s;
+
+                        &:hover {
+                            background-color: rgba(255, 255, 255, 0.1);
+                        }
+                    }
+
+                    .languageDropdownIcon {
+                        transition: transform 0.3s;
+                        font-size: 0.7rem;
+                        margin-left: 0.5rem;
+
+                        &.open {
+                            transform: rotate(180deg);
+                        }
+                    }
+
+                    .languageDropdown {
+                        list-style: none;
+                        padding: 0.5rem 0;
+                        margin: 0.5rem -0.5rem -0.5rem -0.5rem;
+                        background-color: #252525;
+                        border-radius: 0 0 5px 5px;
+
+                        li {
+                            padding: 0;
+
+                            .languageLink {
+                                padding: 0.5rem 1rem;
+                                display: block;
+
+                                &:hover {
+                                    background-color: $main-color;
+                                }
+                            }
+                        }
                     }
                 }
             }
 
-            .logoutBtn {
-                background-color: #e53935;
-                border: none;
-                color: white;
-                padding: 0.3rem 0.6rem;
-                margin-right: 0.5rem;
-                border-radius: 6px;
-                font-weight: bold;
-                cursor: pointer;
-                transition: background 0.2s;
-                font-size: 0.9rem;
-
-                &:hover {
-                    background-color: #c62828;
-                }
-            }
             .userName {
                 cursor: pointer;
                 padding: 0.2rem 0.4rem;
@@ -294,9 +444,11 @@ export default {
                 &:hover {
                     background-color: rgba(255, 255, 255, 0.774);
                 }
+
                 .dropdownIcon {
                     transition: transform 0.3s;
                     display: inline-block;
+                    font-size: 0.7rem;
 
                     &.open {
                         transform: rotate(180deg);
@@ -304,6 +456,7 @@ export default {
                 }
             }
         }
+
         .authButtons {
             display: flex;
             gap: 1rem;
@@ -325,4 +478,51 @@ export default {
         }
     }
 }
+
+.languageDropdownGuest {
+    position: absolute;
+    top: 70px;
+    right: 2rem;
+    background-color: #1c1c1c;
+    border: 1px solid #2e2e2e;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    z-index: 1000;
+    min-width: 160px;
+
+    li {
+        padding: 0;
+
+        .languageLink {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+            border-radius: 5px;
+
+            &:hover {
+                background-color: $main-color;
+                color: black;
+            }
+
+            &.active {
+                background-color: rgba($main-color, 0.7);
+                color: black;
+            }
+        }
+    }
+}
+
+.swal-cancel-btn {
+    transition: all 0.4s ease;
+    &:hover {
+        background-color: #A1001EFF;
+    }
+}
+
+
 </style>

@@ -61,6 +61,7 @@
 <script>
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as MetaHead, router } from '@inertiajs/vue3';
+import Swal from 'sweetalert2';
 
 export default {
     components: {
@@ -75,8 +76,22 @@ export default {
         editUser(name) {
             this.$inertia.visit(`/users/${name}/edit`);
         },
-        deleteUser(name) {
-            if (confirm('Are you sure you want to delete this user?')) {
+        async deleteUser(name) {
+            const result = await Swal.fire({
+                title: 'Delete user?',
+                text: 'Are you sure you want to delete this user?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'YES',
+                cancelButtonText: 'NO',
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540'
+            });
+
+            if (result.isConfirmed) {
                 router.delete(`/users/${name}`);
             }
         },

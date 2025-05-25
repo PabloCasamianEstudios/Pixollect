@@ -46,6 +46,8 @@
 <script>
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, router } from '@inertiajs/vue3';
+import Swal from 'sweetalert2';
+
 
 export default {
     components: {
@@ -63,8 +65,22 @@ export default {
         editSaga(id) {
             router.visit(`/sagas/${id}/edit`);
         },
-        deleteSaga(id) {
-            if (confirm('Delete this saga?')) {
+        async deleteSaga(id) {
+            const result = await Swal.fire({
+                title: 'Delete Saga',
+                text: 'Are you sure you want to delete this saga?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'DELETE',
+                cancelButtonText: 'CANCEL',
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540'
+            });
+
+            if (result.isConfirmed) {
                 router.delete(`/sagas/${id}`);
             }
         },
