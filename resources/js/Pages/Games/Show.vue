@@ -12,23 +12,24 @@
         <FlashMessage />
 
         <div class="gameDetailLeft">
-            <img :src="game.image_url" alt="Game Cover" class="gameCover" />
+            <img :src="game.image_url" :alt="$t('Game Cover')" class="gameCover" />
             <div class="gameStats">
                 <div class="statItem">
                     <span class="statValue">{{ this.players || 0 }}</span>
-                    <span class="statLabel">Players</span>
+                    <span class="statLabel">{{ $t('Players') }}</span>
                 </div>
                 <div class="statItem">
                     <span class="statValue">{{ this.avg ? this.avg.toFixed(1) : 'N/A' }}</span>
-                    <span class="statLabel">Avg. Rating</span>
+                    <span class="statLabel">{{ $t('Avg. Rating') }}</span>
                 </div>
                 <div class="statItem">
-                    <span class="statValue">#{{ this.rank }}</span>
-                    <span class="statLabel">Game Rank</span>
+                    <span v-if="this.players > 0" class="statValue">#{{ this.rank }}</span>
+                    <span v-else class="statValue"> {{$t('NOT CLASSIFIED') }}</span>
+                    <span class="statLabel">{{ $t('Game Rank') }}</span>
                 </div>
                 <!-- esto hay que pulirlo
                 <div class="recentPlayers" v-if="recentPlayers.length > 0">
-                    <h4>Recent Players</h4>
+                    <h4>{{ $t('Recent Players') }}</h4>
                     <div class="playerList">
                         <div v-for="player in recentPlayers" :key="player.id" class="playerItem">
                             <span class="playerName">{{ player.name }}</span>
@@ -42,28 +43,28 @@
         <div class="gameDetailCenter">
             <h1 class="gameTitle">{{ game.title }}</h1>
             <p class="gameRelease">
-                Released on {{ formatDate(game.release_date) }} by
-                {{ game.developer || 'Unknown' }} and published by {{ game.publisher || 'Unknown' }}
+                {{ $t('Released on') }} {{ formatDate(game.release_date) }} {{ $t('by') }}
+                {{ game.developer || $t('Unknown') }} {{ $t('and published by') }} {{ game.publisher || $t('Unknown') }}
             </p>
             <p class="gameDescription">{{ game.description }}</p>
 
             <button
-                v-if="!isGameInCollection"
+                v-if="!isGameInCollection && currentUser() !== null"
                 class="addBtn"
                 @click="openModal"
             >
-                Add to your Collection
+                {{ $t('Add to your Collection') }}
             </button>
             <button
-                v-else
+                v-else-if="currentUser() !== null"
                 class="addBtn"
                 @click="removeFromCollection(game.id)"
             >
-                Remove from Collection
+                {{ $t('Remove from Collection') }}
             </button>
 
             <div v-if="game.saga && sameSagaGames.length" class="same-saga-section">
-                <h3>More from the "{{ game.saga.name }}" saga</h3>
+                <h3>{{ $t('More from the') }} "{{ game.saga.name }}" {{ $t('saga') }}</h3>
                 <div class="saga-game-list">
                     <div
                         v-for="sagaGame in sameSagaGames"
@@ -71,7 +72,7 @@
                         class="saga-game-card"
                         @click="goToGame(sagaGame.id)"
                     >
-                        <img :src="sagaGame.image_url" alt="Game Cover" class="saga-cover" />
+                        <img :src="sagaGame.image_url" :alt="$t('Game Cover')" class="saga-cover" />
                         <p class="saga-title">{{ sagaGame.title }}</p>
                     </div>
                 </div>
@@ -80,9 +81,9 @@
 
         <div class="gameDetailRight">
             <div class="tagsSection">
-                <h3>Game Details</h3>
+                <h3>{{ $t('Game Details') }}</h3>
                 <div class="tagsGroup">
-                    <h4>Platforms</h4>
+                    <h4>{{ $t('Platforms') }}</h4>
                     <div class="pill-container">
                         <span
                             v-for="platform in game.platforms"
@@ -95,7 +96,7 @@
                     </div>
                 </div>
                 <div class="tagsGroup">
-                    <h4>Genres</h4>
+                    <h4>{{ $t('Genres') }}</h4>
                     <div class="pill-container">
                         <span
                             v-for="genre in game.genres"
@@ -108,7 +109,7 @@
                     </div>
                 </div>
                 <div class="tagsGroup">
-                    <h4>Themes</h4>
+                    <h4>{{ $t('Themes') }}</h4>
                     <div class="pill-container">
                         <span
                             v-for="theme in game.themes"
@@ -121,7 +122,7 @@
                     </div>
                 </div>
                 <div class="tagsGroup" v-if="game.game_modes && game.game_modes.length">
-                    <h4>Game Modes</h4>
+                    <h4>{{ $t('Game Modes') }}</h4>
                     <div class="pill-container">
                         <span
                             v-for="mode in game.game_modes"
@@ -144,6 +145,8 @@
 import { Head as metaHead, router, usePage } from '@inertiajs/vue3';
 import UserGameModal from '@/Components/UserGameModal.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
+import { useI18n } from 'vue-i18n';
+
 import Swal from 'sweetalert2';
 export default {
     components: {
@@ -160,6 +163,14 @@ export default {
         gameModes: Array,
         sagas: Array,
         userGames: Array,
+    },
+    setup() {
+        const { t } = useI18n();
+        return {
+                t,
+                $t: t
+            };
+
     },
     data() {
         return {
@@ -180,7 +191,8 @@ export default {
         },
         recentPlayers() {
             return this.game.recent_players || [];
-        }
+        },
+
     },
     async mounted() {
         await this.fetchSameSagaGames();
@@ -206,6 +218,10 @@ export default {
                 this.players = stats.total_players;
                 this.avg = stats.average_score;
 
+                if(this.players === 0) {
+                    this.rank= this.t('NOT CLASSIFIED');
+                }
+
             } catch (error) {
                 console.error('Error fetching game stats:', error);
             }
@@ -213,8 +229,6 @@ export default {
         openModal() {
             if(this.currentUser() !== null) {
                  this.showModal = true;
-            } else {
-                console.log('you need to be registered');
             }
         },
         closeModal() {
@@ -224,28 +238,28 @@ export default {
             router.visit(`/games/${gameId}`);
         },
         async removeFromCollection(gameId) {
-    const result = await Swal.fire({
-        title: 'Are you sure?',
-        text: 'Are you sure you want to remove this game from your collection?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'YES',
-        cancelButtonText: 'NO',
-        confirmButtonColor: '#ff1540',
-        cancelButtonColor: '#ff1540',
-        background: '#262626',
-        color: '#fff',
-        iconColor: '#ff1540'
-    });
+            const result = await Swal.fire({
+                title: this.t('Are you sure?'),
+                text: this.t('Are you sure you want to remove this game from your collection?'),
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: this.t('YES'),
+                cancelButtonText: this.t('NO'),
+                confirmButtonColor: '#ff1540',
+                cancelButtonColor: '#ff1540',
+                background: '#262626',
+                color: '#fff',
+                iconColor: '#ff1540'
+            });
 
-    if (result.isConfirmed) {
-        try {
-            await router.delete(`/games/${gameId}/remove`);
-        } catch (error) {
-            console.error('Error removing game:', error);
-        }
-    }
-},
+            if (result.isConfirmed) {
+                try {
+                    await router.delete(`/games/${gameId}/remove`);
+                } catch (error) {
+                    console.error(this.$t('Error removing game:'), error);
+                }
+            }
+        },
         formatDate(date) {
             if (!date) return 'N/A';
             const options = { year: 'numeric', month: 'short', day: 'numeric' };

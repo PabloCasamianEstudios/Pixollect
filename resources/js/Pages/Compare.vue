@@ -1,13 +1,12 @@
 <template>
     <Head>
-        <title>Game Comparator</title>
+        <title>{{ $t('Game Comparator') }}</title>
         <meta
             head-key="description"
             name="description"
             content="Compare your favorite games"
         />
     </Head>
-                {{ console.log(currentUser()) }}
 
 
     <div v-if="currentUser() !== null" class="comparator-container">
@@ -17,7 +16,7 @@
                     type="text"
                     v-model="searchTerm"
                     @input="searchGames"
-                    placeholder="Search game..."
+                    :placeholder="$t('Search game...')"
                     class="search-input"
                 />
                 <button
@@ -25,7 +24,7 @@
                     :disabled="!selectedGame"
                     class="action-button"
                 >
-                    ADD
+                    {{ $t('ADD') }}
                 </button>
             </div>
 
@@ -42,67 +41,67 @@
             </div>
         </div>
 
-      <div v-if="selectedGames.length" class="comparison-section">
-        <div class="comparison-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="attribute-header">TITLE</th>
-                        <th class="attribute-header">COVER</th>
-                        <th class="attribute-header">PRICE</th>
-                        <th class="attribute-header">DEVELOPER</th>
-                        <th class="attribute-header">RELEASE DATE</th>
-                        <th class="attribute-header">GENRES</th>
-                        <th class="attribute-header">PLATFORMS</th>
-                        <th class="attribute-header">GAME MODES</th>
-                        <th class="attribute-header">THEMES</th>
-                        <th class="attribute-header">SAGA</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="game in selectedGames" :key="game.id" class="game-row">
-                        <td class="game-value title">{{ game.title }}</td>
-                        <td class="game-value cover">
-                            <img :src="game.image_url" class="game-cover" />
-                        </td>
-                        <td class="game-value price">
-                            {{ formatPrice(game.price) }}
-                        </td>
-                        <td class="game-value developer">
-                            {{ game.developer || 'N/A' }}
-                        </td>
-                        <td class="game-value release-date">
-                            {{ formatDate(game.release_date) }}
-                        </td>
-                        <td class="game-value genres">
-                            {{ game.genres?.map(g => g.name).join(', ') || 'N/A' }}
-                        </td>
-                        <td class="game-value platforms">
-                            {{ game.platforms?.map(p => p.name).join(', ') || 'N/A' }}
-                        </td>
-                        <td class="game-value game-modes">
-                            {{ game.game_modes?.map(m => m.name).join(', ') || 'N/A' }}
-                        </td>
-                        <td class="game-value themes">
-                            {{ game.themes?.map(t => t.name).join(', ') || 'N/A' }}
-                        </td>
-                        <td class="game-value saga">
-                            {{ game.saga?.name || 'N/A' }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div v-if="selectedGames.length" class="comparison-section">
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="attribute-header">{{ $t('TITLE') }}</th>
+                            <th class="attribute-header">{{ $t('COVER') }}</th>
+                            <th class="attribute-header">{{ $t('PRICE') }}</th>
+                            <th class="attribute-header">{{ $t('DEVELOPER') }}</th>
+                            <th class="attribute-header">{{ $t('RELEASE DATE') }}</th>
+                            <th class="attribute-header">{{ $t('GENRES') }}</th>
+                            <th class="attribute-header">{{ $t('PLATFORMS') }}</th>
+                            <th class="attribute-header">{{ $t('GAME MODES') }}</th>
+                            <th class="attribute-header">{{ $t('THEMES') }}</th>
+                            <th class="attribute-header">{{ $t('SAGA') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="game in selectedGames" :key="game.id" class="game-row">
+                            <td class="game-value title">{{ game.title }}</td>
+                            <td class="game-value cover">
+                                <img :src="game.image_url" class="game-cover" />
+                            </td>
+                            <td class="game-value price">
+                                {{ formatPrice(game.price) }}
+                            </td>
+                            <td class="game-value developer">
+                                {{ game.developer || 'N/A' }}
+                            </td>
+                            <td class="game-value release-date">
+                                {{ formatDate(game.release_date) }}
+                            </td>
+                            <td class="game-value genres">
+                                {{ formatRelation(game.genres) }}
+                            </td>
+                            <td class="game-value platforms">
+                                {{ formatRelation(game.platforms) }}
+                            </td>
+                            <td class="game-value game-modes">
+                                {{ formatRelation(game.game_modes) }}
+                            </td>
+                            <td class="game-value themes">
+                                {{ formatRelation(game.themes) }}
+                            </td>
+                            <td class="game-value saga">
+                                {{ game.saga?.name || 'N/A' }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
         <div v-else class="empty-message">
-            <p>No games added yet. Start by searching and adding your favorite titles!</p>
+            <p>{{ $t('No games added yet. Start by searching and adding your favorite titles!') }}</p>
         </div>
     </div>
     <div v-else class="comparator-container">
-      <div class="empty-message">
-      <h1>SORRY!!!</h1>
-            <p>You Must be logged to start comparing videogames</p>
+        <div class="empty-message">
+            <h1>{{ $t('SORRY!!!') }}</h1>
+            <p>{{ $t('You Must be logged to start comparing videogames') }}</p>
         </div>
     </div>
 </template>

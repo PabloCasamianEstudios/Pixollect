@@ -38,11 +38,6 @@ Route::get('/privacy', function () {
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
-
-Route::get('/welcome', function () {
-    return Inertia::render('Welcome');
-});
-
 Route::get('/gameList', function () {
     $games = Game::with(['saga', 'genres', 'platforms', 'themes'])->get();
     $genres = Genre::all();
@@ -66,10 +61,6 @@ Route::get('/recommend', function () {
     return Inertia::render('Recommend');
 });
 Route::get('/collections', [UserController::class, 'collections'])->name('collections');
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 // USERS
 

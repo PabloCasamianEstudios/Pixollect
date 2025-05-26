@@ -1,6 +1,6 @@
 <template>
     <MetaHead>
-        <title>Manage Users</title>
+        <title>CRUD  Users</title>
         <meta
             head-key="description"
             name="description"
@@ -8,7 +8,7 @@
         />
     </MetaHead>
     <div class="usersPage">
-        <h1 class="usersPage__title">Manage Users</h1>
+        <h1 class="usersPage__title">{{ $t('Manage Users') }}</h1>
 
         <FlashMessage />
 
@@ -62,6 +62,7 @@
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as MetaHead, router } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: {
@@ -72,18 +73,26 @@ export default {
         users: Array,
         successMessage: String,
     },
+    setup() {
+        const { t } = useI18n();
+        return {
+                t,
+                $t: t
+            };
+
+    },
     methods: {
         editUser(name) {
             this.$inertia.visit(`/users/${name}/edit`);
         },
         async deleteUser(name) {
             const result = await Swal.fire({
-                title: 'Delete user?',
-                text: 'Are you sure you want to delete this user?',
+                title: this.t('Delete user?'),
+                text: this.t('Are you sure you want to delete this user?'),
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'YES',
-                cancelButtonText: 'NO',
+                confirmButtonText: this.t('YES'),
+                cancelButtonText: this.t('NO'),
                 confirmButtonColor: '#ff1540',
                 cancelButtonColor: '#ff1540',
                 background: '#262626',

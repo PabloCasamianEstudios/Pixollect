@@ -1,6 +1,6 @@
 <template>
     <metaHead>
-        <title>Privacy</title>
+        <title>{{ $t('Privacy Policy') }}</title>
         <meta
             head-key="description"
             name="description"
@@ -9,54 +9,42 @@
     </metaHead>
     <div class="outer-container">
         <div class="inner-bordered-box">
-            <h1 class="page-title">Privacy Policy</h1>
+            <h1 class="page-title">{{ $t('Privacy Policy') }}</h1>
 
             <p>
-                Pixollect respects your privacy. This policy explains what data
-                we collect, why we collect it, and how we protect it. By using
-                this platform, you consent to the practices described here.
+                {{ $t('Pixollect respects your privacy. This policy explains what data we collect, why we collect it, and how we protect it. By using this platform, you consent to the practices described here.') }}
             </p>
 
-            <h2 class="section-title">Data Collected</h2>
-            <p>We collect the following information when you use Pixollect:</p>
+            <h2 class="section-title">{{ $t('Data Collected') }}</h2>
+            <p>{{ $t('We collect the following information when you use Pixollect:') }}</p>
             <ul>
-                <li>Username and email (for authentication)</li>
+                <li>{{ $t('Username and email (for authentication)') }}</li>
                 <li>
-                    Your game collection and progress (statuses, achievements,
-                    hours, ratings)
+                    {{ $t('Your game collection and progress (statuses, achievements, hours, ratings)') }}
                 </li>
                 <li>
-                    Basic usage data to improve the platform (e.g., preferences
-                    or filters)
+                    {{ $t('Basic usage data to improve the platform (e.g., preferences or filters)') }}
                 </li>
             </ul>
 
-            <h2 class="section-title">Data Usage</h2>
+            <h2 class="section-title">{{ $t('Data Usage') }}</h2>
             <p>
-                Your data is used solely to offer you the services of the
-                platform: collection tracking, recommendations, comparisons, and
-                statistics.
+                {{ $t('Your data is used solely to offer you the services of the platform: collection tracking, recommendations, comparisons, and statistics.') }}
             </p>
 
-            <h2 class="section-title">Data Protection</h2>
+            <h2 class="section-title">{{ $t('Data Protection') }}</h2>
             <p>
-                All personal data is securely stored. Passwords are encrypted
-                using secure hashing. Sensitive operations are protected with
-                role-based access and validated server-side.
+                {{ $t('All personal data is securely stored. Passwords are encrypted using secure hashing. Sensitive operations are protected with role-based access and validated server-side.') }}
             </p>
 
-            <h2 class="section-title">User Rights</h2>
+            <h2 class="section-title">{{ $t('User Rights') }}</h2>
             <p>
-                You may request deletion of your account and data at any time.
-                We do not sell or share your data with third parties. Backup
-                copies are made periodically to prevent loss.
+                {{ $t('You may request deletion of your account and data at any time. We do not sell or share your data with third parties. Backup copies are made periodically to prevent loss.') }}
             </p>
 
-            <h2 class="section-title">Compliance</h2>
+            <h2 class="section-title">{{ $t('Compliance') }}</h2>
             <p>
-                Pixollect follows the GDPR (General Data Protection Regulation)
-                guidelines. Only the minimum required data is stored, and users
-                retain control over their information.
+                {{ $t('Pixollect follows the GDPR (General Data Protection Regulation) guidelines. Only the minimum required data is stored, and users retain control over their information.') }}
             </p>
         </div>
     </div>

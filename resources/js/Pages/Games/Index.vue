@@ -8,9 +8,18 @@
         />
     </metaHead>
     <div class="gamesPage">
-        <h1 class="gamesPage__title">Manage Games</h1>
+        <h1 class="gamesPage__title">{{ $t('Manage Games') }}</h1>
 
         <FlashMessage />
+
+        <div class="gamesPage__search">
+            <input
+                v-model="search"
+                type="text"
+                class="searchInput"
+                :placeholder="$t('Search...')"
+            />
+        </div>
 
         <div class="gamesPage__tableWrapper">
             <table class="gamesPage__table">
@@ -28,12 +37,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="game in games" :key="game.id">
+                    <tr v-for="game in filteredGames" :key="game.id">
                         <td>{{ game.id }}</td>
                         <td>
                             <img
                                 :src="game.image_url"
-                                alt="Imagen del juego"
+                                :alt="game.title"
                                 class="gameImg"
                             />
                         </td>
@@ -70,16 +79,37 @@
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, router } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: {
         metaHead,
-        FlashMessage
+        FlashMessage,
+    },
+    setup() {
+        const { t } = useI18n();
+        return {
+            t,
+            $t: t,
+        };
+    },
+    data() {
+        return {
+            search: '',
+        };
     },
     props: {
         games: Array,
         successMessage: String,
     },
+    computed: {
+        filteredGames() {
+            return this.games.filter((game) =>
+                game.title.toLowerCase().includes(this.search.toLowerCase()),
+            );
+        },
+    },
+
     methods: {
         viewGame(id) {
             router.visit(`/games/${id}`);
@@ -89,19 +119,19 @@ export default {
         },
         async deleteGame(id) {
             const result = await Swal.fire({
-                title: 'DELETE GAME?',
-                text: 'Are you sure you want to delete this game?',
+                title: this.t('DELETE_GAME_TITLE'),
+                text: this.t('DELETE_GAME_CONFIRMATION'),
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'DELETE',
-                cancelButtonText: 'CANCEL',
+                confirmButtonText: this.t('DELETE'),
+                cancelButtonText: this.t('CANCEL'),
                 confirmButtonColor: '#ff1540',
                 cancelButtonColor: '#ff1540',
                 background: '#262626',
                 color: '#fff',
                 iconColor: '#ff1540',
                 buttonsStyling: true,
-                reverseButtons: true
+                reverseButtons: true,
             });
 
             if (result.isConfirmed) {
@@ -199,6 +229,20 @@ export default {
 
         &:hover {
             transform: scale(1.1);
+        }
+    }
+
+    .gamesPage__search {
+        margin-bottom: 1.5rem;
+        .searchInput {
+            background-color: #1c1c1c;
+            border: 1px solid #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 400px;
         }
     }
 }

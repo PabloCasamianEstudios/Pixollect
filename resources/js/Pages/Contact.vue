@@ -1,7 +1,7 @@
 <template>
 
      <MetaHead>
-        <title>Contact</title>
+        <title>{{ $t('Contact') }} </title>
         <meta
             head-key="description"
             name="description"
@@ -10,11 +10,14 @@
     </MetaHead>
     <FlashMessage />
     <div class="formContainer">
-        <h1>Contact</h1>
+    <div class="inner-bordered-box ">
+
+
+        <h1>{{ $t('Contact') }}</h1>
         <form @submit.prevent="submit">
-            <input v-model="form.name" type="text" placeholder="Name" />
-            <input v-model="form.email" type="email" placeholder="Email" />
-            <textarea v-model="form.message" placeholder="Message"></textarea>
+            <input v-model="form.name" type="text" :placeholder="$t('Name')" />
+            <input v-model="form.email" type="email" :placeholder="$t('Email')" />
+            <textarea v-model="form.message" :placeholder="$t('Message')"></textarea>
 
             <div v-if="form.errors" class="errors">
                 <div v-for="(error, field) in form.errors" :key="field">
@@ -22,9 +25,11 @@
                 </div>
             </div>
 
-            <button type="submit">Send</button>
+            <button type="submit">{{ $t('Send') }}
+</button>
         </form>
     </div>
+      </div>
 </template>
 
 <script>
@@ -92,5 +97,13 @@ button {
     padding: 0.8rem 1.2rem;
     border-radius: 8px;
     cursor: pointer;
+}
+
+.inner-bordered-box {
+    border: 1px dashed $main-color;
+    padding: 2rem;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    text-align: center;
 }
 </style>

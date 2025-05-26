@@ -8,13 +8,13 @@
         />
     </metaHead>
 
-    <div v-if="currentUser() !== null" class="recommendation-container">
+    <div v-if="currentUser() !== null" class="recommendation-container inner-bordered-box">
         <div
             v-if="games.length > 0 && currentGameIndex < games.length"
             class="decision-section"
         >
-            <h1 class="title">Discover New Games</h1>
-            <p class="subtitle">Based on your gaming preferences</p>
+            <h1 class="title">{{ $t('Discover New Games') }}</h1>
+            <p class="subtitle">{{ $t('Based on your gaming preferences') }}</p>
 
             <div class="game-card-wrapper">
                 <button @click="rejectGame" class="decision-btn">
@@ -53,7 +53,7 @@
         </div>
 
         <div class="selected-games-section">
-            <h2 v-if="selectedGames.length > 0">Your Selected Games</h2>
+            <h2 v-if="selectedGames.length > 0">{{ $t('Your Selected Games') }}</h2>
             <div class="selected-games-grid">
                 <div
                     v-for="(game, index) in selectedGames"
@@ -76,10 +76,10 @@
                 v-if="currentGameIndex >= games.length && games.length > 0"
                 class="recommendation-complete"
             >
-                <h3>You've reviewed all recommendations!</h3>
-                <p>Come back tomorrow for new suggestions.</p>
+                <h3>{{ $t("You've reviewed all recommendations!") }}</h3>
+                <p>{{ $t('Come back tomorrow for new suggestions.') }}</p>
                 <div v-if="dislikedGames.length > 0" class="disliked-games-list">
-                    <h4>Games you disliked:</h4>
+                    <h4>{{ $t('Games you disliked:') }}</h4>
                     <div class="disliked-games-grid">
                         <div
                             v-for="(game, index) in dislikedGames"
@@ -104,18 +104,27 @@
 
     <div v-else class="recommendation-container">
         <div class="empty-message">
-            <h1>SORRY!!!</h1>
-            <p>You must be logged in to get personalized game recommendations</p>
+            <h1>{{ $t('SORRY!!!') }}</h1>
+            <p>{{ $t('You must be logged in to get personalized game recommendations') }}</p>
         </div>
     </div>
 </template>
 
 <script>
 import { usePage, Head as metaHead } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: {
         metaHead
+    },
+    setup() {
+        const { t } = useI18n();
+        return {
+                t,
+                $t: t
+            };
+
     },
     data() {
         return {
@@ -134,7 +143,7 @@ export default {
     },
     mounted() {
         if (!this.userId) {
-            this.error = 'Debes iniciar sesión para ver recomendaciones';
+            this.error = this.t('You must be logged in to see recommendations');
             return;
         }
 
@@ -166,20 +175,20 @@ export default {
                 this.error = null;
 
                 if (!this.userId) {
-                    throw new Error('Usuario no autenticado');
+                    throw new Error(t('User not authenticated'));
                 }
 
                 const response = await fetch(`/api/recommend/${this.userId}`);
 
                 if (!response.ok) {
-                    throw new Error(`Error HTTP! estado: ${response.status}`);
+                    throw new Error(t('HTTP error! status: ${response.status}')+' '+` ${response.status}`);
                 }
 
                 const data = await response.json();
                 this.games = data;
             } catch (err) {
-                console.error('Error al obtener recomendaciones:', err);
-                this.error = 'Error al cargar recomendaciones. Inténtalo de nuevo.';
+                console.error(t('Error getting recommendations:'), err);
+                this.error = t('Error loading recommendations. Please try again.');
             } finally {
                 this.isLoading = false;
             }
@@ -250,16 +259,9 @@ export default {
     font-family: 'Orbitron', sans-serif;
     margin-top: 2rem;
 
-    h1 {
-        color: $main-color;
-        font-size: 2rem;
-        margin-bottom: 1rem;
-    }
-
     p {
         margin: 0;
         color: lighten($main-color, 15%);
-        font-size: 1.2rem;
     }
 }
 
@@ -494,5 +496,13 @@ export default {
     .selected-games-grid, .disliked-games-grid {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
+}
+
+.inner-bordered-box {
+    border: 1px dashed $main-color;
+    padding: 2rem;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    text-align: center;
 }
 </style>

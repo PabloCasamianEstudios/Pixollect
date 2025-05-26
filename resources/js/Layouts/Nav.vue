@@ -17,11 +17,11 @@
                         { 'navBar__links--open': menuOpen },
                     ]"
                 >
-                    <li><LinkTo href="/">HOME</LinkTo></li>
-                    <li><LinkTo href="/gameList">GAMES</LinkTo></li>
-                    <li><LinkTo href="/collections">COLLECTIONS</LinkTo></li>
-                    <li><LinkTo href="/recommend">RECOMMEND</LinkTo></li>
-                    <li><LinkTo href="/compare">COMPARE</LinkTo></li>
+                    <li><LinkTo href="/">{{ $t('HOME') }}</LinkTo></li>
+                    <li><LinkTo href="/gameList">{{ $t('GAMES') }}</LinkTo></li>
+                    <li><LinkTo href="/collections">{{ $t('COLLECTIONS') }}</LinkTo></li>
+                    <li><LinkTo href="/recommend">{{ $t('RECOMMEND') }}</LinkTo></li>
+                    <li><LinkTo href="/compare">{{ $t('COMPARE') }}</LinkTo></li>
                 </ul>
 
                 <div
@@ -42,14 +42,14 @@
                     <ul v-if="userMenuOpen" class="userMenu">
                         <li>
                             <LinkTo :href="`/user/${currentUser.name}`"
-                                >YOUR PROFILE</LinkTo
+                                >{{ $t('YOUR PROFILE') }}</LinkTo
                             >
                         </li>
                         <li>
-                            <LinkTo @click.stop="logout">LOGOUT</LinkTo>
+                            <LinkTo @click.stop="logout">{{ $t('LOGOUT') }}</LinkTo>
                         </li>
                         <li v-if="currentUser.role === 'admin'">
-                            <LinkTo href="/admin-panel">ADMIN PANEL</LinkTo>
+                            <LinkTo href="/admin-panel">{{ $t('ADMIN PANEL') }}</LinkTo>
                         </li>
                         <li
                             class="languageMenuItem"
@@ -88,10 +88,10 @@
                 </div>
                 <div v-else class="authButtons">
                     <LinkTo href="/login">
-                        <button class="authBtn">Login</button>
+                        <button class="authBtn">{{ $t('LOGIN') }}</button>
                     </LinkTo>
                     <LinkTo href="/register">
-                        <button class="authBtn">Register</button>
+                        <button class="authBtn">{{ $t('REGISTER') }}</button>
                     </LinkTo>
                     <button
                         class="authBtn languageBtn"
@@ -124,10 +124,19 @@
 <script>
 import { Link as LinkTo, usePage, router } from '@inertiajs/vue3';
 import Swal from 'sweetalert2'
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: {
         LinkTo,
+    },
+     setup() {
+        const { t } = useI18n();
+        return {
+                t,
+                $t: t
+            };
+
     },
     data() {
         return {
@@ -136,8 +145,8 @@ export default {
             languageMenuOpen: false,
             currentLanguage: 'en', // DE ALGUN MODO TENGO QUE SACAR EL LOCAL
             languages: {
-                en: { name: 'English', flag: '🇬🇧', letras: 'en' },
-                es: { name: 'Español', flag: '🇪🇸', letras: 'es' },
+                en: { name: this.t('English'), flag: '🇬🇧', letras: 'en' },
+                es: { name: this.t('Español'), flag: '🇪🇸', letras: 'es' },
             },
             languageMenuOpenGuest: false,
         };
@@ -415,6 +424,7 @@ export default {
                         margin: 0.5rem -0.5rem -0.5rem -0.5rem;
                         background-color: #252525;
                         border-radius: 0 0 5px 5px;
+                        gap: 10px;
 
                         li {
                             padding: 0;
@@ -503,6 +513,7 @@ export default {
             padding: 0.5rem 1rem;
             transition: all 0.3s;
             border-radius: 5px;
+            margin: 10px;
 
             &:hover {
                 background-color: $main-color;

@@ -1,6 +1,6 @@
 <template>
     <metaHead>
-        <title>Collections</title>
+        <title>{{ $t('Collections') }}</title>
         <meta
             head-key="description"
             name="description"
@@ -15,7 +15,7 @@
             <input
                 v-model="search"
                 type="text"
-                placeholder="Search users..."
+                :placeholder="$t('Search users...')"
                 class="search-input"
             />
         </div>
@@ -30,14 +30,14 @@
                     <div class="avatar-container">
                         <img
                             :src="user.avatar_url"
-                            alt="Avatar"
+                            :alt="$t('Avatar')"
                             class="avatar"
                         />
                     </div>
                     <div class="card-content">
                         <div class="username">{{ user.name }}</div>
                         <div class="game-count">
-                            {{ user.games.length }} juegos
+                            {{ user.games.length }} {{ $t('games') }}
                         </div>
 
                         <div v-if="isAdmin" class="role-select" @click.stop>
@@ -45,14 +45,14 @@
                                 v-model="user.role"
                                 @change="updateUserRole(user)"
                             >
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                                <option value="mute">Mute</option>
+                                <option value="user">{{ $t('User') }}</option>
+                                <option value="admin">{{ $t('Admin') }}</option>
+                                <option value="mute">{{ $t('Mute') }}</option>
                                 <option
                                     value="deleteuser"
                                     class="delete-option"
                                 >
-                                    Delete User
+                                    {{ $t('Delete User') }}
                                 </option>
                             </select>
                         </div>
@@ -132,7 +132,6 @@ export default {
     border-radius: 5px;
     font-size: 1rem;
     width: 100%;
-    max-width: 400px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 

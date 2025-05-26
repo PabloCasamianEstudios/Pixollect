@@ -13,16 +13,16 @@
         <UserLayout :user="user">
             <div class="profile-container">
                 <div v-if="loading" class="loading-container">
-                    <p>Loading user data...</p>
+                    <p>{{ $t('Loading user data...') }}</p>
                 </div>
                 <div v-else-if="error" class="error-container">
-                    <p>Error loading user data: {{ error }}</p>
+                    <p>{{ $t('Error loading user data:') }} {{ error }}</p>
                 </div>
 
                 <div v-else-if="counters?.totals?.games > 0">
                     <div class="stats-overview">
                         <div class="stat-item">
-                            <span class="stat-label">Total Games:</span>
+                            <span class="stat-label">{{ $t('Total Games:') }}</span>
                             <span class="stat-value">{{
                                 counters?.totals?.games
                                     ?.toString()
@@ -30,7 +30,7 @@
                             }}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Total Hours:</span>
+                            <span class="stat-label">{{ $t('Total Hours:') }}</span>
                             <span class="stat-value">{{
                                 counters?.totals?.hours
                                     ? Math.round(counters.totals.hours)
@@ -40,7 +40,7 @@
                             }}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Total Achievements:</span>
+                            <span class="stat-label">{{ $t('Total Achievements:') }}</span>
                             <span class="stat-value">{{
                                 counters?.totals?.achievements
                                     ?.toString()
@@ -48,7 +48,7 @@
                             }}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Total Spent:</span>
+                            <span class="stat-label">{{ $t('Total Spent:') }}</span>
                             <span class="stat-value">
                                 ${{
                                     counters?.financial?.total_spent != null
@@ -67,7 +67,7 @@
                         <div class="chart-wrapper">
                             <div class="chart-container">
                                 <div class="chart-header">
-                                    <h3>Games by Genre</h3>
+                                    <h3>{{ $t('Games by Genre') }}</h3>
                                 </div>
                                 <div class="chart-canvas-container">
                                     <canvas
@@ -81,7 +81,7 @@
                          <div class="chart-wrapper">
                             <div class="chart-container">
                                 <div class="chart-header">
-                                    <h3>Games by State</h3>
+                                    <h3>{{ $t('Games by State') }}</h3>
                                 </div>
                                 <div class="chart-canvas-container">
                                     <canvas
@@ -95,7 +95,7 @@
                          <div class="chart-wrapper">
                         <div class="chart-container">
                             <div class="chart-header">
-                                <h3>Games Mastered</h3>
+                                <h3>{{ $t('Games Mastered') }}</h3>
                             </div>
                             <div class="chart-canvas-container">
                                 <canvas
@@ -109,7 +109,7 @@
                           <div class="chart-wrapper">
                             <div class="chart-container">
                                 <div class="chart-header">
-                                    <h3>Library by Saga</h3>
+                                    <h3>{{ $t('Library by Saga') }}</h3>
                                 </div>
                                 <div class="chart-canvas-container">
                                     <canvas
@@ -119,14 +119,12 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
 
                 <div v-else class="empty-message">
-                    <h1>NO GAMES</h1>
-                    <p>No games to calc user stats</p>
+                    <h1>{{ $t('NO GAMES') }}</h1>
+                    <p>{{ $t('No games to calculate user stats') }}</p>
                 </div>
             </div>
         </UserLayout>
@@ -338,7 +336,6 @@ export default {
         initSagaRadarChart() {
             this.$nextTick(() => {
                 if (!this.$refs.sagaRadarChart || !this.stats.gamesBySaga?.length) {
-                    console.log('No data or canvas for radar chart');
                     return;
                 }
 

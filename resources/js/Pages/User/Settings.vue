@@ -1,6 +1,6 @@
 <template>
     <metaHead>
-        <title>{{ user.name }} Settings</title>
+        <title>$t('Settings')</title>
     </metaHead>
 
     <FlashMessage />

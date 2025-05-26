@@ -12,7 +12,7 @@
                     alt="User avatar"
                 />
                 <div class="avatar-overlay">
-                    <span>Change Avatar</span>
+                    <span>{{ $t('Change Avatar') }}</span>
                 </div>
                 <input
                     type="file"
@@ -26,7 +26,7 @@
                 v-else
                 :src="user.avatar_url || '/images/default-avatar.png'"
                 class="profile-avatar"
-                alt="User avatar"
+                alt="{{ $t('User Avatar') }}"
             />
 
             <div class="profile-info">
@@ -40,7 +40,7 @@
                 :href="`/user/${user.name}`"
                 :class="{ 'active-tab': $page.url === `/user/${user.name}` }"
             >
-                PROFILE
+                {{ $t('PROFILE') }}
             </LinkTo>
             <LinkTo
                 :href="`/user/${user.name}/games`"
@@ -48,7 +48,7 @@
                     'active-tab': $page.url === `/user/${user.name}/games`,
                 }"
             >
-                COLLECTION
+                {{ $t('COLLECTION') }}
             </LinkTo>
             <LinkTo
                 :href="`/user/${user.name}/achievements`"
@@ -57,21 +57,21 @@
                         $page.url === `/user/${user.name}/achievements`,
                 }"
             >
-                ACHIEVEMENTS
+                {{ $t('ACHIEVEMENTS') }}
             </LinkTo>
             <LinkTo
                 v-if="isCurrentUser"
                 :href="`/user/${user.name}/settings`"
                 :class="{ 'active-tab': $page.url === `/user/${user.name}/settings` }"
             >
-                SETTINGS
+                {{ $t('SETTINGS') }}
             </LinkTo>
              <a
                 v-if="isCurrentUser"
                 :href="`/user/${user.name}/games/export/csv`"
                 target="_blank"
             >
-                Export CSV
+                {{ $t('Export CSV') }}
             </a>
 
         </div>
@@ -84,11 +84,20 @@
 
 <script>
 import { Link as LinkTo, usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: { LinkTo },
     props: {
         user: Object,
+    },
+    setup() {
+        const { t } = useI18n();
+        return {
+                t,
+                $t: t
+            };
+
     },
     data() {
         return {
@@ -118,7 +127,15 @@ export default {
                     event.target.value = '';
                 },
                 onError: (errors) => {
-                    alert(errors.message || 'Error uploading avatar');
+                     Swal.fire({
+                        title: 'Error',
+                        text: errors.message || this.t('Error uploading avatar'),
+                        icon: 'error',
+                        confirmButtonColor: '#ff1540',
+                        background: '#262626',
+                        color: '#fff',
+                        iconColor: '#ff1540'
+                    });
                 },
             });
         },

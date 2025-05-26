@@ -1,14 +1,14 @@
 <template>
     <footer class="footer">
         <div class="footer-top">
-            <LinkTo href="/about" class="footer-link">About</LinkTo>
-            <LinkTo href="/contact" class="footer-link">Contact Us</LinkTo>
-            <LinkTo href="/terms" class="footer-link">Terms</LinkTo>
-            <LinkTo href="/privacy" class="footer-link">Privacy</LinkTo>
-            <a  href="/manualUsuario.pdf" download="manualUsuario.pdf" class="footer-link">Ayuda Usuario</a>
+            <LinkTo href="/about" class="footer-link">{{ $t('About') }}</LinkTo>
+            <LinkTo href="/contact" class="footer-link">{{ $t('Contact Us') }}</LinkTo>
+            <LinkTo href="/terms" class="footer-link">{{ $t('Terms') }}</LinkTo>
+            <LinkTo href="/privacy" class="footer-link">{{ $t('Privacy') }}</LinkTo>
+            <a  href="/manualUsuario.pdf" download="manualUsuario.pdf" class="footer-link">{{ $t('User Help') }}</a>
         </div>
         <div class="footer-bottom">
-            <p>Pixollect - {{ currentYear }}</p>
+            <p>{{ $t('Pixollect') }} - {{ currentYear }}</p>
         </div>
     </footer>
 </template>

@@ -1,6 +1,6 @@
 <template>
     <metaHead>
-        <title>Manage Sagas</title>
+        <title>CRUD Sagas</title>
         <meta
             head-key="description"
             name="description"
@@ -10,7 +10,7 @@
 
       <FlashMessage />
     <div class="sagasPage">
-        <h1 class="sagasPage__title">Manage Sagas</h1>
+        <h1 class="sagasPage__title">{{ $t('Manage Sagas') }}</h1>
 
 
 
@@ -47,12 +47,21 @@
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head as metaHead, router } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
 
 
 export default {
     components: {
         metaHead,
         FlashMessage,
+    },
+    setup() {
+        const { t } = useI18n();
+        return {
+                t,
+                $t: t
+            };
+
     },
     props: {
         sagas: Array,
@@ -67,17 +76,17 @@ export default {
         },
         async deleteSaga(id) {
             const result = await Swal.fire({
-                title: 'Delete Saga',
-                text: 'Are you sure you want to delete this saga?',
+                title: this.t('Delete Saga'),
+                text: this.t('Are you sure you want to delete this saga?'),
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'DELETE',
-                cancelButtonText: 'CANCEL',
+                confirmButtonText: this.t('DELETE'),
+                cancelButtonText: this.t('CANCEL'),
                 confirmButtonColor: '#ff1540',
                 cancelButtonColor: '#ff1540',
                 background: '#262626',
                 color: '#fff',
-                iconColor: '#ff1540'
+                iconColor: '#ff1540',
             });
 
             if (result.isConfirmed) {

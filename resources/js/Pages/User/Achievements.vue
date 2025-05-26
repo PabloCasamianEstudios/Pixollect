@@ -1,12 +1,12 @@
 <template>
     <metaHead>
-        <title>{{ user.name }} Achievements</title>
+        <title>{{ $t('{user}\'s Achievements', { user: user.name }) }}</title>
     </metaHead>
         <FlashMessage />
 
     <UserLayout :user="user">
         <div class="achievements-container">
-            <h1 class="achievements-title">{{ user.name }}'s Achievements</h1>
+            <h1 class="achievements-title">{{ $t('{user}\'s Achievements', { user: user.name }) }}</h1>
 
             <div class="achievements-grid">
                 <div v-for="achievement in achievements" :key="achievement.id"
@@ -17,7 +17,7 @@
                         <h3>{{ achievement.title }}</h3>
                         <p>{{ achievement.description }}</p>
                         <div class="progress" v-if="achievement.progress">
-                            Progress: {{ achievement.progress.current }}/{{ achievement.progress.total }}
+                            {{ $t('Progress') }}: {{ achievement.progress.current }}/{{ achievement.progress.total }}
                         </div>
                     </div>
                 </div>

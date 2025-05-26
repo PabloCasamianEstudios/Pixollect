@@ -1,6 +1,6 @@
 <template>
     <MetaHead>
-        <title>Admin Panel</title>
+        <title>{{ $t('Admin Panel') }}</title>
         <meta
             head-key="description"
             name="description"
@@ -9,9 +9,9 @@
     </MetaHead>
 
     <section class="adminPanel">
-        <h1 class="adminTitle">Admin Panel</h1>
+        <h1 class="adminTitle">{{ $t('Admin Panel') }}</h1>
 
-        <h2 class="sectionTitle">Manage Data Base</h2>
+        <h2 class="sectionTitle">{{ $t('Manage Tables') }}</h2>
         <div class="adminButtons">
             <button
                 v-for="item in adminSections"
@@ -25,9 +25,7 @@
 
         <div class="container">
             <div class="message">
-                <h1>ESSENTIALS QUE FALTAN</h1>
-                <p>1 | LANGUAGES - <span class="meh">FÁCIL PERO LARGO</span></p>
-                <h1>OPTIONAL</h1>
+                <h1>EXTRAS</h1>
                 <p>1 | Comparator reseña final</p>
             </div>
         </div>

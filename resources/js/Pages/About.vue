@@ -1,11 +1,12 @@
 <template>
     <div>
         <metaHead>
-            <title>About</title>
+            <title>{{ $t('About') }}
+</title>
             <meta
                 head-key="description"
                 name="description"
-                content="About Pixollect"
+                content="About page of Pixollect"
             />
         </metaHead>
 
@@ -13,34 +14,28 @@
         <div class="border">
 
 
-            <h1 class="about-title">What is Pixollect?</h1>
+            <h1 class="about-title">{{ $t('What is Pixollect?') }}
+</h1>
             <p class="about-paragraph">
-                Pixollect is a web application built to help gamers keep track
-                of their video game collections. It centralizes all your games,
-                no matter the platform or format, and provides tools for
-                organizing, analyzing, and discovering new titles.
+                {{ $t( 'Pixollect is a web application built to help gamers keep track of their video game collections. It centralizes all your games, no matter the platform or format, and provides tools for organizing, analyzing, and discovering new titles.') }}
             </p>
 
-            <h2 class="about-subtitle">Project Objective</h2>
+            <h2 class="about-subtitle">{{ $t('Project Objective') }}</h2>
             <p class="about-paragraph">
-                The goal is to offer users a practical and user-friendly
-                platform to manage their gaming libraries, track their progress,
-                compare games, and receive personalized recommendations.
+                {{ $t( 'The goal is to offer users a practical and user-friendly platform to manage their gaming libraries, track their progress, compare games, and receive personalized recommendations.') }}
             </p>
 
-            <h2 class="about-subtitle">Target Audience</h2>
+            <h2 class="about-subtitle">{{ $t('Target Audience') }}</h2>
             <p class="about-paragraph">
-                Pixollect is designed for any gamer, whether casual or hardcore,
-                who values collection tracking, stats, and game discovery based
-                on personal preferences.
+                {{ $t('Pixollect is designed for any gamer, whether casual or hardcore, who values collection tracking, stats, and game discovery based on personal preferences.') }}
             </p>
 
-            <h2 class="about-subtitle">Technologies Used</h2>
+            <h2 class="about-subtitle">{{ $t('Technologies Used') }}</h2>
             <ul class="about-list">
-                <li>Laravel (Backend)</li>
-                <li>Inertia.js + Vue 3 (Frontend)</li>
-                <li>MySQL (Database)</li>
-                <li>Chart.js (Statistics)</li>
+                <li>{{ $t('Laravel (Backend)') }}</li>
+                <li>{{ $t('Inertia.js + Vue 3 (Frontend)') }}</li>
+                <li>{{ $t('MySQL (Database)') }}</li>
+                <li>{{ $t('Chart.js (Statistics)') }}</li>
             </ul>
         </div>
          </div>

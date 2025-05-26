@@ -122,7 +122,6 @@ class GameApiController extends Controller
             'themes:id,name',
             'saga:id,name'
         ])
-        ->select('id','title','description','release_date','developer','publisher','price','achievements','image_url')
         ->take(10)
         ->get();
 

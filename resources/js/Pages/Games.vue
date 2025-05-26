@@ -1,6 +1,6 @@
 <template>
     <metaHead>
-        <title>Games</title>
+        <title>{{ $t('Games') }}</title>
         <meta
             head-key="description"
             name="description"
@@ -15,13 +15,13 @@
                 v-model="search"
                 type="text"
                 class="searchInput"
-                placeholder="Search..."
+                :placeholder="$t('Search...')"
                 @input="handleSearch"
             />
 
             <div class="filters">
                 <select v-model="filters.genre">
-                    <option value="">All Genres</option>
+                    <option value="">{{ $t('All Genres') }}</option>
                     <option
                         v-for="genre in genres"
                         :key="genre.id"
@@ -31,7 +31,7 @@
                     </option>
                 </select>
                 <select v-model="filters.platform">
-                    <option value="">All Platforms</option>
+                    <option value="">{{ $t('All Platforms') }}</option>
                     <option
                         v-for="platform in platforms"
                         :key="platform.id"
@@ -41,7 +41,7 @@
                     </option>
                 </select>
                 <select v-model="filters.theme">
-                    <option value="">All Themes</option>
+                    <option value="">{{ $t('All Themes') }}</option>
                     <option
                         v-for="theme in themes"
                         :key="theme.id"
@@ -51,7 +51,7 @@
                     </option>
                 </select>
                 <select v-model="filters.saga">
-                    <option value="">All Sagas</option>
+                    <option value="">{{ $t('All Sagas') }}</option>
                     <option
                         v-for="saga in sagas"
                         :key="saga.id"
@@ -157,11 +157,13 @@ export default {
 
     .gamesHeader {
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         margin-bottom: 2rem;
         gap: 10px;
+        justify-content: center;
 
         .searchInput {
             background-color: #1c1c1c;
@@ -171,13 +173,15 @@ export default {
             border-radius: 5px;
             font-size: 1rem;
             flex: 1;
-            min-width: 250px;
+            width: 60%;
         }
 
         .filters {
+            justify-content: center;
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
+            flex-grow: 1;
 
             select {
                 background-color: #1c1c1c;
@@ -192,8 +196,11 @@ export default {
 
     .gameGrid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px;
     }
 
     .gameCard {
@@ -216,29 +223,29 @@ export default {
         }
 
         .overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.75);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
 
-            h2 {
-                color: white;
-                font-size: 1.2rem;
-                padding: 1rem;
-            }
+        h2 {
+            color: white;
+            font-size: 1.1rem;
+            padding: 1rem;
         }
+    }
 
-        &:hover .overlay {
-            opacity: 1;
-        }
+    &:hover .overlay {
+        opacity: 1;
+    }
     }
 }
 </style>

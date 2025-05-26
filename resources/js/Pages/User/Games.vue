@@ -1,6 +1,6 @@
 <template>
     <metaHead>
-        <title>{{ user.name }} Games</title>
+        <title>{{ $t("{user}'s Games", { user: user.name }) }}</title>
         <meta
             head-key="description"
             name="description"
@@ -10,29 +10,31 @@
     <FlashMessage />
     <UserLayout :user="user">
         <div class="userGamesContainer">
-            <h1 class="sectionTitle">{{ user.name }}'s Collection</h1>
+            <h1 class="sectionTitle">
+                {{ $t("{user}'s Collection", { user: user.name }) }}
+            </h1>
 
             <div class="gamesHeader">
                 <input
                     v-model="search"
                     type="text"
                     class="searchInput"
-                    placeholder="Search in collection..."
+                    :placeholder="$t('Search in collection...')"
                     @input="handleSearch"
                 />
 
                 <select v-model="filters.state" class="filterSelect">
-                    <option value="">All States</option>
-                    <option value="whishlist">Whishlist</option>
-                    <option value="playing">Playing</option>
-                    <option value="completed">Completed</option>
-                    <option value="dropped">Dropped</option>
-                    <option value="planned">Planned</option>
-                    <option value="backlog">Backlog</option>
+                    <option value="">{{ $t('All States') }}</option>
+                    <option value="whishlist">{{ $t('Wishlist') }}</option>
+                    <option value="playing">{{ $t('Playing') }}</option>
+                    <option value="completed">{{ $t('Completed') }}</option>
+                    <option value="dropped">{{ $t('Dropped') }}</option>
+                    <option value="planned">{{ $t('Planned') }}</option>
+                    <option value="backlog">{{ $t('Backlog') }}</option>
                 </select>
 
                 <select v-model="filters.genre" class="filterSelect">
-                    <option value="">All Genres</option>
+                    <option value="">{{ $t('All Genres') }}</option>
                     <option
                         v-for="genre in uniqueGenres"
                         :key="genre"
@@ -43,7 +45,7 @@
                 </select>
 
                 <select v-model="filters.platform" class="filterSelect">
-                    <option value="">All Platforms</option>
+                    <option value="">{{ $t('All Platforms') }}</option>
                     <option
                         v-for="platform in uniquePlatforms"
                         :key="platform"
@@ -54,7 +56,7 @@
                 </select>
 
                 <select v-model="filters.theme" class="filterSelect">
-                    <option value="">All Themes</option>
+                    <option value="">{{ $t('All Themes') }}</option>
                     <option
                         v-for="theme in uniqueThemes"
                         :key="theme"
@@ -65,7 +67,7 @@
                 </select>
 
                 <select v-model="filters.saga" class="filterSelect">
-                    <option value="">All Sagas</option>
+                    <option value="">{{ $t('All Sagas') }}</option>
                     <option
                         v-for="saga in uniqueSagas"
                         :key="saga"
@@ -81,6 +83,7 @@
                     v-for="game in filteredGames"
                     :key="game.id"
                     class="gameCard"
+                    :class="{ mastered: game.pivot.mastered }"
                     @click="goToGame(game.id)"
                 >
                     <div class="gameImageWrapper">
@@ -97,20 +100,23 @@
                                 <button
                                     class="actionBtn"
                                     @click.stop="openUpdateModal(game)"
+                                    title="Edit"
                                 >
-                                    O
+                                    ✏️
                                 </button>
                                 <button
                                     class="actionBtn"
                                     @click.stop="incrementAchievement(game)"
+                                    title="Achievement"
                                 >
-                                    W
+                                    ⬆️
                                 </button>
                                 <button
                                     class="actionBtn"
                                     @click.stop="removeGame(game.id)"
+                                    title="Remove"
                                 >
-                                    X
+                                    ❌
                                 </button>
                             </div>
                         </div>
@@ -118,18 +124,18 @@
                     <div class="gameInfo">
                         <h2 class="gameTitle">{{ game.title }}</h2>
                         <div class="gameStats">
-                            <span
-                                v-if="game.achievements > 0"
-                                class="gameProgress"
-                                >{{
-                                    (
-                                        (game.pivot.achievements_unlocked *
-                                            100) /
-                                        game.achievements
-                                    ).toFixed(2)
-                                }}%</span
-                            >
-                            <span v-else class="gameProgress"></span>
+                            <span class="gameProgress">
+                                <template v-if="game.pivot.mastered">⭐</template>
+                                <template v-else-if="game.achievements > 0">
+                                    {{
+                                        (
+                                            (game.pivot.achievements_unlocked * 100) /
+                                            game.achievements
+                                        ).toFixed(2)
+                                    }}%
+                                </template>
+                            </span>
+
                             <span class="gameState">{{
                                 formatState(game.pivot.state)
                             }}</span>
@@ -138,8 +144,8 @@
                 </div>
             </div>
             <div v-else class="empty-message">
-                <h1>EMPTY</h1>
-                <p>No games here</p>
+                <h1>{{ $t('EMPTY') }}</h1>
+                <p>{{ $t('No games here') }}</p>
             </div>
             <UserUpdateGameModal
                 v-if="showModal && selectedGame && selectedUserGame"
@@ -156,6 +162,7 @@ import AppLayout from '@/Layouts/Layout.vue';
 import UserLayout from '@/Layouts/UserLayout.vue';
 import { Head as metaHead, router, usePage } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
 
 import UserUpdateGameModal from '../../Components/UserUpdateGameModal.vue';
 import FlashMessage from '../../Components/FlashMessage.vue';
@@ -167,6 +174,13 @@ export default {
         metaHead,
         UserUpdateGameModal,
         FlashMessage,
+    },
+    setup() {
+        const { t } = useI18n();
+        return {
+            t,
+            $t: t,
+        };
     },
     props: {
         user: {
@@ -299,12 +313,14 @@ export default {
         },
         async removeGame(gameId) {
             const result = await Swal.fire({
-                title: 'Remove game?',
-                text: 'Are you sure you want to remove this game from your collection?',
+                title: this.t('Remove game?'),
+                text: this.t(
+                    'Are you sure you want to remove this game from your collection?',
+                ),
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'YES',
-                cancelButtonText: 'NO',
+                confirmButtonText: this.t('YES'),
+                cancelButtonText: this.t('NO'),
                 confirmButtonColor: '#ff1540',
                 cancelButtonColor: '#ff1540',
                 background: '#262626',
@@ -320,12 +336,14 @@ export default {
         },
         async incrementAchievement(game) {
             const result = await Swal.fire({
-                title: 'Increment achievement?',
-                text: 'Do you want to add one achievement to this game?',
+                title: this.t('Increment achievement?'),
+                text: this.t(
+                    'Do you want to add one achievement to this game?',
+                ),
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'YES',
-                cancelButtonText: 'NO',
+                confirmButtonText: this.t('YES'),
+                cancelButtonText: this.t('NO'),
                 confirmButtonColor: '#ff1540',
                 cancelButtonColor: '#ff1540',
                 background: '#262626',
@@ -368,7 +386,7 @@ export default {
                 console.error('Error incrementing achievement:', error);
                 Swal.fire({
                     title: 'Error',
-                    text: 'Failed to increment achievement',
+                    text: his.t('Failed to increment achievement'),
                     icon: 'error',
                     confirmButtonColor: '#ff1540',
                     background: '#262626',
@@ -416,6 +434,11 @@ export default {
     overflow: hidden;
     transition: all 0.3s ease;
     cursor: pointer;
+
+    &.mastered {
+        border: 2px solid $main-color;
+        box-shadow: 0 0 10px rgba($main-color, 0.5);
+    }
 
     &:hover {
         transform: translateY(-5px);

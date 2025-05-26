@@ -1,14 +1,14 @@
 <template>
-    <Head title="Register" />
+    <Head :title="$t('Register')" />
 
     <GuestLayout>
         <div class="registerContainer">
             <div class="registerBox">
-                <h2 class="registerTitle">Register</h2>
+                <h2 class="registerTitle">{{ $t('Register') }}</h2>
 
                 <form @submit.prevent="submit">
                     <div class="inputGroup">
-                        <InputLabel for="name" value="Name" />
+                        <InputLabel for="name" :value="$t('Name')" />
                         <TextInput
                             id="name"
                             type="text"
@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="inputGroup">
-                        <InputLabel for="email" value="Email" />
+                        <InputLabel for="email" :value="$t('Email')"  />
                         <TextInput
                             id="email"
                             type="email"
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="inputGroup">
-                        <InputLabel for="password" value="Password" />
+                        <InputLabel for="password" :value="$t('Password')"  />
                         <TextInput
                             id="password"
                             type="password"
@@ -49,7 +49,7 @@
                     <div class="inputGroup">
                         <InputLabel
                             for="password_confirmation"
-                            value="Confirm Password"
+                            :value="$t('Confirm Password')"
                         />
                         <TextInput
                             id="password_confirmation"
@@ -66,7 +66,7 @@
 
                     <div class="actions">
                         <Link href="/login" class="alreadyRegisteredLink"
-                            >Already registered?</Link
+                            >{{ $t('Already registered?') }}</Link
                         >
 
                         <PrimaryButton
@@ -74,7 +74,7 @@
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Register
+                            {{ $t('Register') }}
                         </PrimaryButton>
                     </div>
                 </form>
@@ -101,13 +101,6 @@ const form = useForm({
 const submit = () => {
     form.post('register', {
         onFinish: () => form.reset('password', 'password_confirmation'),
-        onSuccess: () => {
-            console.log('Registro exitoso!');
-            // Aquí podrías redirigir o realizar otra acción tras el éxito
-        },
-        onError: () => {
-            console.error('Hubo un error al intentar registrar al usuario');
-        },
     });
 };
 </script>

@@ -1,7 +1,4 @@
 <template>
-
-    {{ $t('Email') }}
-
     <NavLayout />
 
     <main>

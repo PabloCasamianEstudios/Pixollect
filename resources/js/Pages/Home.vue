@@ -1,6 +1,7 @@
 <template>
     <metaHead>
-        <title>Home</title>
+        <title>{{ $t('Home') }}</title>
+
         <meta
             head-key="description"
             name="description"
@@ -8,54 +9,54 @@
         />
     </metaHead>
 
-    <div class="home-container">
+     <div class="home-container">
         <div v-if="!currentUser" class="inner-bordered-box">
             <img src="images/icon.png" alt="Pixollect" class="logo" />
-            <h1 class="home-title">Welcome to Pixollect</h1>
+            <h1 class="home-title">{{ $t('Welcome to Pixollect') }}</h1>
             <p class="home-paragraph">
-                Track, compare, and explore your video game collection with
-                ease.
+                {{ $t('Track, compare, and explore your video game collection with ease.') }}
             </p>
 
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">📊</div>
-                    <h3>Track Your Collection</h3>
-                    <p>Keep record of all your games in one place</p>
+                    <h3>{{ $t('Track Your Collection') }}</h3>
+                    <p>{{ $t('Keep record of all your games in one place') }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔍</div>
-                    <h3>Discover New Games</h3>
-                    <p>Find recommendations based on your taste</p>
+                    <h3>{{ $t('Discover New Games') }}</h3>
+                    <p>{{ $t('Find recommendations based on your taste') }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🏆</div>
-                    <h3>Achievement Tracking</h3>
-                    <p>Monitor your gaming progress and trophies</p>
+                    <h3>{{ $t('Achievement Tracking') }}</h3>
+                    <p>{{ $t('Monitor your gaming progress and trophies') }}</p>
                 </div>
             </div>
 
             <div class="button-group">
                 <button @click="$inertia.visit('/login')" class="home-button">
-                    Login
+                    {{ $t('LOGIN') }}
                 </button>
-                <button
-                    @click="$inertia.visit('/register')"
-                    class="home-button"
-                >
-                    Register
+                <button @click="$inertia.visit('/register')" class="home-button">
+                    {{ $t('REGISTER') }}
                 </button>
             </div>
         </div>
 
         <div v-else class="logged-in-content">
             <div class="logged-box">
+
                 <img src="images/icon.png" alt="Pixollect" class="logo" />
                 <h1>Pixollect</h1>
                 <p class="stats-text">
-                    TOTAL USERS: {{ stats.users }} | TOTAL GAMES:
-                    {{ stats.games }}
+                    {{ $t('TOTAL USERS') }}: {{ stats.users }} | {{ $t('TOTAL GAMES') }}: {{ stats.games }}
                 </p>
+
+                        <!-- AVISO TEMPORAL DE BETA -->
+                            <Advise style="margin-bottom: 20px"/>
+
 
                 <div class="slider-wrapper" v-if="latestGames.length">
                     <div class="slider-track">
@@ -79,10 +80,12 @@
 
 <script>
 import { Head as metaHead, usePage } from '@inertiajs/vue3';
+import Advise from '@/Components/advice_component/Advice.vue';
 
 export default {
     components: {
         metaHead,
+        Advise,
     },
     data() {
         return {

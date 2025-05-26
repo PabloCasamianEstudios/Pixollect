@@ -1,14 +1,14 @@
 <template>
-    <Head title="Log in" />
+    <Head :title="$t('Log in')" />
 
     <GuestLayout>
         <div class="loginContainer">
             <div class="loginBox">
-                <h2 class="loginTitle">Log in</h2>
+                <h2 class="loginTitle">{{ $t('Log in') }}</h2>
 
                 <form @submit.prevent="submit">
                     <div class="inputGroup">
-                        <InputLabel for="email" value="{{__('Email') }}"  />
+                        <InputLabel for="email" :value="$t('Email')"  />
                         <TextInput
                             id="email"
                             type="email"
@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="inputGroup">
-                        <InputLabel for="password" value="Password" />
+                        <InputLabel for="password" :value="$t('Password')" />
                         <TextInput
                             id="password"
                             type="password"
@@ -40,7 +40,7 @@
                             name="remember"
                             v-model:checked="form.remember"
                         />
-                        <span class="rememberText">Remember me</span>
+                        <span class="rememberText">{{ $t('Remember me') }}</span>
                     </div>
 
                     <div class="actions">
@@ -49,7 +49,7 @@
                             href="/forgot-password"
                             class="forgotPasswordLink"
                         >
-                            Forgot your password?
+                            {{ $t('Forgot your password?') }}
                         </Link>
 
                         <PrimaryButton
@@ -57,7 +57,7 @@
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Log in
+                            {{ $t('Log in') }}
                         </PrimaryButton>
                     </div>
                 </form>
