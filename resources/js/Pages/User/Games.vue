@@ -104,13 +104,13 @@
                                 >
                                     ✏️
                                 </button>
-                                <button
+                                <!-- <button
                                     class="actionBtn"
                                     @click.stop="incrementAchievement(game)"
                                     title="Achievement"
                                 >
                                     ⬆️
-                                </button>
+                                </button> -->
                                 <button
                                     class="actionBtn"
                                     @click.stop="removeGame(game.id)"
