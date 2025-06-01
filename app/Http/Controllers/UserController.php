@@ -108,7 +108,9 @@ public function updateSettings(Request $request, User $user)
 
     $user->save();
 
-    return back()->with('message', 'Account settings updated.');
+    return redirect()->route('user.settings', ['user' => $user->name])
+    ->with('message', 'Account settings updated.');
+    // return back()->with('message', 'Account settings updated.');
 }
 
 // contadores de cada usuario
