@@ -22,13 +22,6 @@
                 {{ item.label }}
             </button>
         </div>
-
-        <div class="container">
-            <div class="message">
-                <h1>EXTRAS</h1>
-                <p>1 | Comparator reseña final</p>
-            </div>
-        </div>
     </section>
 </template>
 

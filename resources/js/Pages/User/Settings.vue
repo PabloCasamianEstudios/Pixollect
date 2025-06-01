@@ -1,6 +1,6 @@
 <template>
     <metaHead>
-        <title>$t('Settings')</title>
+        <title>{{$t('Settings')}}</title>
     </metaHead>
 
     <FlashMessage />
@@ -41,7 +41,7 @@
                     <p v-if="form.errors.password" class="error">{{ form.errors.password }}</p>
                 </div>
 
-                <button :disabled="form.processing">Update</button>
+                <button :disabled="form.processing">{{$t('Update')}}</button>
 
                 <p v-if="successMessage" class="success">{{ successMessage }}</p>
             </form>
@@ -82,7 +82,7 @@ export default {
     },
     methods: {
         submit() {
-            this.form.patch(`/user/${this.user.name}/settings`);
+            this.form.post(`/user/${this.user.name}/settings`);
         },
     },
 };
