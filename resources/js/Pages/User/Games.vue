@@ -386,7 +386,7 @@ export default {
                 console.error('Error incrementing achievement:', error);
                 Swal.fire({
                     title: 'Error',
-                    text: his.t('Failed to increment achievement'),
+                    text: this.t('Failed to increment achievement'),
                     icon: 'error',
                     confirmButtonColor: '#ff1540',
                     background: '#262626',
