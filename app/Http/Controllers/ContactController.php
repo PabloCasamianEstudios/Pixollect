@@ -20,7 +20,7 @@ class ContactController extends Controller
         ]);
 
       Mail::send([], [], function ($message) use ($validated) {
-    $message->to('admin@tusitio.com')
+    $message->to('admin@pixollect.com')
             ->subject('New Contact Message')
             ->html("
                 <h2>New Message</h2>
@@ -43,7 +43,6 @@ class ContactController extends Controller
     // Enviar
     public function send(Request $request)
     {
-        // Validar los datos del formulario
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -54,22 +53,17 @@ class ContactController extends Controller
         $email = $request->email;
         $message = $request->message;
 
-        // Crear el objeto del correo con los datos
         $data = [
             'name' => $name,
             'email' => $email,
             'message' => $message,
         ];
 
-        // Intentar enviar el correo
         try {
-            // Enviar el correo utilizando el Mailable
             Mail::to('no-reply@pixollect.com')->send(new ContactMail($data));
 
-            // Redirigir con message de éxito
             return redirect()->back()->with('message', 'Succesfull sended');
         } catch (\Exception $e) {
-            // Redirigir con message de error si falla
             return redirect()->back()->with('error', 'ERROR: ' . $e->getMessage());
         }
     }
