@@ -429,15 +429,27 @@ const messages = {
 
         'Error removing game:': 'Error removing game:',
         'NOT CLASSIFIED': 'Not Classified',
-
         // BETA ADVISE
-        'BETA NOTICE': 'AVISO DE BETA',
-        'Pixollect is in beta.': 'Pixollect está en beta.',
+        'BETA NOTICE': 'BETA NOTICE',
+        'Pixollect is in beta.': 'Pixollect is in beta.',
         'Found a bug or want a game added?':
-            '¿Encontraste un error o quieres que añadamos un juego?',
-        'Contact us': 'Contáctanos',
+            'Found a bug or want a game added?',
+        'Contact us': 'Contact us',
         'Include game info and a cover URL from':
-            'Incluye la información del juego y una URL de portada desde',
+            'Include game info and a cover URL from',
+
+        //CONTACT
+        'Need Help?': 'Need Help?',
+        'Use this form to contact us for any of the following reasons:':
+            'Use this form to contact us for any of the following reasons:',
+        'I want to permanently delete my account':
+            'I want to permanently delete my account',
+        'I want to suggest a game that is not listed':
+            'I want to suggest a game that is not listed',
+        'I found a user violating the rules':
+            'I found a user violating the rules',
+        'I discovered a bug or technical issue':
+            'I discovered a bug or technical issue',
     },
     es: {
         // Buttons
@@ -875,14 +887,28 @@ const messages = {
         'Error removing game:': 'Error al eliminar juego:',
         'NOT CLASSIFIED': 'Sin clasificar',
 
-        // BETA ADVISE
-        'BETA NOTICE': 'BETA NOTICE',
-        'Pixollect is in beta.': 'Pixollect is in beta.',
+         // BETA ADVISE
+        'BETA NOTICE': 'AVISO DE BETA',
+        'Pixollect is in beta.': 'Pixollect está en beta.',
         'Found a bug or want a game added?':
-            'Found a bug or want a game added?',
-        'Contact us': 'Contact us',
+            '¿Encontraste un error o quieres que añadamos un juego?',
+        'Contact us': 'Contáctanos',
         'Include game info and a cover URL from':
-            'Include game info and a cover URL from',
+            'Incluye la información del juego y una URL de portada desde',
+
+        // CONTACT
+        'Need Help?': '¿Necesitas ayuda?',
+        'Use this form to contact us for any of the following reasons:':
+            'Usa este formulario para contactarnos por cualquiera de las siguientes razones:',
+        'I want to permanently delete my account':
+            'Quiero eliminar mi cuenta de forma permanente',
+        'I want to suggest a game that is not listed':
+            'Quiero sugerir un juego que no está registrado',
+        'I found a user violating the rules':
+            'He encontrado a un usuario que está rompiendo las reglas',
+        'I discovered a bug or technical issue':
+            'He encontrado un error o problema técnico',
+
     },
 };
 
