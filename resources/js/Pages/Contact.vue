@@ -10,6 +10,18 @@
     </MetaHead>
     <FlashMessage />
     <div class="formContainer">
+
+       <div class="empty-message">
+            <h1>{{ $t('Need Help?') }}</h1>
+            <p>{{ $t('Use this form to contact us for any of the following reasons:') }}</p>
+            <ul class="help-reasons">
+                <li>• {{ $t('I want to permanently delete my account') }}</li>
+                <li>• {{ $t('I want to suggest a game that is not listed') }}</li>
+                <li>• {{ $t('I found a user violating the rules') }}</li>
+                <li>• {{ $t('I discovered a bug or technical issue') }}</li>
+            </ul>
+        </div>
+
     <div class="inner-bordered-box ">
 
 
@@ -78,6 +90,39 @@ export default {
     background: #1c1c1c;
     border-radius: 10px;
     color: white;
+
+  .empty-message {
+    background-color: #1e1e1e;
+    border: 1px dashed $main-color;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 2rem;
+    font-family: 'Orbitron', sans-serif;
+
+    h1 {
+        font-size: 1.5rem;
+        color: lighten($main-color, 10%);
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        margin-bottom: 1rem;
+        color: lighten($main-color, 15%);
+    }
+
+    .help-reasons {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.95rem;
+
+        li {
+            margin: 0.5rem 0;
+        }
+    }
+}
 }
 
 input, textarea {
